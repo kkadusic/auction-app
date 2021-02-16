@@ -1,0 +1,8 @@
+# IntelliJ project files
+.idea
+*.iws
+*.iml
+*.ipr
+
+# System files
+.DS_Store
