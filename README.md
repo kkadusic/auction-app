@@ -33,3 +33,5 @@ $ npm install
 # Run the client
 $ npm start
 ```
+
+Open [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html) to launch Swagger UI in a browser.
