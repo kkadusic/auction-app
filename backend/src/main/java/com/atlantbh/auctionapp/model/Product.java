@@ -37,6 +37,7 @@ public class Product {
 
     @NotBlank
     @javax.validation.constraints.Size(max = 100)
+    @Column(nullable = false)
     private String name;
 
     @javax.validation.constraints.Size(max = 1000)
