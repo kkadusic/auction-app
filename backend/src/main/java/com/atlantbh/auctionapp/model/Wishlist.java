@@ -15,14 +15,19 @@ public class Wishlist {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public Wishlist() {
+    }
+
+    public Wishlist(Person person, Product product) {
+        this.person = person;
+        this.product = product;
     }
 
     public Long getId() {

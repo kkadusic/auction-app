@@ -5,7 +5,9 @@ import com.atlantbh.auctionapp.enumeration.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,8 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class Product {
@@ -25,31 +29,59 @@ public class Product {
     private Long id;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime creationDate;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdateDate;
 
+    @NotBlank
+    @javax.validation.constraints.Size(max = 100)
     private String name;
 
+    @javax.validation.constraints.Size(max = 1000)
     private String description;
 
-    private Integer startPrice;
+    @PositiveOrZero
+    @Column(nullable = false)
+    private BigDecimal startPrice;
 
-    private Date startDate;
+    @Column(nullable = false)
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    @Column(nullable = false)
+    private LocalDateTime endDate;
 
+    @NotBlank
+    @Column(nullable = false)
     private String street;
 
+    @NotBlank
+    @Column(nullable = false)
     private String city;
 
+    @NotBlank
+    @javax.validation.constraints.Size(max = 32)
+    @Column(nullable = false)
     private String zip;
 
+    @NotBlank
+    @Column(nullable = false)
     private String country;
 
+    @NotBlank
+    @javax.validation.constraints.Size(max = 15)
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @NotBlank
+    @Column(nullable = false)
+    @Value("false")
     private Boolean featured;
 
+    @NotBlank
+    @Column(nullable = false)
+    @Value("false")
     private Boolean shipping;
 
     @Enumerated(EnumType.STRING)
@@ -59,10 +91,33 @@ public class Product {
     private Color color;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    private Subcategory subcategory;
+
     public Product() {
+    }
+
+    public Product(@NotBlank @javax.validation.constraints.Size(max = 100) String name,
+                   @PositiveOrZero BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate,
+                   @NotBlank String street, @NotBlank String city,
+                   @NotBlank @javax.validation.constraints.Size(max = 32) String zip, @NotBlank String country,
+                   @NotBlank @javax.validation.constraints.Size(max = 15) String phoneNumber, Person person,
+                   Subcategory subcategory) {
+        this.name = name;
+        this.startPrice = startPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
+        this.country = country;
+        this.phoneNumber = phoneNumber;
+        this.person = person;
+        this.subcategory = subcategory;
     }
 
     public Long getId() {
@@ -105,27 +160,27 @@ public class Product {
         this.description = description;
     }
 
-    public Integer getStartPrice() {
+    public BigDecimal getStartPrice() {
         return startPrice;
     }
 
-    public void setStartPrice(Integer startPrice) {
+    public void setStartPrice(BigDecimal startPrice) {
         this.startPrice = startPrice;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -159,6 +214,14 @@ public class Product {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Boolean getFeatured() {
@@ -199,5 +262,13 @@ public class Product {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Subcategory getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(Subcategory subcategory) {
+        this.subcategory = subcategory;
     }
 }

@@ -1,9 +1,11 @@
 package com.atlantbh.auctionapp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Category {
@@ -12,9 +14,15 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(nullable = false, unique = true)
     private String name;
 
     public Category() {
+    }
+
+    public Category(@NotBlank String name) {
+        this.name = name;
     }
 
     public Long getId() {

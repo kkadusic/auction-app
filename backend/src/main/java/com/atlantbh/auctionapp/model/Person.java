@@ -5,10 +5,16 @@ import com.atlantbh.auctionapp.enumeration.Gender;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -20,29 +26,46 @@ public class Person {
     private Long id;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime creationDate;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdateDate;
 
+    @NotBlank
+    @Column(nullable = false)
+    @Size(min = 2, max = 50)
     private String firstName;
 
+    @NotBlank
+    @Column(nullable = false)
+    @Size(min = 2, max = 50)
     private String lastName;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private Date birthDate;
 
+    @Size(max = 15)
     private String phoneNumber;
 
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    @Size(max = 320)
+    @Email
     private String email;
 
+    @NotBlank
+    @Column(nullable = false)
+    @Size(max = 128)
     private String password;
 
     private String street;
 
     private String city;
 
+    @Size(max = 32)
     private String zip;
 
     private String state;
@@ -50,6 +73,16 @@ public class Person {
     private String country;
 
     public Person() {
+    }
+
+    public Person(@NotBlank @Size(min = 2, max = 50) String firstName,
+                  @NotBlank @Size(min = 2, max = 50) String lastName,
+                  @NotBlank @Size(max = 320) @Email String email,
+                  @NotBlank @Size(max = 128) String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
     }
 
     public Long getId() {

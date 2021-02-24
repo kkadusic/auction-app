@@ -1,11 +1,13 @@
 package com.atlantbh.auctionapp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Subcategory {
@@ -14,15 +16,22 @@ public class Subcategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(nullable = false)
     private String name;
 
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     public Subcategory() {
+    }
+
+    public Subcategory(@NotBlank String name, Category category) {
+        this.name = name;
+        this.category = category;
     }
 
     public Long getId() {

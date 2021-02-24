@@ -1,11 +1,13 @@
 package com.atlantbh.auctionapp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Notification {
@@ -14,19 +16,30 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(nullable = false)
     private String type;
 
+    @NotBlank
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public Notification() {
+    }
+
+    public Notification(@NotBlank String type, @NotBlank String description, Person person, Product product) {
+        this.type = type;
+        this.description = description;
+        this.person = person;
+        this.product = product;
     }
 
     public Long getId() {
