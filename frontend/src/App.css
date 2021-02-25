@@ -1,38 +1,96 @@
-.App {
-    text-align: center;
+.app {
+  font-size: 16px;
+  letter-spacing: 0.56px;
+  text-align: center;
+  position: relative;
+  min-height: 100vh;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+.btn {
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  border: 3px solid #8367D8;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10%;
+  padding-left: 10%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.btn:hover {
+  color: currentColor;
 }
 
-.App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.btn-xl {
+  height: 54px;
 }
 
-.App-link {
-    color: #61dafb;
+.btn-xxl {
+  height: 57px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.btn-flat-white {
+  color: #D8D8D8;
+  background-color: transparent;
+}
+
+.form-control {
+  border: 1px solid #E3E3E3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+  border-radius: 0;
+  color: #9B9B9B;
+}
+
+.form-control-xl-16 {
+  height: 54px;
+  font-size: 16px;
+  letter-spacing: 0.56px;
+}
+
+.form-control-xl-18 {
+  height: 54px;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
+.white-nav-link {
+  color: white;
+}
+
+.white-nav-link:hover {
+  color: lightgray;
+  text-decoration: none;
+}
+
+.black-nav-link {
+  color: #252525;
+}
+
+.black-nav-link:hover {
+  color: #8367D8;
+  text-decoration: none;
+}
+
+.black-active-nav-link {
+  color: #8367D8;
+  font-weight: bold;
+}
+
+.social-media-container {
+  font-size: 25px;
+  display: flex;
+}
+
+.social-media-link {
+  color: #9B9B9B;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.social-media-link:hover {
+  color: white;
 }
