@@ -4,6 +4,7 @@ import {Button, Form} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
 import {registerUser} from '../../utilities/ServerCall';
 import {setSession} from '../../utilities/Common';
+import * as yup from 'yup';
 
 import './register.css';
 
@@ -16,6 +17,27 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
     useEffect(() => {
         setBreadcrumb("REGISTER", []);
     }, []);
+
+    const validationSchema = yup.object().shape({
+        firstName: yup.string()
+            .min(2, "*First name must have at least 2 characters")
+            .max(50, "*First name can't be longer than 50 characters")
+            .required("*First name is required"),
+        lastName: yup.string()
+            .min(2, "*Last name must have at least 2 characters")
+            .max(50, "*Last name can't be longer than 50 characters")
+            .required("*Last name is required"),
+        email: yup.string()
+            .email("*Email must be valid")
+            .max(320, "*Email must be less than 320 characters")
+            .required("*Email is required"),
+        password: yup.string()
+            .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+            )
+            .required("*Password is required"),
+    });
 
     const handleSubmit = async (user) => {
         setLoading(true);
@@ -41,6 +63,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                 REGISTER
             </div>
             <Formik
+                validationSchema={validationSchema}
                 initialValues={{firstName: "", lastName: "", email: "", password: ""}}
                 onSubmit={handleSubmit}
             >
