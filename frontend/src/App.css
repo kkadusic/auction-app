@@ -1,9 +1,14 @@
 .app {
+  color: #252525;
   font-size: 16px;
   letter-spacing: 0.56px;
   text-align: center;
   position: relative;
   min-height: 100vh;
+}
+
+.route-container {
+  padding: 2.5% 11.1% calc(12.5% + 356px) 11.1%;
 }
 
 .btn {
@@ -36,11 +41,16 @@
   background-color: transparent;
 }
 
+.btn-flat-black {
+  color: #252525;
+  background-color: transparent;
+}
+
 .form-control {
   border: 1px solid #E3E3E3;
   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
   border-radius: 0;
-  color: #9B9B9B;
+  color: #919191;
 }
 
 .form-control-xl-16 {
@@ -55,12 +65,35 @@
   letter-spacing: 0.63px;
 }
 
+.form-control-gray {
+  background: #FCFCFC;
+  border: 1px solid #D8D8D8;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-label, .font-18 {
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
 .white-nav-link {
   color: white;
 }
 
 .white-nav-link:hover {
   color: lightgray;
+  text-decoration: none;
+}
+
+.purple-nav-link {
+  color: #8367D8;
+}
+
+.purple-nav-link:hover {
+  color: #573BAC;
   text-decoration: none;
 }
 
@@ -84,7 +117,7 @@
 }
 
 .social-media-link {
-  color: #9B9B9B;
+  color: #919191;
   display: flex;
   align-items: center;
   margin-left: 5px;
@@ -93,4 +126,57 @@
 
 .social-media-link:hover {
   color: white;
+}
+
+.alert {
+  font-size: 18px;
+  letter-spacing: 0.63px;
+  border: none;
+  text-align: left;
+  padding-left: 11.1%;
+  border-radius: 0;
+}
+
+.alert-warning {
+  background: #F6F2E5;
+  color: #AB944E;
+}
+
+.alert-success {
+  background: #F0F3EE;
+  font-weight: bold;
+  color: #417505;
+}
+
+.breadcrumb {
+  background: #FAFAFA;
+  padding-left: 11.1%;
+  padding-right: 11.1%;
+  text-align: right;
+  justify-content: end;
+  height: 60px;
+  align-items: center;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.breadcrumb-title {
+  position: absolute;
+  left: 11.1%;
+  font-size: 18px;
+  letter-spacing: 0.63px;
+}
+
+.breadcrumb-item>a {
+  font-weight: lighter;
+  color: #252525;
+}
+
+.breadcrumb-item>a:hover {
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.breadcrumb-item.active {
+  color: #252525;
 }

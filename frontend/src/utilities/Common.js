@@ -1,13 +1,20 @@
 // Set token and user to local storage
-export const setUser = (token, user) => {
+export const setSession = (user, token) => {
     localStorage.setItem('auction-token', token);
     localStorage.setItem('auction-user', JSON.stringify(user));
 }
 
-// Return user from the local storage
+// Remove token and user from local storage
+export const removeSession = () => {
+    localStorage.removeItem('auction-token');
+    localStorage.removeItem('auction-user');
+};
+
+// Return user from local storage
 export const getUser = () => {
-    return localStorage.getItem('auction-user') || null;
-}
+    const user = localStorage.getItem('auction-user');
+    return user ?  JSON.parse(user) : null;
+};
 
 // Return token from local storage
 export const getToken = () => {
