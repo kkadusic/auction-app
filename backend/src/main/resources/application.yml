@@ -9,3 +9,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+app:
+  jwtSecret: JWTSuperSecretKey
+  jwtExpiration: 9000000

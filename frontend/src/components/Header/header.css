@@ -1,0 +1,54 @@
+.topbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #252525;
+    height: 40px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.49px;
+    padding-right: 11.1%;
+    padding-left: 11.1%;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    padding-right: 11.1%;
+    padding-left: 11.1%;
+    height: 80px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    letter-spacing: 0.84px;
+    font-weight: 200;
+    color: #8367D8;
+}
+
+.navbar-brand:hover {
+    text-decoration: none;
+    color: #8367D8;
+}
+
+.navbar-auction-icon {
+    color: #C4BFD6;
+    margin: 5px 5px 10px;
+}
+
+.navbar-search {
+    width: 50%;
+    position: relative;
+}
+
+.navbar-search-icon {
+    position: absolute;
+    right: 8px;
+    font-size: 36px;
+    top: 9px;
+    cursor: pointer;
+}
