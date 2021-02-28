@@ -7,6 +7,7 @@ import Shop from '../components/Shop';
 import Login from '../components/Login';
 import Register from '../components/Register';
 import MyAccount from '../components/MyAccount';
+import PageNotFound from "../components/PageNotFound";
 
 const UserRoutes = (props) => {
     return (
@@ -16,6 +17,7 @@ const UserRoutes = (props) => {
             <Route path="/login" component={Login}/>
             <Route path="/register" render={() => <Register {...props} />}/>
             <PrivateRoute path="/my-account" component={MyAccount}/>
+            <Route component={PageNotFound} />
         </Switch>
     );
 }
