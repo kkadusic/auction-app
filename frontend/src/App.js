@@ -47,7 +47,7 @@ const App = () => {
                     {breadcrumbItems.map((item, i, {length}) => (
                         <Breadcrumb.Item active key={item.text}>
                             {length - 1 === i ? (
-                                <div style={{width: '110px'}}>
+                                <div style={{marginLeft: '19px'}}>
                                     {item.text}
                                 </div>
                             ) : (

@@ -9,6 +9,7 @@ import Register from '../components/Register';
 import MyAccount from '../components/MyAccount';
 import PageNotFound from "../components/PageNotFound";
 import AboutUs from "../components/AboutUs";
+import TermsConditions from "../components/TermsConditions";
 
 const UserRoutes = (props) => {
     return (
@@ -16,6 +17,7 @@ const UserRoutes = (props) => {
             <Route exact path="/" component={Home}/>
             <Route path="/shop" render={() => <Shop {...props} />}/>
             <Route path="/about" render={() => <AboutUs {...props} />}/>
+            <Route path="/terms" render={() => <TermsConditions {...props} />}/>
             <Route path="/login" component={Login}/>
             <Route path="/register" render={() => <Register {...props} />}/>
             <PrivateRoute path="/my-account" component={MyAccount}/>
