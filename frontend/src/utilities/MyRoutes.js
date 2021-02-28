@@ -8,12 +8,14 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import MyAccount from '../components/MyAccount';
 import PageNotFound from "../components/PageNotFound";
+import AboutUs from "../components/AboutUs";
 
 const UserRoutes = (props) => {
     return (
         <Switch>
             <Route exact path="/" component={Home}/>
-            <Route path="/shop" component={Shop}/>
+            <Route path="/shop" render={() => <Shop {...props} />}/>
+            <Route path="/about" render={() => <AboutUs {...props} />}/>
             <Route path="/login" component={Login}/>
             <Route path="/register" render={() => <Register {...props} />}/>
             <PrivateRoute path="/my-account" component={MyAccount}/>
