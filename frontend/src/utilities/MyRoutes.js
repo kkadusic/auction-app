@@ -20,10 +20,10 @@ const UserRoutes = (props) => {
             <Route path="/about" render={() => <AboutUs {...props} />}/>
             <Route path="/privacy" render={() => <PrivacyPolicy {...props} />}/>
             <Route path="/terms" render={() => <TermsConditions {...props} />}/>
-            <Route path="/login" component={Login}/>
+            <Route path="/login" render={() => <Login {...props} />}/>
             <Route path="/register" render={() => <Register {...props} />}/>
             <PrivateRoute path="/my-account" component={MyAccount}/>
-            <Route component={PageNotFound} />
+            <Route component={PageNotFound}/>
         </Switch>
     );
 }

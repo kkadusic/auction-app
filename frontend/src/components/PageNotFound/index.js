@@ -24,7 +24,7 @@ const PageNotFound = () => {
             <div className="page-not-found-text">
                 Ooops! Looks like the page is Not Found
             </div>
-            <Button onClick={goHome} className="btn-go-back"  variant="transparent-black-shadow">
+            <Button onClick={goHome} className="btn-go-back" variant="transparent-black-shadow">
                 GO BACK
             </Button>
         </div>
