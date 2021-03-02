@@ -4,7 +4,7 @@ import {Button, Form} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
 import {loginUser} from '../../utilities/ServerCall';
 import {setSession, setRememberInfo, getRememberInfo, removeRememberInfo} from '../../utilities/Common';
-import {SiFacebook, SiGmail} from 'react-icons/si';
+// import {SiFacebook, SiGmail} from 'react-icons/si';
 import * as yup from 'yup';
 
 import './login.css';
@@ -119,22 +119,22 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                             LOGIN
                         </Button>
 
-                        <Form.Row>
-                            <Button variant="fb-button" size="xxl">
-                                <SiFacebook style={{fontSize: 25, marginRight: 10}}/>
-                                LOGIN WITH FACEBOOK
-                            </Button>
-                            <Button variant="google-button" size="xxl">
-                                <SiGmail style={{fontSize: 25, marginRight: 10}}/>
-                                LOGIN WITH GMAIL
-                            </Button>
-                        </Form.Row>
+                        {/*<Form.Row>*/}
+                        {/*    <Button variant="fb-button" size="xxl">*/}
+                        {/*        <SiFacebook style={{fontSize: 25, marginRight: 10}}/>*/}
+                        {/*        LOGIN WITH FACEBOOK*/}
+                        {/*    </Button>*/}
+                        {/*    <Button variant="google-button" size="xxl">*/}
+                        {/*        <SiGmail style={{fontSize: 25, marginRight: 10}}/>*/}
+                        {/*        LOGIN WITH GMAIL*/}
+                        {/*    </Button>*/}
+                        {/*</Form.Row>*/}
 
-                        <Form.Text className="font-18">
-                            <Link className="purple-nav-link nav-link" to="/forgot-password">
-                                Forgot password?
-                            </Link>
-                        </Form.Text>
+                        {/*<Form.Text className="font-18">*/}
+                        {/*    <Link className="purple-nav-link nav-link" to="/forgot-password">*/}
+                        {/*        Forgot password?*/}
+                        {/*    </Link>*/}
+                        {/*</Form.Text>*/}
                     </Form>
                 )}
             </Formik>
