@@ -1,0 +1,51 @@
+h1 {
+    text-align: left;
+    font-size: 46px;
+    color: #252525;
+    letter-spacing: 1.61px;
+    margin-bottom: 22px;
+}
+
+.about-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.about-text {
+    text-align: left;
+    width: 45%;
+    font-size: 18px;
+    color: #9B9B9B;
+    letter-spacing: 0.63px;
+    line-height: 25px;
+}
+
+.about-images {
+    width: 45%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.about-large-image {
+    width: 100%;
+    margin-bottom: 11px;
+    object-fit: cover;
+}
+
+.about-small-image {
+    width: 48.4%;
+    object-fit: cover;
+}
+
+@media (max-width: 991px) {
+    .about-text {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .about-images {
+        width: 100%;
+    }
+}

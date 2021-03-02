@@ -13,13 +13,13 @@ const Footer = () => {
                 <div className="footer-content-title">
                     AUCTION
                 </div>
-                <Link className="white-nav-link" to="/shop/about">
+                <Link className="white-nav-link" to="/about">
                     About Us
                 </Link>
-                <Link className="white-nav-link" to="/shop/terms">
+                <Link className="white-nav-link" to="/terms">
                     Terms and Conditions
                 </Link>
-                <Link className="white-nav-link" to="/shop/privacy">
+                <Link className="white-nav-link" to="/privacy">
                     Privacy and Policy
                 </Link>
             </div>
