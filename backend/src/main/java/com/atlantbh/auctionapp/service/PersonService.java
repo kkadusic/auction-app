@@ -1,8 +1,10 @@
 package com.atlantbh.auctionapp.service;
 
 import com.atlantbh.auctionapp.exception.ConflictException;
+import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.repository.PersonRepository;
+import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +32,15 @@ public class PersonService {
                 registerRequest.getEmail(),
                 passwordEncoder.encode(registerRequest.getPassword()))
         );
+        person.setPassword(null);
+        return person;
+    }
+
+    public Person login(LoginRequest loginRequest) {
+        Person person = personRepository.findByEmail(loginRequest.getEmail());
+        if (person == null || !passwordEncoder.matches(loginRequest.getPassword(), person.getPassword())) {
+            throw new UnauthorizedException("Wrong email or password");
+        }
         person.setPassword(null);
         return person;
     }
