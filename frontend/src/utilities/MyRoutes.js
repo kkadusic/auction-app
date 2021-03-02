@@ -23,7 +23,7 @@ const UserRoutes = (props) => {
             <Route path="/login" render={() => <Login {...props} />}/>
             <Route path="/register" render={() => <Register {...props} />}/>
             <PrivateRoute path="/my-account" component={MyAccount}/>
-            <Route component={PageNotFound} />
+            <Route component={PageNotFound}/>
         </Switch>
     );
 }

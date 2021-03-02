@@ -5,7 +5,7 @@
     width: 100%;
 }
 
-.page-not-found-container>div {
+.page-not-found-container > div {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -38,7 +38,7 @@
     color: #8367D8;
 }
 
-.btn-go-back{
+.btn-go-back {
     width: 179px;
     white-space: nowrap;
 }

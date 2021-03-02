@@ -17,7 +17,7 @@
     flex-direction: column;
 }
 
-.footer-content>* {
+.footer-content > * {
     margin: 5px 0;
 }
 

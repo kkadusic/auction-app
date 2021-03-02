@@ -174,12 +174,12 @@
     letter-spacing: 0.63px;
 }
 
-.breadcrumb-item>a {
+.breadcrumb-item > a {
     font-weight: lighter;
     color: #252525;
 }
 
-.breadcrumb-item>a:hover {
+.breadcrumb-item > a:hover {
     text-decoration: none;
     font-weight: normal;
 }
