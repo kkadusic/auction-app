@@ -48,7 +48,7 @@ const Header = ({loggedInState}) => {
                     {loggedIn ?
                         (
                             <>
-                                <Link className="white-nav-link nav-link" onClick={handleLogout} to="/">
+                                <Link style={{ paddingRight: 0 }} className="white-nav-link nav-link" onClick={handleLogout} to="/">
                                     Log out
                                 </Link>
                             </>

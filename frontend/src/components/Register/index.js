@@ -16,6 +16,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
 
     useEffect(() => {
         setBreadcrumb("REGISTER", []);
+        // eslint-disable-next-line
     }, []);
 
     const validationSchema = yup.object().shape({
@@ -74,7 +75,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                       errors,
                   }) => (
                     <Form noValidate className="register-form" onSubmit={handleSubmit}>
-                        <Form.Group controlId="validationFormik02">
+                        <Form.Group>
                             <Form.Label>First Name</Form.Label>
                             <Form.Control
                                 className="form-control-gray"
@@ -90,7 +91,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="lastName">
+                        <Form.Group>
                             <Form.Label>Last Name</Form.Label>
                             <Form.Control
                                 className="form-control-gray"
@@ -106,7 +107,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="email">
+                        <Form.Group>
                             <Form.Label>Enter Email</Form.Label>
                             <Form.Control
                                 className="form-control-gray"
@@ -122,7 +123,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group controlId="password">
+                        <Form.Group>
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 className="form-control-gray"
@@ -138,7 +139,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Button disabled={loading} style={{marginTop: 80}} block variant="flat-black" size="xxl"
+                        <Button disabled={loading} style={{marginTop: 80}} block variant="transparent-black" size="xxl"
                                 type="submit">
                             REGISTER
                         </Button>

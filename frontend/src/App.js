@@ -21,6 +21,9 @@ const App = () => {
         setMessage(message);
         setVariant(variant);
         setAlertVisible(true);
+        setTimeout(() => {
+            setAlertVisible(false);
+        }, 3000);
     }
 
     const setBreadcrumb = (title, items) => {
