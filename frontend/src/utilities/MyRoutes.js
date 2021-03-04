@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 
-import Home from '../components/Home';
+import LandingPage from '../components/LandingPage';
 import Shop from '../components/Shop';
 import Login from '../components/Login';
 import Register from '../components/Register';
@@ -15,7 +15,7 @@ import PrivacyPolicy from "../components/PrivacyPolicy";
 const UserRoutes = (props) => {
     return (
         <Switch>
-            <Route exact path="/" component={Home}/>
+            <Route exact path="/" render={() => <LandingPage {...props} />}/>
             <Route path="/shop" render={() => <Shop {...props} />}/>
             <Route path="/about" render={() => <AboutUs {...props} />}/>
             <Route path="/privacy" render={() => <PrivacyPolicy {...props} />}/>
