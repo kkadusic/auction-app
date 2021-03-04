@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query(value = "SELECT p.id, p.name, p.start_price, p.description " +
+    @Query(value = "SELECT * " +
             "FROM product p " +
             "INNER JOIN image i ON p.id = i.product_id " +
             "WHERE p.featured = true AND p.start_date <= now() AND p.end_date > now() " +
@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> getFeaturedRandomProducts();
 
     // Based on the date of creation
-    @Query(value = "SELECT p.id, p.name, p.start_price, p.description " +
+    @Query(value = "SELECT * " +
             "FROM product p " +
             "INNER JOIN image i ON p.id = i.product_id " +
             "WHERE start_date <= now() AND end_date > now() " +
@@ -30,7 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> getNewArrivalsProducts();
 
     // Based on the time left for bidding process
-    @Query(value = "SELECT p.id, p.name, p.start_price, p.description " +
+    @Query(value = "SELECT * " +
             "FROM product p " +
             "INNER JOIN image i ON p.id = i.product_id " +
             "WHERE start_date <= now() AND end_date > now() " +

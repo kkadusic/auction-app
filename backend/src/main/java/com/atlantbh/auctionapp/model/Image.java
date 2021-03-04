@@ -20,16 +20,11 @@ public class Image {
     @Column(nullable = false)
     private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
     public Image() {
     }
 
-    public Image(@NotBlank String url, Product product) {
+    public Image(@NotBlank String url) {
         this.url = url;
-        this.product = product;
     }
 
     public Long getId() {
@@ -46,13 +41,5 @@ public class Image {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }
