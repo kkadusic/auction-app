@@ -1,6 +1,6 @@
 package com.atlantbh.auctionapp.service;
 
-import com.atlantbh.auctionapp.model.Product;
+import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getFeaturedRandomProducts() {
+    public List<SimpleProductProjection> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
     }
 
-    public List<Product> getNewProducts() {
+    public List<SimpleProductProjection> getNewProducts() {
         return productRepository.getNewArrivalsProducts();
     }
 
-    public List<Product> getLastProducts() {
+    public List<SimpleProductProjection> getLastProducts() {
         return productRepository.getLastChanceProducts();
     }
 }

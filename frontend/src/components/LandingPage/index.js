@@ -68,7 +68,7 @@ const LandingPage = ({setBreadcrumb}) => {
                                 <IoIosArrowForward style={{fontSize: 24}}/>
                             </Button>
                         </div>
-                        <Image width="484px" height="294px" src={featuredProducts[0].images[0].url}/>
+                        <Image width="484px" height="294px" src={featuredProducts[0].imageUrl}/>
                     </div> : null}
             </div>
 
@@ -100,7 +100,7 @@ const LandingPage = ({setBreadcrumb}) => {
                     {featuredProducts.slice(1).map(product => (
                         <div key={product.id} className="featured-item-container">
                             <Image className="featured-item-image-xl" width="260px" height="350px"
-                                   src={product.images[0].url}/>
+                                   src={product.imageUrl}/>
                             <h3>
                                 {product.name}
                             </h3>
@@ -126,7 +126,7 @@ const LandingPage = ({setBreadcrumb}) => {
                     {newArrivalsLastChanceProducts.length !== 0 ? newArrivalsLastChanceProducts[activeTab].map(product => (
                         <div key={product.id} className="featured-item-container">
                             <Image className="featured-item-image-lg" width="260px" height="260px"
-                                   src={product.images[0].url}/>
+                                   src={product.imageUrl}/>
                             <h3>
                                 {product.name}
                             </h3>

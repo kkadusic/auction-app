@@ -1,6 +1,6 @@
 package com.atlantbh.auctionapp.controller;
 
-import com.atlantbh.auctionapp.model.Product;
+import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +22,17 @@ public class ProductController {
     }
 
     @GetMapping("/featured/random")
-    public ResponseEntity<List<Product>> getFeaturedRandomProducts() {
+    public ResponseEntity<List<SimpleProductProjection>> getFeaturedRandomProducts() {
         return ResponseEntity.ok(productService.getFeaturedRandomProducts());
     }
 
     @GetMapping("/new")
-    public ResponseEntity<List<Product>> getNewProducts() {
+    public ResponseEntity<List<SimpleProductProjection>> getNewProducts() {
         return ResponseEntity.ok(productService.getNewProducts());
     }
 
     @GetMapping("/last")
-    public ResponseEntity<List<Product>> getLastProducts() {
+    public ResponseEntity<List<SimpleProductProjection>> getLastProducts() {
         return ResponseEntity.ok(productService.getLastProducts());
     }
 }
