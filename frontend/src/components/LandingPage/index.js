@@ -54,7 +54,7 @@ const LandingPage = ({setBreadcrumb}) => {
                 {featuredProducts.length !== 0 ?
                     <div className="featured-product-container">
                         <div className="featured-product-container-inner">
-                            <h1>
+                            <h1 style={{marginBottom: "5px"}}>
                                 {featuredProducts[0].name}
                             </h1>
                             <div className="featured-product-price">
@@ -63,12 +63,14 @@ const LandingPage = ({setBreadcrumb}) => {
                             <div className="featured-product-description">
                                 {featuredProducts[0].description}
                             </div>
-                            <Button style={{width: 192}} size="xxl" variant="transparent-black-shadow">
+                            <Button style={{width: 192, boxShadow: "3px 3px 0 #C4BFD6", marginTop: "15px"}} size="xxl"
+                                    variant="transparent-black-shadow">
                                 BID NOW
                                 <IoIosArrowForward style={{fontSize: 24}}/>
                             </Button>
                         </div>
-                        <Image width="484px" height="294px" src={featuredProducts[0].imageUrl}/>
+                        <Image width="484px" height="294px" style={{marginLeft: "20px"}}
+                               src={featuredProducts[0].imageUrl}/>
                     </div> : null}
             </div>
 
