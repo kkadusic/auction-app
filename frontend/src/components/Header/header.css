@@ -41,8 +41,9 @@
 }
 
 .navbar-search {
-    width: 50%;
+    width: 513px;
     position: relative;
+    margin-left: 131px;
 }
 
 .navbar-search-icon {
