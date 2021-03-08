@@ -8,10 +8,13 @@ import {
     getLastProducts
 } from '../../utilities/ServerCall';
 import {IoIosArrowForward} from "react-icons/io";
+import { useHistory } from 'react-router-dom';
 
 import './landingPage.css';
 
 const LandingPage = ({setBreadcrumb}) => {
+
+    const history = useHistory();
 
     useEffect(() => {
         setBreadcrumb(null, []);
@@ -44,9 +47,11 @@ const LandingPage = ({setBreadcrumb}) => {
                         CATEGORIES
                     </ListGroup.Item>
                     {categories.map(category => (
-                        <ListGroup.Item key={category.name} action>{category.name}</ListGroup.Item>
+                        <ListGroup.Item key={category.name} action onClick={() => history.push("/shop/" + category.name.split(' ').join('_').toLowerCase())}>
+                            {category.name}
+                        </ListGroup.Item>
                     ))}
-                    <ListGroup.Item action>
+                    <ListGroup.Item action onClick={() => history.push("/shop/all")}>
                         All Categories
                     </ListGroup.Item>
                 </ListGroup>
@@ -63,8 +68,14 @@ const LandingPage = ({setBreadcrumb}) => {
                             <div className="featured-product-description">
                                 {featuredProducts[0].description}
                             </div>
-                            <Button style={{width: 192, boxShadow: "3px 3px 0 #C4BFD6", marginTop: "15px"}} size="xxl"
-                                    variant="transparent-black-shadow">
+                            <Button
+                                style={{ width: 192 }}
+                                size="xxl"
+                                variant="transparent-black-shadow"
+                                onClick={() => history.push(
+                                    "/shop/" + featuredProducts[0].categoryName.split(' ').join('_').toLowerCase() + "/" + featuredProducts[0].subcategoryName.split(' ').join('_').toLowerCase() + "/" + featuredProducts[0].id
+                                )}
+                            >
                                 BID NOW
                                 <IoIosArrowForward style={{fontSize: 24}}/>
                             </Button>
@@ -101,8 +112,15 @@ const LandingPage = ({setBreadcrumb}) => {
                 <div className="featured-items-container">
                     {featuredProducts.slice(1).map(product => (
                         <div key={product.id} className="featured-item-container">
-                            <Image className="featured-item-image-xl" width="260px" height="350px"
-                                   src={product.imageUrl}/>
+                            <Image
+                                className="featured-item-image-xl"
+                                width="260px"
+                                height="350px"
+                                src={product.imageUrl}
+                                onClick={() => history.push(
+                                    "/shop/" + product.categoryName.split(' ').join('_').toLowerCase() + "/" + product.subcategoryName.split(' ').join('_').toLowerCase() + "/" + product.id
+                                )}
+                            />
                             <h3>
                                 {product.name}
                             </h3>
@@ -127,8 +145,15 @@ const LandingPage = ({setBreadcrumb}) => {
                 <div className="featured-items-container">
                     {newArrivalsLastChanceProducts.length !== 0 ? newArrivalsLastChanceProducts[activeTab].map(product => (
                         <div key={product.id} className="featured-item-container">
-                            <Image className="featured-item-image-lg" width="260px" height="260px"
-                                   src={product.imageUrl}/>
+                            <Image
+                                className="featured-item-image-lg"
+                                width="260px"
+                                height="260px"
+                                src={product.imageUrl}
+                                onClick={() => history.push(
+                                    "/shop/" + product.categoryName.split(' ').join('_').toLowerCase() + "/" + product.subcategoryName.split(' ').join('_').toLowerCase() + "/" + product.id
+                                )}
+                            />
                             <h3>
                                 {product.name}
                             </h3>

@@ -1,12 +1,24 @@
-import './shop.css';
-import {useEffect} from "react";
+import { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 
-const Shop = ({setBreadcrumb}) => {
+import './shop.css';
+
+const Shop = ({ match, setBreadcrumb }) => {
 
     useEffect(() => {
-        setBreadcrumb(null, []);
+        formBreadcrumb();
         // eslint-disable-next-line
-    }, [])
+    }, [match.url])
+
+    const formBreadcrumb = () => {
+        const urlElements = match.url.split("/").slice(1);
+        setBreadcrumb("SHOP", urlElements.map((el, i) => {
+            return {
+                text: el.toUpperCase().split("_").join(" "),
+                href: "/" + urlElements.slice(0, i + 1).join("/")
+            }
+        }));
+    }
 
     return (
         <div>
@@ -15,4 +27,4 @@ const Shop = ({setBreadcrumb}) => {
     );
 }
 
-export default Shop;
+export default withRouter(Shop);
