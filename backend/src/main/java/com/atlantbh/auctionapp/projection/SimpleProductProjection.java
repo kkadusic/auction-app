@@ -13,4 +13,8 @@ public interface SimpleProductProjection {
     String getDescription();
 
     String getImageUrl();
+
+    String getCategoryName();
+
+    String getSubcategoryName();
 }

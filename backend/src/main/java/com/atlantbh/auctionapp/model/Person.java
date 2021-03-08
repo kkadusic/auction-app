@@ -72,6 +72,8 @@ public class Person {
 
     private String country;
 
+    private String imageUrl;
+
     public Person() {
     }
 
