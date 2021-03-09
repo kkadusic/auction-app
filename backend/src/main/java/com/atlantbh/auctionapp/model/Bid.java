@@ -20,10 +20,10 @@ public class Bid {
 
     @PositiveOrZero
     @Column(nullable = false)
-    private BigDecimal bidAmount;
+    private BigDecimal amount;
 
     @Column(nullable = false)
-    private LocalDateTime bidDate;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
@@ -36,9 +36,9 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(@PositiveOrZero BigDecimal bidAmount, LocalDateTime bidDate, Person person, Product product) {
-        this.bidAmount = bidAmount;
-        this.bidDate = bidDate;
+    public Bid(@PositiveOrZero BigDecimal amount, LocalDateTime date, Person person, Product product) {
+        this.amount = amount;
+        this.date = date;
         this.person = person;
         this.product = product;
     }
@@ -51,20 +51,20 @@ public class Bid {
         this.id = id;
     }
 
-    public BigDecimal getBidAmount() {
-        return bidAmount;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setBidAmount(BigDecimal bidAmount) {
-        this.bidAmount = bidAmount;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public LocalDateTime getBidDate() {
-        return bidDate;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setBidDate(LocalDateTime bidDate) {
-        this.bidDate = bidDate;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public Person getPerson() {

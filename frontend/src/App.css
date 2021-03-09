@@ -218,3 +218,44 @@ h3 {
     height: 4px;
     margin: 10px 0;
 }
+
+.btn-transparent-gray {
+    border: 3px solid #ECECEC;
+    font-size: 15px;
+    letter-spacing: 0.52px;
+    font-weight: normal;
+    padding: 0;
+}
+
+.font-15 {
+    font-size: 15px;
+    letter-spacing: 0.53px;
+}
+
+.avatar-image-small {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.table-gray-transparent {
+    text-align: left;
+    border: 1px solid #D8D8D8;
+    margin-top: 200px;
+}
+
+.table-gray-transparent thead th, .table-gray-transparent td {
+    font-size: 18px;
+    letter-spacing: 0.63px;
+    vertical-align: middle;
+    border: none;
+}
+
+.table-gray-transparent th {
+    background-color: #F0F0F0;
+    font-weight: normal;
+}
+
+.table-gray-transparent thead tr th:first-child, .table-gray-transparent tbody tr td:first-child {
+    padding-left: 50px;
+}
