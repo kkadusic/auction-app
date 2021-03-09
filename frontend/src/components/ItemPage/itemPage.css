@@ -55,3 +55,15 @@
     width: 140px;
     height: 36px;
 }
+
+.wishlist-icon-wished {
+    font-size: 22px;
+    margin-left: 5px;
+    color: #CD5C5C;
+}
+
+.wishlist-icon {
+    font-size: 22px;
+    margin-left: 5px;
+    color: #ECECEC;
+}
