@@ -34,4 +34,6 @@ $ npm install
 $ npm start
 ```
 
-Open [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html) to launch Swagger UI in a browser.
+Frontend application: [`https://auction-abh.herokuapp.com`](https://auction-abh.herokuapp.com/) <br>
+Backend application: [`https://auction-abh-server.herokuapp.com`](https://auction-abh-server.herokuapp.com/) <br>
+Open [`https://auction-abh-server.herokuapp.com/swagger-ui.html`](https://auction-abh-server.herokuapp.com/swagger-ui.html) to launch Swagger UI in a browser.
