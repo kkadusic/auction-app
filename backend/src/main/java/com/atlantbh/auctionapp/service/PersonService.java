@@ -41,6 +41,9 @@ public class PersonService {
         if (person == null || !passwordEncoder.matches(loginRequest.getPassword(), person.getPassword())) {
             throw new UnauthorizedException("Wrong email or password");
         }
+        if (!person.getActive()) {
+            throw new UnauthorizedException("User account disabled");
+        }
         person.setPassword(null);
         return person;
     }

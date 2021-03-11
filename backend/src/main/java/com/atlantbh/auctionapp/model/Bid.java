@@ -1,5 +1,7 @@
 package com.atlantbh.auctionapp.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,8 +24,10 @@ public class Bid {
 
     @PositiveOrZero
     @Column(nullable = false)
+    @DecimalMin("0.01")
     private BigDecimal amount;
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime date;
 
@@ -36,9 +42,15 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(@PositiveOrZero BigDecimal amount, LocalDateTime date, Person person, Product product) {
+    public Bid(@PositiveOrZero @DecimalMin("0.01") BigDecimal amount, LocalDateTime date, Person person, Product product) {
         this.amount = amount;
         this.date = date;
+        this.person = person;
+        this.product = product;
+    }
+
+    public Bid(@PositiveOrZero @Min(value = 0) BigDecimal amount, Person person, Product product) {
+        this.amount = amount;
         this.person = person;
         this.product = product;
     }

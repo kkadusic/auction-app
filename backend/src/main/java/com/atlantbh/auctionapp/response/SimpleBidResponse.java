@@ -16,4 +16,6 @@ public interface SimpleBidResponse {
     LocalDateTime getDate();
 
     BigDecimal getAmount();
+
+    Long getPersonId();
 }

@@ -1,16 +1,21 @@
 package com.atlantbh.auctionapp.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public interface FullProductResponse {
 
     Long getId();
 
+    Long getPersonId();
+
     String getName();
 
     String getDescription();
 
-    Integer getStartPrice();
+    BigDecimal getStartPrice();
+
+    LocalDateTime getStartDate();
 
     LocalDateTime getEndDate();
 
