@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import {useEffect} from 'react';
+import {withRouter} from 'react-router-dom';
 
 import './shop.css';
 
-const Shop = ({ match, setBreadcrumb }) => {
+const Shop = ({match, setBreadcrumb}) => {
 
     useEffect(() => {
         formBreadcrumb();
@@ -22,7 +22,7 @@ const Shop = ({ match, setBreadcrumb }) => {
 
     return (
         <div>
-            Shop
+
         </div>
     );
 }
