@@ -30,12 +30,15 @@ const LandingPage = ({setBreadcrumb}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setCategories(await getCategories());
-            setFeaturedProducts(await getFeaturedRandomProducts());
-            setRandomSubcategories(await getRandomSubcategories());
-            const newProducts = await getNewProducts();
-            const lastProducts = await getLastProducts();
-            setNewArrivalsLastChanceProducts([newProducts, lastProducts]);
+            try {
+                setCategories(await getCategories());
+                setFeaturedProducts(await getFeaturedRandomProducts());
+                setRandomSubcategories(await getRandomSubcategories());
+                const newProducts = await getNewProducts();
+                const lastProducts = await getLastProducts();
+                setNewArrivalsLastChanceProducts([newProducts, lastProducts]);
+            } catch (e) {
+            }
         }
         fetchData();
     }, [])
