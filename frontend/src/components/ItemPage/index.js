@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Image, Modal, Table, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Button, Form, Image, Modal, Table, Alert} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
-import {getToken, getUserId} from '../../utilities/Common';
+import {getUserId} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {AiOutlineFullscreen} from "react-icons/ai";
@@ -24,6 +24,8 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
     const [ownProduct, setOwnProduct] = useState(false);
     const [bidPrice, setBidPrice] = useState(null);
     const [minPrice, setMinPrice] = useState(0);
+    const [alertVisible, setAlertVisible] = useState(true);
+    const [outbid, setOutbid] = useState(false);
 
     useEffect(() => {
         if (personId == null) {
@@ -41,6 +43,15 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
                 setBids(bids);
+
+                if (!moment().isBetween(moment(data.startDate), moment(data.endDate)) && highestBidFromUser > 0) {
+                    setOutbid(true);
+                    for (let i = 0; i < bids.length; i++) {
+                        if (highestBidFromUser < bids[i].amount) {
+                            setOutbid(false);
+                        }
+                    }
+                }
             } catch (e) {
             }
         }
@@ -146,26 +157,39 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                                     {product.name}
                                 </h1>
                                 <div style={{marginTop: 10}} className="featured-product-price">
-                                    Start from ${product.startPrice}
+                                    Start from - ${product.startPrice}
                                 </div>
+                                {outbid !== false ?
+                                    <div style={{marginTop: 50, maxWidth: 500, minWidth: 220}}>
+                                        <Alert className="congrats-alert" dismissible
+                                               onClose={() => setAlertVisible(false)} transition={false}
+                                               show={alertVisible} variant="info">
+                                            Congratulations!
+                                            <span style={{fontWeight: 'normal'}}>
+                                {' '}You outbid the competition.
+                            </span>
+                                        </Alert>
+                                    </div> : null}
                             </div>
-                            <div className="place-bid-container">
-                                <div>
-                                    <Form.Control disabled={ownProduct || !active || loading} maxLength="7"
-                                                  className="form-control-gray place-bid-form" size="xl-18" type="text"
-                                                  onChange={e => setBidPrice(e.target.value)}/>
-                                    <div className="place-bid-label">
-                                        Enter ${minPrice} or more
+                            {active !== false ?
+                                <div className="place-bid-container">
+                                    <div>
+                                        <Form.Control disabled={ownProduct || !active || loading} maxLength="7"
+                                                      className="form-control-gray place-bid-form" size="xl-18"
+                                                      type="text"
+                                                      onChange={e => setBidPrice(e.target.value)}/>
+                                        <div className="place-bid-label">
+                                            Enter ${minPrice} or more
+                                        </div>
                                     </div>
-                                </div>
-                                <Button
-                                    disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}
-                                    style={{width: 192, padding: 0}} size="xxl" variant="transparent-black-shadow"
-                                    onClick={bid}>
-                                    PLACE BID
-                                    <IoIosArrowForward style={{fontSize: 24}}/>
-                                </Button>
-                            </div>
+                                    <Button
+                                        disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}
+                                        style={{width: 192, padding: 0}} size="xxl" variant="transparent-black-shadow"
+                                        onClick={bid}>
+                                        PLACE BID
+                                        <IoIosArrowForward style={{fontSize: 24}}/>
+                                    </Button>
+                                </div> : null}
                             <div style={{color: '#9B9B9B'}}>
                                 Highest bid: {' '}
                                 <span style={{color: '#8367D8', fontWeight: 'bold'}}>

@@ -98,3 +98,15 @@
         height: 85px;
     }
 }
+
+.congrats-alert {
+    padding-left: 1.25rem;
+    padding-right: 4rem;
+    background: rgba(131,103,216,0.10);
+    color: #8367D8;
+    font-weight: bold;
+}
+
+.congrats-alert>.close {
+    right: 0;
+}
