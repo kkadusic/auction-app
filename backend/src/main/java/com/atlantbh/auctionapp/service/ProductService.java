@@ -4,13 +4,24 @@ import com.atlantbh.auctionapp.exception.NotFoundException;
 import com.atlantbh.auctionapp.model.Image;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.repository.ProductRepository;
+import com.atlantbh.auctionapp.response.CategoryCountResponse;
+import com.atlantbh.auctionapp.response.CountResponse;
 import com.atlantbh.auctionapp.response.FullProductResponse;
+import com.atlantbh.auctionapp.response.ProductCountResponse;
+import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
+import com.atlantbh.auctionapp.response.SimpleProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 @Service
 public class ProductService {
@@ -62,5 +73,52 @@ public class ProductService {
         }
 
         return productResponse;
+    }
+
+    public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort) {
+        PageRequest pageRequest;
+        switch (sort) {
+            case "popularity":
+                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(bids)"));
+                break;
+            case "new":
+                pageRequest = PageRequest.of(page, 12, Sort.by("start_date").descending());
+                break;
+            case "price":
+                pageRequest = PageRequest.of(page, 12, Sort.by("start_price"));
+                break;
+            default:
+                pageRequest = PageRequest.of(page, 12, Sort.by("name").and(Sort.by("id")));
+                break;
+        }
+        Slice<SimpleProductResponse> searchResult = productRepository.search(
+                query.toLowerCase(),
+                category.toLowerCase(),
+                subcategory.toLowerCase(),
+                pageRequest
+        );
+        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext());
+    }
+
+    public List<CategoryCountResponse> searchCount(String query) {
+        List<ProductCountResponse> data = productRepository.searchCount(query.toLowerCase());
+        List<CategoryCountResponse> response = new ArrayList<>();
+
+        for (ProductCountResponse product : data) {
+            CategoryCountResponse newCategory = new CategoryCountResponse(product.getCategoryName(), product.getCount(), new TreeSet<>());
+            int i = response.indexOf(newCategory);
+            if (i == -1) {
+                newCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
+                response.add(newCategory);
+            } else {
+                CategoryCountResponse oldCategory = response.get(i);
+                oldCategory.setCount(oldCategory.getCount() + product.getCount());
+                oldCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
+            }
+        }
+
+        response.sort(Comparator.comparing(CategoryCountResponse::getCount).reversed());
+
+        return response;
     }
 }

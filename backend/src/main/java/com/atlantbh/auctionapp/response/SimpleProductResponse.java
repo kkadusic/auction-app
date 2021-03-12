@@ -3,6 +3,7 @@ package com.atlantbh.auctionapp.response;
 import java.math.BigDecimal;
 
 public interface SimpleProductResponse {
+
     Long getId();
 
     String getName();
@@ -14,4 +15,6 @@ public interface SimpleProductResponse {
     String getUrl();
 
     String getCategoryName();
+
+    String getSubcategoryName();
 }
