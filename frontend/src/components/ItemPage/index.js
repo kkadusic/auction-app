@@ -53,6 +53,7 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                     }
                 }
             } catch (e) {
+                showMessage("warning", "Error: " + e.message());
             }
         }
 
@@ -89,6 +90,7 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
+            showMessage("warning", "Error: " + e.message());
         }
         setLoading(false);
     }
