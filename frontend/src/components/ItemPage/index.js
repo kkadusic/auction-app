@@ -208,9 +208,9 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                                         variant="transparent-gray">
                                     Wishlist
                                     {product.wished ? (
-                                        <RiHeartFill style={{fontSize: 22, marginLeft: 5, color: '#8367D8'}}/>
+                                        <RiHeartFill className="wishlist-icon-wished"/>
                                     ) : (
-                                        <RiHeartFill style={{fontSize: 22, marginLeft: 5, color: '#ECECEC'}}/>
+                                        <RiHeartFill className="wishlist-icon"/>
                                     )}
                                 </Button>
                                 <div className="font-18" style={{marginTop: 15}}>
