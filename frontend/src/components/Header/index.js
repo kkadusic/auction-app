@@ -3,15 +3,17 @@ import {SiFacebook, SiTwitter, SiInstagram} from 'react-icons/si';
 import {FaGooglePlus} from 'react-icons/fa';
 import {GrFormSearch} from 'react-icons/gr';
 import {RiAuctionFill} from 'react-icons/ri';
-import {FormControl, Nav, Navbar} from 'react-bootstrap';
+import {FormControl, Image, Nav, Navbar} from 'react-bootstrap';
 import {Link, NavLink} from 'react-router-dom';
-import {getToken, removeSession} from '../../utilities/Common';
+import {getToken, removeSession, getUser} from '../../utilities/Common';
 
 import './header.css';
 
 const Header = ({loggedInState}) => {
 
     const [loggedIn, setLoggedIn] = useState(getToken() !== null);
+
+    const user = getUser();
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -48,7 +50,10 @@ const Header = ({loggedInState}) => {
                     {loggedIn ?
                         (
                             <>
-                                <Link style={{paddingRight: 0}} className="white-nav-link nav-link"
+                                <Image style={{marginRight: '0.5rem'}} roundedCircle className="avatar-image-tiny"
+                                       src={user.imageUrl}/>
+                                {user.firstName + ' ' + user.lastName + ' |'}
+                                <Link style={{paddingRight: 0, paddingLeft: 5}} className="white-nav-link nav-link"
                                       onClick={handleLogout} to="/">
                                     Log out
                                 </Link>

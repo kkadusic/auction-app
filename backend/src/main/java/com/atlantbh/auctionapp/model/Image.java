@@ -1,7 +1,5 @@
 package com.atlantbh.auctionapp.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +20,7 @@ public class Image {
 
     @NotBlank
     @Column(nullable = false)
-    @Value("false")
-    private Boolean featured;
+    private Boolean featured = false;
 
     public Image() {
     }
@@ -52,5 +49,13 @@ public class Image {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
     }
 }

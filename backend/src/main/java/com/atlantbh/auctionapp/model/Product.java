@@ -79,13 +79,11 @@ public class Product {
 
     @NotBlank
     @Column(nullable = false)
-    @Value("false")
-    private Boolean featured;
+    private Boolean featured = false;
 
     @NotBlank
     @Column(nullable = false)
-    @Value("false")
-    private Boolean shipping;
+    private Boolean shipping = false;
 
     @Enumerated(EnumType.STRING)
     private Size size;

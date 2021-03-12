@@ -31,6 +31,8 @@
     background: #3B3B3B;
     border: none;
     margin-right: 8px;
+    width: 275px;
+    margin-bottom: 10px;
 }
 
 .footer-go-button-arrow {
@@ -39,4 +41,5 @@
 
 .footer-newsletter-bottom {
     display: flex;
+    flex-wrap: wrap;
 }

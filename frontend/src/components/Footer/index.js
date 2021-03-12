@@ -65,7 +65,7 @@ const Footer = () => {
                 <div className="footer-newsletter-bottom">
                     <Form.Control className="footer-email-input" size="xl-16" type="text"
                                   placeholder="Your Email address"/>
-                    <Button size="xl" variant="transparent-white">
+                    <Button style={{width: 116}} size="xl" variant="transparent-white">
                         GO
                         <IoIosArrowForward className="footer-go-button-arrow"/>
                     </Button>

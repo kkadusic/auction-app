@@ -13,7 +13,7 @@ import {categoryUrl, allCategoriesUrl, productUrl} from "../../utilities/AppUrl"
 
 import './landingPage.css';
 
-const LandingPage = ({setBreadcrumb}) => {
+const LandingPage = ({setBreadcrumb, showMessage}) => {
 
     const history = useHistory();
 
@@ -30,12 +30,16 @@ const LandingPage = ({setBreadcrumb}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setCategories(await getCategories());
-            setFeaturedProducts(await getFeaturedRandomProducts());
-            setRandomSubcategories(await getRandomSubcategories());
-            const newProducts = await getNewProducts();
-            const lastProducts = await getLastProducts();
-            setNewArrivalsLastChanceProducts([newProducts, lastProducts]);
+            try {
+                setCategories(await getCategories());
+                setFeaturedProducts(await getFeaturedRandomProducts());
+                setRandomSubcategories(await getRandomSubcategories());
+                const newProducts = await getNewProducts();
+                const lastProducts = await getLastProducts();
+                setNewArrivalsLastChanceProducts([newProducts, lastProducts]);
+            } catch (e) {
+                showMessage("warning", "Error: " + e.message());
+            }
         }
         fetchData();
     }, [])

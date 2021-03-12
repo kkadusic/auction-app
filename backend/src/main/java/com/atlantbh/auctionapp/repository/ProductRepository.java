@@ -48,9 +48,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             nativeQuery = true)
     List<SimpleProductProjection> getLastChanceProducts();
 
-    @Query(value = "SELECT p.id, p.name, p.description, p.start_price startPrice, p.end_date endDate, " +
+    @Query(value = "SELECT p.id, p.person_id personId, p.name, p.description, p.start_price startPrice, p.start_date startDate, p.end_date endDate, " +
             "EXISTS(SELECT * FROM wishlist " +
-            "WHERE product_id = :product_id AND person_id = :user_id) wished, i.id imageId, i.url imageUrl, i.featured imageFeatured " +
+            "WHERE product_id = :product_id AND person_id = :user_id) wished, i.id AS imageId, i.url AS imageUrl, i.featured AS photoFeatured " +
             "FROM product p LEFT OUTER JOIN image i on p.id = i.product_id " +
             "WHERE p.id = :product_id " +
             "ORDER BY i.featured DESC",

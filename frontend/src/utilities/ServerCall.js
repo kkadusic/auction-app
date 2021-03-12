@@ -1,13 +1,22 @@
 import axios from 'axios';
+import {getToken} from "./Common";
 
 const hostUrl = 'https://auction-abh-server.herokuapp.com';
 
+const config = () => {
+    return {
+        headers: {
+            'Authorization': 'Bearer ' + getToken()
+        }
+    };
+}
+
 export const registerUser = async (user) => {
-    return await axios.post(hostUrl + '/auth/register', user);
+    return (await axios.post(hostUrl + '/auth/register', user)).data;
 };
 
 export const loginUser = async (user) => {
-    return await axios.post(hostUrl + '/auth/login', user);
+    return (await axios.post(hostUrl + '/auth/login', user)).data;
 };
 
 export const getCategories = async () => {
@@ -36,4 +45,16 @@ export const getProduct = async (productId, userId) => {
 
 export const getBidsForProduct = async (id) => {
     return (await axios.get(hostUrl + '/bids/product/?id=' + id)).data;
+};
+
+export const bidForProduct = async (price, productId) => {
+    return (await axios.post(hostUrl + '/bids/add', {price, productId}, config())).data;
+};
+
+export const wishlistProduct = async (personId, productId) => {
+    return (await axios.post(hostUrl + '/wishlist/add', {personId, productId},)).data;
+};
+
+export const removeWishlistProduct = async (personId, productId) => {
+    return (await axios.post(hostUrl + '/wishlist/remove', {personId, productId},)).data;
 };

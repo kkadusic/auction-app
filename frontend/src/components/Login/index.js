@@ -24,22 +24,23 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
     const handleSubmit = async (user) => {
         setLoading(true);
         try {
-            const response = await loginUser(user);
-            setSession(response.data.person, response.data.token);
+            const data = await loginUser(user);
+            setSession(data.person, data.token);
             if (user.remember)
                 setRememberInfo(user.email, user.password);
             else
                 removeRememberInfo();
             setLoading(false);
-            history.push("/");
+
+            if (history.location.pathname === "/register")
+                history.push("/");
+            else
+                history.goBack();
             changeLoggedInState();
-            showMessage("success", "Logged in successfully");
-        } catch (error) {
-            if (error.response.data.status === 401)
-                setLoginError(true);
-            showMessage("warning", "Wrong email or password");
-            setLoading(false);
+        } catch (e) {
+            setLoginError(true);
         }
+        setLoading(false);
     }
 
     const validationSchema = yup.object().shape({

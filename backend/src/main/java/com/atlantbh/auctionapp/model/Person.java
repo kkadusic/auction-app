@@ -4,6 +4,7 @@ import com.atlantbh.auctionapp.enumeration.Gender;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,7 +73,10 @@ public class Person {
 
     private String country;
 
-    private String imageUrl;
+    private String imageUrl = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
+
+    @Column(nullable = false)
+    private Boolean active = true;
 
     public Person() {
     }
@@ -205,5 +209,21 @@ public class Person {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

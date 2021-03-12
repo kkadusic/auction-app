@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {BrowserRouter as Router, Link} from 'react-router-dom';
 import {Alert, Breadcrumb} from 'react-bootstrap';
+import axios from 'axios';
 
 import './App.css';
 
@@ -17,9 +18,16 @@ const App = () => {
     const [breadcrumbItems, setBreadcrumbItems] = useState([]);
     const [breadcrumbTitle, setBreadcrumbTitle] = useState(null);
 
+    const handleError = (error) => {
+        showMessage("warning", error.response.data.message);
+        return Promise.reject(error);
+    }
+
+    axios.interceptors.response.use((response) => response, handleError);
+
     const showMessage = (variant, message) => {
-        setMessage(message);
         setVariant(variant);
+        setMessage(message);
         setAlertVisible(true);
         setTimeout(() => {
             setAlertVisible(false);
@@ -61,9 +69,12 @@ const App = () => {
                         </Breadcrumb.Item>
                     ))}
                 </Breadcrumb>
-                <Alert transition={false} show={alertVisible} variant={variant}>
-                    {message}
-                </Alert>
+                <div style={alertVisible && breadcrumbTitle === null ? {marginTop: 40, marginBottom: '-1rem'} : null}>
+                    <Alert dismissible onClose={() => setAlertVisible(false)} transition={false} show={alertVisible}
+                           variant={variant}>
+                        {message}
+                    </Alert>
+                </div>
                 <div className="route-container">
                     <MyRoutes changeLoggedInState={changeLoggedInState} setBreadcrumb={setBreadcrumb}
                               showMessage={showMessage}/>
