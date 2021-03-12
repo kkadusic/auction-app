@@ -12,11 +12,13 @@ import AboutUs from "../components/AboutUs";
 import TermsConditions from "../components/TermsConditions";
 import PrivacyPolicy from "../components/PrivacyPolicy";
 import ItemPage from "../components/ItemPage";
+import AllCategories from "../components/AllCategories";
 
 const UserRoutes = (props) => {
     return (
         <Switch>
             <Route exact path="/" render={() => <LandingPage {...props} />}/>
+            <Route path="/all" render={() => <AllCategories {...props} />} />
             <Route path="/shop/*/*/:id" render={() => <ItemPage {...props} />}/>
             <Route path="/shop*" render={() => <Shop {...props} />}/>
             <Route path="/about" render={() => <AboutUs {...props} />}/>
