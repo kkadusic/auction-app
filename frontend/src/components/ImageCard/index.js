@@ -8,13 +8,13 @@ const ImageCard = ({data, size, url}) => {
     const history = useHistory();
 
     return (
-        <div className="featured-item-container">
+        <div className="item-container">
             <Image
-                className={"featured-item-image-" + size}
+                className={"item-image-" + size}
                 src={data.url}
                 onClick={() => history.push(url)}
             />
-            <h3>
+            <h3 className={"word-wrap-" + size}>
                 {data.name}
             </h3>
             Start from ${data.startPrice}
