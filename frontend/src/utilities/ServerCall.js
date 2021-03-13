@@ -59,14 +59,6 @@ export const bidForProduct = async (price, productId) => {
     return (await axios.post(hostUrl + '/bids/add', {price, productId}, config())).data;
 };
 
-export const wishlistProduct = async (personId, productId) => {
-    return (await axios.post(hostUrl + '/wishlist/add', {personId, productId},)).data;
-};
-
-export const removeWishlistProduct = async (personId, productId) => {
-    return (await axios.post(hostUrl + '/wishlist/remove', {personId, productId},)).data;
-};
-
 export const searchProducts = async (query, category, subcategory, page, sort) => {
     return (await axios.get(hostUrl + '/products/search', getParams({query, category, subcategory, page, sort}))).data;
 };
@@ -77,12 +69,4 @@ export const searchCountProducts = async (query) => {
 
 export const getSubcategories = async () => {
     return (await axios.get(hostUrl + '/subcategories')).data;
-};
-
-export const wishlistProduct = async (personId, productId) => {
-    return (await axios.post(hostUrl + '/wishlist/add', {personId, productId},)).data;
-};
-
-export const removeWishlistProduct = async (personId, productId) => {
-    return (await axios.post(hostUrl + '/wishlist/remove', {personId, productId},)).data;
 };
