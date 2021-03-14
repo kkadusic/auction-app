@@ -1,5 +1,6 @@
 package com.atlantbh.auctionapp.response;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -59,8 +60,9 @@ public class CategoryCountResponse implements Comparable<CategoryCountResponse> 
         return Objects.hash(name);
     }
 
-    @Override
     public int compareTo(CategoryCountResponse o) {
-        return 0;
+        return Comparator.comparing(CategoryCountResponse::getCount).reversed()
+                .thenComparing(CategoryCountResponse::getName)
+                .compare(this, o);
     }
 }

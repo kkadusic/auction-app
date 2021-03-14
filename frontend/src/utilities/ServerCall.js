@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {getToken} from "./Common";
 
-const hostUrl = 'https://auction-abh-server.herokuapp.com';
+const hostUrl = process.env.REACT_APP_API_URL;
 
 const config = () => {
     return {

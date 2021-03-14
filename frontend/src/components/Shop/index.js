@@ -2,8 +2,8 @@ import ImageCard from '../../components/ImageCard';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {productUrl} from "../../utilities/AppUrl";
-import {BsGrid3X3GapFill} from "react-icons/bs";
-import {FaThList} from "react-icons/fa";
+// import {BsGrid3X3GapFill} from "react-icons/bs";
+// import {FaThList} from "react-icons/fa";
 import {searchProducts} from "../../utilities/ServerCall";
 import {Button, Form} from 'react-bootstrap';
 import CategoriesFilter from '../../components/CategoriesFilter';
@@ -19,7 +19,7 @@ const Shop = ({setBreadcrumb}) => {
 
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState({category: null, subcategory: null});
-    const [gridLayout, setGridLayout] = useState(true);
+    // const [gridLayout, setGridLayout] = useState(true);
     const [lastPage, setLastPage] = useState(true);
 
     const history = useHistory();
@@ -106,20 +106,20 @@ const Shop = ({setBreadcrumb}) => {
                         <option value="new">Sort by New</option>
                         <option value="price">Sort by Price</option>
                     </Form.Control>
-                    <div style={{display: 'flex'}}>
-                        <Button onClick={() => setGridLayout(true)}
-                                style={gridLayout ? {color: 'white', backgroundColor: '#8367D8'} : null} size="lg"
-                                variant="transparent">
-                            <BsGrid3X3GapFill style={{marginRight: 10}}/>
-                            Grid
-                        </Button>
-                        <Button onClick={() => setGridLayout(false)}
-                                style={gridLayout ? null : {color: 'white', backgroundColor: '#8367D8'}} size="lg"
-                                variant="transparent">
-                            <FaThList style={{marginRight: 10}}/>
-                            List
-                        </Button>
-                    </div>
+                    {/*<div style={{display: 'flex'}}>*/}
+                    {/*    <Button onClick={() => setGridLayout(true)}*/}
+                    {/*            style={gridLayout ? {color: 'white', backgroundColor: '#8367D8'} : null} size="lg"*/}
+                    {/*            variant="transparent">*/}
+                    {/*        <BsGrid3X3GapFill style={{marginRight: 10}}/>*/}
+                    {/*        Grid*/}
+                    {/*    </Button>*/}
+                    {/*    <Button onClick={() => setGridLayout(false)}*/}
+                    {/*            style={gridLayout ? null : {color: 'white', backgroundColor: '#8367D8'}} size="lg"*/}
+                    {/*            variant="transparent">*/}
+                    {/*        <FaThList style={{marginRight: 10}}/>*/}
+                    {/*        List*/}
+                    {/*    </Button>*/}
+                    {/*</div>*/}
                 </div>
 
                 <div className="shop-products">
