@@ -53,6 +53,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             if (error.response.data.status === 409) {
                 setEmailError(true);
             }
+            showMessage("warning", "This email address is already being used.");
         }
         setLoading(false);
     }
