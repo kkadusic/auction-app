@@ -12,3 +12,6 @@ spring:
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpiration: ${JWT_EXPIRATION}
+  emailUsername: ${EMAIL_USERNAME}
+  emailPassword: ${EMAIL_PASSWORD}
+  hostUrl: ${HOST_URL}

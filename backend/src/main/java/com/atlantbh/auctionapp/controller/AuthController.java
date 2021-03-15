@@ -1,12 +1,18 @@
 package com.atlantbh.auctionapp.controller;
 
+import com.atlantbh.auctionapp.exception.BadGatewayException;
+import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.model.Person;
+import com.atlantbh.auctionapp.request.ForgotPasswordRequest;
 import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
+import com.atlantbh.auctionapp.request.ResetPasswordRequest;
 import com.atlantbh.auctionapp.response.LoginResponse;
 import com.atlantbh.auctionapp.response.RegisterResponse;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
 import com.atlantbh.auctionapp.service.PersonService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +43,22 @@ public class AuthController {
         final Person person = personService.login(loginRequest);
         final String token = jwtTokenUtil.generateToken(person);
         return ResponseEntity.ok(new LoginResponse(person, token));
+    }
+
+    @PostMapping("/forgot_password")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+            @ApiResponse(code = 502, message = "Bad gateway", response = BadGatewayException.class),
+    })
+    public ResponseEntity<String> forgotPassword(@RequestBody @Valid ForgotPasswordRequest forgotPassRequest) {
+        return ResponseEntity.ok(personService.forgotPassword(forgotPassRequest));
+    }
+
+    @PostMapping("/reset_password")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPasswordRequest resetPassRequest) {
+        return ResponseEntity.ok(personService.resetPassword(resetPassRequest));
     }
 }
