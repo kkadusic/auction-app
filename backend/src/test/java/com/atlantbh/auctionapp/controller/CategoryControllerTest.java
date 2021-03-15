@@ -1,10 +1,11 @@
 package com.atlantbh.auctionapp.controller;
 
-import com.atlantbh.auctionapp.service.CategoryService;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -12,14 +13,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CategoryController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CategoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private CategoryService categoryService;
 
     @Test
     public void getCategories() throws Exception {

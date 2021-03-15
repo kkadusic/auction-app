@@ -4,16 +4,18 @@ import {FaGooglePlus} from 'react-icons/fa';
 import {GrFormSearch} from 'react-icons/gr';
 import {RiAuctionFill} from 'react-icons/ri';
 import {FormControl, Image, Nav, Navbar} from 'react-bootstrap';
-import {Link, NavLink} from 'react-router-dom';
+import {Link, NavLink, useHistory} from 'react-router-dom';
 import {getToken, removeSession, getUser} from '../../utilities/Common';
+import * as qs from 'query-string';
 
 import './header.css';
 
 const Header = ({loggedInState}) => {
 
-    const [loggedIn, setLoggedIn] = useState(getToken() !== null);
-
     const user = getUser();
+    const history = useHistory();
+    const [loggedIn, setLoggedIn] = useState(getToken() !== null);
+    const [searchInput, setSearchInput] = useState("");
 
     const handleLogout = () => {
         setLoggedIn(false);
@@ -24,6 +26,17 @@ const Header = ({loggedInState}) => {
         if (loggedInState !== null)
             setLoggedIn(!loggedIn);
     }, [loggedInState]);
+
+    const handleSearch = async () => {
+        const urlParams = {
+            query: searchInput,
+            sort: "default"
+        };
+        history.push({
+            pathname: '/shop',
+            search: qs.stringify(urlParams)
+        });
+    }
 
     return (
         <>
@@ -81,8 +94,15 @@ const Header = ({loggedInState}) => {
                     AUCTION
                 </Link>
                 <div className="navbar-search">
-                    <FormControl size="xl-18" type="text" placeholder="Try enter: Shoes"/>
-                    <GrFormSearch className="navbar-search-icon"/>
+                    <FormControl
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        size="xl-18"
+                        type="text"
+                        placeholder="Try enter: Shoes"
+                        onKeyUp={(e) => e.key === 'Enter' ? handleSearch() : null}
+                    />
+                    <GrFormSearch className="navbar-search-icon" onClick={handleSearch}/>
                 </div>
                 <Nav>
                     <NavLink exact className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/">

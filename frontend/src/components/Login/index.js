@@ -37,8 +37,10 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             else
                 history.goBack();
             changeLoggedInState();
+            showMessage("success", "Logged in successfully.");
         } catch (e) {
             setLoginError(true);
+            showMessage("warning", "Wrong email or password.");
         }
         setLoading(false);
     }

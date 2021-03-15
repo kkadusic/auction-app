@@ -11,6 +11,7 @@ import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.request.BidRequest;
 import com.atlantbh.auctionapp.response.SimpleBidResponse;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class BidService {
     private final PersonRepository personRepository;
     private final ProductRepository productRepository;
 
+    @Autowired
     public BidService(BidRepository bidRepository, PersonRepository personRepository, ProductRepository productRepository) {
         this.bidRepository = bidRepository;
         this.personRepository = personRepository;
@@ -45,6 +47,9 @@ public class BidService {
         if (product.getEndDate().isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Auction ended for this product");
         }
+        Long id = JwtTokenUtil.getRequestPersonId();
+        if (id == null)
+            throw new UnprocessableException("Invalid JWT signature");
         Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
         if (product.getPerson().getId().equals(person.getId())) {
             throw new BadRequestException("You can't bid on your own product");
