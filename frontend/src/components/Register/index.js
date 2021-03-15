@@ -48,7 +48,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             setLoading(false);
             history.push("/my-account");
             changeLoggedInState();
-            showMessage("success", "Account created successfully");
+            showMessage("success", "Account created successfully.");
         } catch (error) {
             if (error.response.data.status === 409) {
                 setEmailError(true);
