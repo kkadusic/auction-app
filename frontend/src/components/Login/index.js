@@ -133,11 +133,11 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                         {/*    </Button>*/}
                         {/*</Form.Row>*/}
 
-                        {/*<Form.Text className="font-18">*/}
-                        {/*    <Link className="purple-nav-link nav-link" to="/forgot-password">*/}
-                        {/*        Forgot password?*/}
-                        {/*    </Link>*/}
-                        {/*</Form.Text>*/}
+                        <Form.Text className="font-18">
+                            <Link className="purple-nav-link nav-link" to="/forgot_password">
+                                Forgot password?
+                            </Link>
+                        </Form.Text>
                     </Form>
                 )}
             </Formik>
