@@ -70,3 +70,11 @@ export const searchCountProducts = async (query) => {
 export const getSubcategories = async () => {
     return (await axios.get(hostUrl + '/subcategories')).data;
 };
+
+export const forgotPassword = async (email) => {
+    return (await axios.post(hostUrl + '/auth/forgot_password', {email})).data;
+};
+
+export const resetPassword = async (token, password) => {
+    return (await axios.post(hostUrl + '/auth/reset_password', {token, password})).data;
+};

@@ -13,6 +13,8 @@ import TermsConditions from "../components/TermsConditions";
 import PrivacyPolicy from "../components/PrivacyPolicy";
 import ItemPage from "../components/ItemPage";
 import AllCategories from "../components/AllCategories";
+import ForgotPassword from "../components/ForgotPassword";
+import ResetPassword from "../components/ResetPassword";
 
 const UserRoutes = (props) => {
     return (
@@ -26,6 +28,8 @@ const UserRoutes = (props) => {
             <Route path="/terms" render={() => <TermsConditions {...props} />}/>
             <Route path="/login" render={() => <Login {...props} />}/>
             <Route path="/register" render={() => <Register {...props} />}/>
+            <Route path="/forgot_password" render={() => <ForgotPassword {...props} />} />
+            <Route path="/reset_password" render={() => <ResetPassword {...props} />} />
             <PrivateRoute path="/my-account" component={MyAccount}/>
             <Route component={PageNotFound}/>
         </Switch>
