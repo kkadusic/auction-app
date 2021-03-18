@@ -27,18 +27,22 @@ const ResetPassword = ({setBreadcrumb, showMessage}) => {
         }
         fetchData();
         // eslint-disable-next-line
-    }, [])
+    }, []);
 
-    const schema = yup.object().shape({
+    const validationSchema = yup.object().shape({
         password: yup.string()
             .required("*Password is required")
-            .min(8, "*Password must have at least 8 characters")
-            .max(255, "*Password can't be longer than 255 characters"),
+            .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+            ),
         confirmPassword: yup.string()
             .required("*Confirm your password")
             .oneOf([yup.ref("password")], "*Passwords must match")
-            .min(8, "*Password must have at least 8 characters")
-            .max(255, "*Password can't be longer than 255 characters"),
+            .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+            )
     });
 
     const handleSubmit = async (data) => {
@@ -64,7 +68,7 @@ const ResetPassword = ({setBreadcrumb, showMessage}) => {
                 <div className="forgot-content">
                     {validToken ?
                         <Formik
-                            validationSchema={schema}
+                            validationSchema={validationSchema}
                             initialValues={{password: "", confirmPassword: ""}}
                             onSubmit={handleSubmit}
                         >
@@ -132,7 +136,7 @@ const ResetPassword = ({setBreadcrumb, showMessage}) => {
                             <Form.Group className="forgot-form">
                                 <Form.Label>
                                     Unable to reset password. The reset link is invalid or expired.
-                                    Try requesting a new one.
+                                    Check your email or try requesting a new one.
                                 </Form.Label>
                                 <Button
                                     size="xxl"
