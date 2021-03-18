@@ -31,11 +31,7 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             else
                 removeRememberInfo();
             setLoading(false);
-
-            if (history.location.pathname === "/register")
-                history.push("/");
-            else
-                history.goBack();
+            history.push("/");
             changeLoggedInState();
             showMessage("success", "Logged in successfully.");
         } catch (e) {

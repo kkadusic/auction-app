@@ -88,9 +88,7 @@ public class PersonService {
                     "in the last 24 hours. Please check your inbox.";
         UUID uuid = UUID.randomUUID();
         String body = formEmailBody(hostUrl, uuid);
-        System.out.println("tu sam");
         try {
-            System.out.println("tu sam2");
             emailService.sendMail(person.getEmail(), "Password reset", body);
         } catch (MessagingException e) {
             throw new BadGatewayException("We have issues sending you an email");
@@ -106,7 +104,6 @@ public class PersonService {
     }
 
     public String resetPassword(ResetPasswordRequest resetPassRequest) {
-        System.out.println("OK, reset");
         Token token = tokenRepository.getToken(resetPassRequest.getToken().toString())
                 .orElseThrow(() -> new BadRequestException("Invalid token"));
         Person person = personRepository.findById(token.getPerson().getId())
