@@ -15,7 +15,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         CustomExceptionResponse body = getDefaultExceptionBody(status, request);
-        System.out.println(request.toString() + ex.toString() + headers.toString() + status.toString());
         body.setMessage("JSON parse error");
         return new ResponseEntity<>(body, headers, status);
     }
