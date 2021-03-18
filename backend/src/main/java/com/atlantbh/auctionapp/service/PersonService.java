@@ -15,6 +15,7 @@ import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
 
 import com.atlantbh.auctionapp.request.ResetPasswordRequest;
+import com.atlantbh.auctionapp.request.TokenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsString;
-
 
 @Service
 public class PersonService {
@@ -116,5 +116,10 @@ public class PersonService {
         tokenRepository.save(token);
 
         return "You have changed your password";
+    }
+
+    public Boolean validToken(TokenRequest tokenRequest) {
+        Token token = tokenRepository.getToken(tokenRequest.getToken()).orElse(new Token());
+        return token.getId() != null && personRepository.existsById(token.getPerson().getId());
     }
 }

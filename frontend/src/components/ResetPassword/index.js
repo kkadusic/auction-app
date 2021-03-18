@@ -2,21 +2,30 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button, Form} from 'react-bootstrap';
 import {Formik} from 'formik';
-import {loginUrl} from '../../utilities/AppUrl';
-import {resetPassword} from "../../utilities/ServerCall";
+import {loginUrl, forgotPasswordUrl} from '../../utilities/AppUrl';
+import {resetPassword, validResetToken} from "../../utilities/ServerCall";
 import * as qs from 'query-string';
 import * as yup from 'yup';
 
 import '../ForgotPassword/forgotPassword.css';
 
-const ResetPassword = ({setBreadcrumb}) => {
+const ResetPassword = ({setBreadcrumb, showMessage}) => {
     const history = useHistory();
     const urlParams = qs.parse(history.location.search);
+    const [validToken, setValidToken] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setBreadcrumb("RESET PASSWORD", []);
+        const fetchData = async () => {
+            try {
+                setValidToken(await validResetToken(urlParams.token));
+            } catch (e) {
+                showMessage("warning", "Unable to reset password. The reset link is invalid or expired.");
+            }
+        }
+        fetchData();
         // eslint-disable-next-line
     }, [])
 
@@ -53,70 +62,90 @@ const ResetPassword = ({setBreadcrumb}) => {
                     RESET PASSWORD
                 </div>
                 <div className="forgot-content">
-                    <Formik
-                        validationSchema={schema}
-                        initialValues={{password: "", confirmPassword: ""}}
-                        onSubmit={handleSubmit}
-                    >
-                        {({
-                              handleSubmit,
-                              handleChange,
-                              touched,
-                              errors,
-                          }) => (
-                            <Form noValidate className="forgot-form" onSubmit={handleSubmit}>
-                                <Form.Text style={{textAlign: 'left', color: 'var(--text-secondary)', margin: '20px 0'}}
-                                           className="font-18">
-                                    Enter a new password below.
-                                </Form.Text>
+                    {validToken ?
+                        <Formik
+                            validationSchema={schema}
+                            initialValues={{password: "", confirmPassword: ""}}
+                            onSubmit={handleSubmit}
+                        >
+                            {({
+                                  handleSubmit,
+                                  handleChange,
+                                  touched,
+                                  errors,
+                              }) => (
+                                <Form noValidate className="forgot-form" onSubmit={handleSubmit}>
+                                    <Form.Text
+                                        style={{textAlign: 'left', color: 'var(--text-secondary)', margin: '20px 0'}}
+                                        className="font-18">
+                                        Enter a new password below.
+                                    </Form.Text>
 
-                                <Form.Group style={{marginTop: 40}}>
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
-                                        className="form-control-gray"
-                                        size="xl-18"
-                                        type="password"
-                                        name="password"
-                                        maxLength={255}
-                                        defaultValue=""
-                                        onChange={handleChange}
-                                        isInvalid={touched.password && errors.password}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.password}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                                    <Form.Group style={{marginTop: 40}}>
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            className="form-control-gray"
+                                            size="xl-18"
+                                            type="password"
+                                            name="password"
+                                            maxLength={255}
+                                            defaultValue=""
+                                            onChange={handleChange}
+                                            isInvalid={touched.password && errors.password}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.password}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
 
-                                <Form.Group style={{marginTop: 20}}>
-                                    <Form.Label>Confirm Password</Form.Label>
-                                    <Form.Control
-                                        className="form-control-gray"
-                                        size="xl-18"
-                                        type="password"
-                                        name="confirmPassword"
-                                        maxLength={255}
-                                        defaultValue=""
-                                        onChange={handleChange}
-                                        isInvalid={touched.confirmPassword && errors.confirmPassword}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.confirmPassword}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                                    <Form.Group style={{marginTop: 20}}>
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control
+                                            className="form-control-gray"
+                                            size="xl-18"
+                                            type="password"
+                                            name="confirmPassword"
+                                            maxLength={255}
+                                            defaultValue=""
+                                            onChange={handleChange}
+                                            isInvalid={touched.confirmPassword && errors.confirmPassword}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.confirmPassword}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
 
+                                    <Button
+                                        size="xxl"
+                                        style={{margin: '60px 0'}}
+                                        block
+                                        disabled={loading}
+                                        type="submit"
+                                        variant="transparent-black-shadow"
+                                    >
+                                        SUBMIT
+                                    </Button>
+                                </Form>
+                            )}
+                        </Formik> :
+                        <>
+                            <Form.Group className="forgot-form">
+                                <Form.Label>
+                                    Unable to reset password. The reset link is invalid or expired.
+                                    Try requesting a new one.
+                                </Form.Label>
                                 <Button
                                     size="xxl"
-                                    style={{margin: '60px 0'}}
+                                    style={{marginTop: 10, marginBottom: 5}}
                                     block
-                                    disabled={loading}
-                                    type="submit"
                                     variant="transparent-black-shadow"
+                                    onClick={() => history.push(forgotPasswordUrl)}
                                 >
-                                    SUBMIT
+                                    RESET PASSWORD
                                 </Button>
-                            </Form>
-                        )}
-                    </Formik>
+                            </Form.Group>
+                        </>
+                    }
                 </div>
             </div>
         </>

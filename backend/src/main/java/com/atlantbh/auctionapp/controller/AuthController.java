@@ -7,6 +7,7 @@ import com.atlantbh.auctionapp.request.ForgotPasswordRequest;
 import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
 import com.atlantbh.auctionapp.request.ResetPasswordRequest;
+import com.atlantbh.auctionapp.request.TokenRequest;
 import com.atlantbh.auctionapp.response.LoginResponse;
 import com.atlantbh.auctionapp.response.RegisterResponse;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
@@ -60,5 +61,13 @@ public class AuthController {
     })
     public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPasswordRequest resetPassRequest) {
         return ResponseEntity.ok(personService.resetPassword(resetPassRequest));
+    }
+
+    @PostMapping("/valid_token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
+    })
+    public ResponseEntity<Boolean> validToken(@RequestBody @Valid TokenRequest tokenRequest) {
+        return ResponseEntity.ok(personService.validToken(tokenRequest));
     }
 }
