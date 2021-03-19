@@ -77,16 +77,16 @@ public class ProductService {
     public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort) {
         PageRequest pageRequest;
         switch (sort) {
-            case "newestArrivals":
+            case "start-date-desc":
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_date").descending());
                 break;
-            case "timeLeft":
+            case "end-date-asc":
                 pageRequest = PageRequest.of(page, 12, Sort.by("end_date"));
                 break;
-            case "priceLowToHigh":
+            case "price-asc":
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_price"));
                 break;
-            case "priceHighToLow":
+            case "price-desc":
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_price").descending());
                 break;
             default:

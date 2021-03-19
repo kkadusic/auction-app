@@ -102,10 +102,10 @@ const Shop = ({setBreadcrumb}) => {
                     <Form.Control defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg"
                                   as="select" style={{width: '30%'}}>
                         <option value="default">Default Sorting</option>
-                        <option value="newestArrivals">Newest Arrivals</option>
-                        <option value="priceLowToHigh">Price: Low To High</option>
-                        <option value="priceHighToLow">Price: High To Low</option>
-                        <option value="timeLeft">Time Left</option>
+                        <option value="start-date-desc">Newest Arrivals</option>
+                        <option value="end-date-asc">Time Left</option>
+                        <option value="price-asc">Price: Low To High</option>
+                        <option value="price-desc">Price: High To Low</option>
                     </Form.Control>
                     {/*<div style={{display: 'flex'}}>*/}
                     {/*    <Button onClick={() => setGridLayout(true)}*/}
