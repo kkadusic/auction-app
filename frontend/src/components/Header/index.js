@@ -6,6 +6,7 @@ import {RiAuctionFill} from 'react-icons/ri';
 import {FormControl, Image, Nav, Navbar} from 'react-bootstrap';
 import {Link, NavLink, useHistory} from 'react-router-dom';
 import {getToken, removeSession, getUser} from '../../utilities/Common';
+import {loginUrl, registerUrl, forgotPasswordUrl, resetPasswordUrl} from '../../utilities/AppUrl';
 import * as qs from 'query-string';
 
 import './header.css';
@@ -105,7 +106,10 @@ const Header = ({loggedInState}) => {
                     <GrFormSearch className="navbar-search-icon" onClick={handleSearch}/>
                 </div>
                 <Nav>
-                    <NavLink exact className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/">
+                    <NavLink
+                        isActive={(match, location) => (location.pathname === loginUrl || location.pathname === registerUrl ||
+                            location.pathname === forgotPasswordUrl || location.pathname === resetPasswordUrl)} exact
+                        className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/">
                         HOME
                     </NavLink>
                     <NavLink className="black-nav-link nav-link" activeClassName="black-active-nav-link" to="/shop">

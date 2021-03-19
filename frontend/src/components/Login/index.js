@@ -31,11 +31,7 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             else
                 removeRememberInfo();
             setLoading(false);
-
-            if (history.location.pathname === "/register")
-                history.push("/");
-            else
-                history.goBack();
+            history.push("/");
             changeLoggedInState();
             showMessage("success", "Logged in successfully.");
         } catch (e) {
@@ -133,11 +129,11 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                         {/*    </Button>*/}
                         {/*</Form.Row>*/}
 
-                        {/*<Form.Text className="font-18">*/}
-                        {/*    <Link className="purple-nav-link nav-link" to="/forgot-password">*/}
-                        {/*        Forgot password?*/}
-                        {/*    </Link>*/}
-                        {/*</Form.Text>*/}
+                        <Form.Text className="font-18">
+                            <Link className="purple-nav-link nav-link" to="/forgot_password">
+                                Forgot password?
+                            </Link>
+                        </Form.Text>
                     </Form>
                 )}
             </Formik>

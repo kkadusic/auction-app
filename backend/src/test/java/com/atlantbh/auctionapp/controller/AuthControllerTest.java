@@ -128,4 +128,40 @@ public class AuthControllerTest {
                 .content("{\"email\": \"mickey@gmail.com\", \"password\": \"Mickey123!\"}")
         ).andExpect(status().is4xxClientError());
     }
+
+    @Test
+    @Order(13)
+    public void forgotPassword() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/forgot_password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"auction.abh@gmail.com\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(14)
+    public void forgotPasswordInvalidEmail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/forgot_password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"email\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(15)
+    public void resetPassword() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/reset_password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"password\": \"Mickey123!\", \"token\": \"token\"}")
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @Order(16)
+    public void validToken() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/valid_token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"token\": \"token\"}")
+        ).andExpect(status().isOk());
+    }
 }
