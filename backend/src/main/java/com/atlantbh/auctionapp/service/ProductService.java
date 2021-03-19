@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -78,14 +77,17 @@ public class ProductService {
     public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort) {
         PageRequest pageRequest;
         switch (sort) {
-            case "popularity":
-                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC, "(bids)"));
-                break;
-            case "new":
+            case "newestArrivals":
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_date").descending());
                 break;
-            case "price":
+            case "timeLeft":
+                pageRequest = PageRequest.of(page, 12, Sort.by("end_date"));
+                break;
+            case "priceLowToHigh":
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_price"));
+                break;
+            case "priceHighToLow":
+                pageRequest = PageRequest.of(page, 12, Sort.by("start_price").descending());
                 break;
             default:
                 pageRequest = PageRequest.of(page, 12, Sort.by("name").and(Sort.by("id")));
