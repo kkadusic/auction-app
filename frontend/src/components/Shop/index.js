@@ -102,7 +102,7 @@ const Shop = ({setBreadcrumb}) => {
                     <Form.Control defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg"
                                   as="select" style={{width: '30%'}}>
                         <option value="default">Default Sorting</option>
-                        <option value="start-date-desc">Newest Arrivals</option>
+                        <option value="start-date-desc">Added: New to Old</option>
                         <option value="end-date-asc">Time Left</option>
                         <option value="price-asc">Price: Low To High</option>
                         <option value="price-desc">Price: High To Low</option>
