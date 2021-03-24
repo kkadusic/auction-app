@@ -90,7 +90,6 @@ const Shop = ({setBreadcrumb}) => {
         });
     }
 
-
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
@@ -104,8 +103,8 @@ const Shop = ({setBreadcrumb}) => {
                         <option value="default">Default Sorting</option>
                         <option value="start-date-desc">Added: New to Old</option>
                         <option value="end-date-asc">Time Left</option>
-                        <option value="price-asc">Price: Low To High</option>
-                        <option value="price-desc">Price: High To Low</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
                     </Form.Control>
                     {/*<div style={{display: 'flex'}}>*/}
                     {/*    <Button onClick={() => setGridLayout(true)}*/}
