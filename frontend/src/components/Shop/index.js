@@ -98,13 +98,6 @@ const Shop = ({setBreadcrumb}) => {
         });
     }
 
-    const gridStyle = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, 14.4vw)',
-        gridGap: 5,
-        justifyContent: 'space-between'
-    };
-
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
@@ -114,7 +107,7 @@ const Shop = ({setBreadcrumb}) => {
             <div className="shop-products-container">
                 <div className="shop-sorting-bar">
                     <Form.Control defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg"
-                                  as="select" style={{width: '30%'}}>
+                                  as="select" className="sort-select">
                         <option value="default">Default Sorting</option>
                         <option value="start-date-desc">Added: New to Old</option>
                         <option value="end-date-asc">Time Left</option>
@@ -138,7 +131,7 @@ const Shop = ({setBreadcrumb}) => {
                     </div>
                 </div>
 
-                <div style={gridLayout ? gridStyle : null} className="shop-products">
+                <div style={!gridLayout ? { display: 'unset' } : null} className="shop-products">
                     {products.map(product => gridLayout ? (
                         <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)}/>
                     ) : (
