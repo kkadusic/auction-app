@@ -24,14 +24,16 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             .min(2, "*First name must have at least 2 characters")
             .max(50, "*First name can't be longer than 50 characters")
             .required("*First name is required")
-            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "First name must be valid")
-            .test("symbol-test", "*First name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value)),
+            .test("number-test", "*First name can't contain numbers", value => /^([^0-9]*)$/.test(value))
+            .test("symbol-test", "*First name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value))
+            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "First name must be valid"),
         lastName: yup.string()
             .min(2, "*Last name must have at least 2 characters")
             .max(50, "*Last name can't be longer than 50 characters")
             .required("*Last name is required")
-            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "Last name must be valid")
-            .test("symbol-test", "*Last name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value)),
+            .test("number-test", "*Last name can't contain numbers", value => /^([^0-9]*)$/.test(value))
+            .test("symbol-test", "*Last name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value))
+            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "Last name must be valid"),
         email: yup.string()
             .email("*Email must be valid")
             .max(320, "*Email must be less than 320 characters")
