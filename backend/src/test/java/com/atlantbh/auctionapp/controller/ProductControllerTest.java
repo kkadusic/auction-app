@@ -75,4 +75,103 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
     }
+
+    @Test
+    public void getDefaultSorted() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=0")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getDefaultSortedPageInvalid() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=first")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    public void getNewestArrivalsSorted() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=0&sort=start-date-desc")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getLastChanceSorted() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=0&sort=end-date-asc")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getPriceAscendingSorted() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=0&sort=price-asc")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getPriceDescendingSorted() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=0&sort=price-desc")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getDefaultSortedSecondPage() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?page=1")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getDefaultSortedForCategory() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?category=home&page=0")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void getPriceAscSortedForCategorySubcategoryProduct() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?category=home&page=0&query=bag&sort=price-asc&subcategory=desk")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
 }

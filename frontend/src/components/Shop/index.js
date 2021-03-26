@@ -2,30 +2,32 @@ import ImageCard from '../../components/ImageCard';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {productUrl} from "../../utilities/AppUrl";
-// import {BsGrid3X3GapFill} from "react-icons/bs";
-// import {FaThList} from "react-icons/fa";
+import {BsGrid3X3GapFill} from "react-icons/bs";
+import {FaThList} from "react-icons/fa";
 import {searchProducts} from "../../utilities/ServerCall";
-import {Button, Form} from 'react-bootstrap';
+import {Button, Form, Spinner} from 'react-bootstrap';
 import CategoriesFilter from '../../components/CategoriesFilter';
 import ItemNotFound from '../../components/ItemNotFound';
+import ListCard from "../ListCard";
 import {removeSpaces} from "../../utilities/AppUrl";
 import * as qs from 'query-string';
 
 import './shop.css';
 
-var page = 0;
+let page = 0;
 
 const Shop = ({setBreadcrumb}) => {
 
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState({category: null, subcategory: null});
-    // const [gridLayout, setGridLayout] = useState(true);
+    const [gridLayout, setGridLayout] = useState(true);
     const [lastPage, setLastPage] = useState(true);
-
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
     const urlParams = qs.parse(history.location.search);
 
     useEffect(() => {
+        setLoading(true);
         formBreadcrumb();
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])
@@ -54,18 +56,24 @@ const Shop = ({setBreadcrumb}) => {
 
     const refreshData = async (urlElements) => {
         page = 0;
-        const newFilter = {category: formCategoryName(urlElements[1]), subcategory: formCategoryName(urlElements[2])};
+        const newFilter = {
+            category: formCategoryName(urlElements[1]),
+            subcategory: formCategoryName(urlElements[2])
+        };
         setFilter(newFilter);
         const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
         setProducts(data.products);
         setLastPage(data.lastPage);
+        setLoading(false);
     }
 
     const exploreMore = async () => {
+        setLoading(true);
         page++;
         const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
         setProducts([...products, ...data.products]);
         setLastPage(data.lastPage);
+        setLoading(false);
     }
 
     const sortBy = async (sort) => {
@@ -90,7 +98,6 @@ const Shop = ({setBreadcrumb}) => {
         });
     }
 
-
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
@@ -100,39 +107,46 @@ const Shop = ({setBreadcrumb}) => {
             <div className="shop-products-container">
                 <div className="shop-sorting-bar">
                     <Form.Control defaultValue={urlParams.sort} onChange={e => sortBy(e.target.value)} size="lg"
-                                  as="select" style={{width: '30%'}}>
+                                  as="select" className="sort-select">
                         <option value="default">Default Sorting</option>
-                        <option value="popularity">Sort by Popularity</option>
-                        <option value="new">Sort by New</option>
-                        <option value="price">Sort by Price</option>
+                        <option value="start-date-desc">Added: New to Old</option>
+                        <option value="end-date-asc">Time Left</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
                     </Form.Control>
-                    {/*<div style={{display: 'flex'}}>*/}
-                    {/*    <Button onClick={() => setGridLayout(true)}*/}
-                    {/*            style={gridLayout ? {color: 'white', backgroundColor: '#8367D8'} : null} size="lg"*/}
-                    {/*            variant="transparent">*/}
-                    {/*        <BsGrid3X3GapFill style={{marginRight: 10}}/>*/}
-                    {/*        Grid*/}
-                    {/*    </Button>*/}
-                    {/*    <Button onClick={() => setGridLayout(false)}*/}
-                    {/*            style={gridLayout ? null : {color: 'white', backgroundColor: '#8367D8'}} size="lg"*/}
-                    {/*            variant="transparent">*/}
-                    {/*        <FaThList style={{marginRight: 10}}/>*/}
-                    {/*        List*/}
-                    {/*    </Button>*/}
-                    {/*</div>*/}
+                    {loading ? <Spinner className="shop-spinner" animation="border"/> : null}
+                    <div style={{display: 'flex'}}>
+                        <Button onClick={() => setGridLayout(true)}
+                                style={gridLayout ? {color: 'white', backgroundColor: '#8367D8'} : null} size="lg"
+                                variant="transparent">
+                            <BsGrid3X3GapFill style={{marginRight: 10}}/>
+                            Grid
+                        </Button>
+                        <Button onClick={() => setGridLayout(false)}
+                                style={gridLayout ? null : {color: 'white', backgroundColor: '#8367D8'}} size="lg"
+                                variant="transparent">
+                            <FaThList style={{marginRight: 10}}/>
+                            List
+                        </Button>
+                    </div>
                 </div>
 
-                <div className="shop-products">
-                    {products.map(product => (
+                <div style={!gridLayout ? { display: 'unset' } : null} className="shop-products">
+                    {products.map(product => gridLayout ? (
                         <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)}/>
+                    ) : (
+                        <ListCard key={product.id} data={product} url={productUrl(product)}/>
                     ))}
                 </div>
 
-                {products.length === 0 ? <ItemNotFound/> : null}
+                {!loading && products.length === 0 ? <ItemNotFound/> : null}
 
                 {!lastPage ?
                     <div style={{width: '100%', marginTop: 50}}>
-                        <Button onClick={exploreMore} style={{width: 250, margin: '0 auto'}} variant="fill-purple"
+                        <Button disabled={loading}
+                                onClick={exploreMore}
+                                style={{width: 250, margin: '0 auto'}}
+                                variant="fill-purple"
                                 size="xxl">
                             EXPLORE MORE
                         </Button>

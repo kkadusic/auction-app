@@ -144,7 +144,7 @@ public class AuthControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/forgot_password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\": \"email\"}")
-        ).andExpect(status().isOk());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test

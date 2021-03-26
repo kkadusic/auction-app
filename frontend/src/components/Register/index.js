@@ -23,19 +23,26 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
         firstName: yup.string()
             .min(2, "*First name must have at least 2 characters")
             .max(50, "*First name can't be longer than 50 characters")
-            .required("*First name is required"),
+            .required("*First name is required")
+            .test("number-test", "*First name can't contain numbers", value => /^([^0-9]*)$/.test(value))
+            .test("symbol-test", "*First name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value))
+            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "First name must be valid"),
         lastName: yup.string()
             .min(2, "*Last name must have at least 2 characters")
             .max(50, "*Last name can't be longer than 50 characters")
-            .required("*Last name is required"),
+            .required("*Last name is required")
+            .test("number-test", "*Last name can't contain numbers", value => /^([^0-9]*)$/.test(value))
+            .test("symbol-test", "*Last name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value))
+            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "Last name must be valid"),
         email: yup.string()
             .email("*Email must be valid")
             .max(320, "*Email must be less than 320 characters")
             .required("*Email is required"),
         password: yup.string()
+            .max(128, "*Password can't be longer than 128 characters")
             .matches(
                 /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                "Password must contain 8 characters, one uppercase, one lowercase, one number and one special case character"
             )
             .required("*Password is required"),
     });
