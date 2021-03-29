@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.controller;
 
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
+import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
@@ -58,5 +59,10 @@ public class ProductController {
     @GetMapping("/search/count")
     public ResponseEntity<List<CategoryCountResponse>> searchCount(@RequestParam(name = "query", defaultValue = "") String query) {
         return ResponseEntity.ok(productService.searchCount(query));
+    }
+
+    @GetMapping("/user/bid")
+    public ResponseEntity<List<UserProductProjection>> getUserBidProducts() {
+        return ResponseEntity.ok(productService.getUserBidProducts());
     }
 }

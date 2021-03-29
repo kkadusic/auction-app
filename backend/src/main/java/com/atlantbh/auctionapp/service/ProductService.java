@@ -3,6 +3,7 @@ package com.atlantbh.auctionapp.service;
 import com.atlantbh.auctionapp.exception.NotFoundException;
 import com.atlantbh.auctionapp.model.Image;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
+import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.CountResponse;
@@ -11,6 +12,7 @@ import com.atlantbh.auctionapp.response.ProductCountResponse;
 import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
 import com.atlantbh.auctionapp.response.SimpleProductResponse;
+import com.atlantbh.auctionapp.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -122,5 +124,10 @@ public class ProductService {
         response.sort(Comparator.comparing(CategoryCountResponse::getCount).reversed());
 
         return response;
+    }
+
+    public List<UserProductProjection> getUserBidProducts() {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserBidProducts(personId);
     }
 }
