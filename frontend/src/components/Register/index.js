@@ -20,7 +20,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
     }, []);
 
     let whitespaceRegex = new RegExp("^(?!\\s+$).*");
-    let firstLastNameRegex = new RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžđÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ∂ð ,.'-]+$", "g");
+    let firstLastNameRegex = new RegExp("^[A-ZÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ ,.'-][a-zA-Zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžđ∂ðÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ ,.'-]+$", "g");
 
     const validationSchema = yup.object().shape({
         firstName: yup.string()
