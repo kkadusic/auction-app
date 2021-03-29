@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import {getUserId} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
-import {AiOutlineFullscreen} from "react-icons/ai";
+import {GiExpand} from "react-icons/gi";
 import {getBidsForProduct, getProduct, bidForProduct} from '../../utilities/ServerCall';
 import moment from 'moment';
 
@@ -133,7 +133,7 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                                 src={product.images[activePhoto].url}
                                 className="product-image-big"
                             />
-                            <AiOutlineFullscreen
+                            <GiExpand
                                 onMouseEnter={() => setShowFullscreenIcon(true)}
                                 onMouseLeave={() => setShowFullscreenIcon(false)}
                                 style={!showFullscreenIcon ? {display: 'none'} : null}
