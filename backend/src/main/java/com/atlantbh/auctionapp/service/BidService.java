@@ -38,7 +38,7 @@ public class BidService {
 
     public void add(BidRequest bidRequest) {
         Product product = productRepository.findById(bidRequest.getProductId()).orElseThrow(() -> new UnprocessableException("Wrong product id"));
-        if (product.getStartPrice().compareTo(bidRequest.getPrice()) > 0) {
+        if (product.getStartPrice().compareTo(bidRequest.getAmount()) > 0) {
             throw new BadRequestException("Price can't be lower than the product start price");
         }
         if (product.getStartDate().isAfter(LocalDateTime.now())) {
@@ -55,9 +55,9 @@ public class BidService {
             throw new BadRequestException("You can't bid on your own product");
         }
         BigDecimal maxBid = bidRepository.getMaxBidFromPersonForProduct(person.getId(), product.getId());
-        if (maxBid != null && (maxBid.compareTo(bidRequest.getPrice()) >= 0)) {
+        if (maxBid != null && (maxBid.compareTo(bidRequest.getAmount()) >= 0)) {
             throw new BadRequestException("Price can't be lower than your previous bid of $" + maxBid);
         }
-        bidRepository.save(new Bid(bidRequest.getPrice(), person, product));
+        bidRepository.save(new Bid(bidRequest.getAmount(), person, product));
     }
 }
