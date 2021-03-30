@@ -165,14 +165,16 @@ const ItemPage = ({match}) => {
                                     Start from - ${product.startPrice}
                                 </div>
                                 {outbid !== false ?
-                                    <div style={{marginTop: 50, maxWidth: 500, minWidth: 220}}>
+                                    <div style={{marginTop: 50, maxWidth: 480, minWidth: 220}}>
                                         <Alert className="congrats-alert" dismissible
                                                onClose={() => setAlertVisible(false)} transition={false}
                                                show={alertVisible} variant="info">
-                                            Congratulations!
-                                            <span style={{fontWeight: 'normal'}}>
-                                {' '}You outbid the competition.
-                            </span>
+                                            <div style={{marginLeft: '-2vw'}}>
+                                                Congratulations!
+                                                <span style={{fontWeight: 'normal'}}>
+                                            {' '}You outbid the competition.
+                                            </span>
+                                            </div>
                                         </Alert>
                                     </div> : null}
                             </div>
