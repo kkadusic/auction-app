@@ -5,28 +5,24 @@ import {GrFormSearch} from 'react-icons/gr';
 import {RiAuctionFill} from 'react-icons/ri';
 import {FormControl, Image, Nav, Navbar} from 'react-bootstrap';
 import {Link, NavLink, useHistory} from 'react-router-dom';
-import {getToken, removeSession, getUser} from '../../utilities/Common';
+import {removeSession, getUser} from '../../utilities/Common';
 import {loginUrl, registerUrl, forgotPasswordUrl, resetPasswordUrl} from '../../utilities/AppUrl';
+import {useUserContext} from "../../AppContext";
 import * as qs from 'query-string';
 
 import './header.css';
 
-const Header = ({loggedInState}) => {
+const Header = () => {
 
     const user = getUser();
     const history = useHistory();
-    const [loggedIn, setLoggedIn] = useState(getToken() !== null);
     const [searchInput, setSearchInput] = useState("");
+    const {loggedIn, setLoggedIn} = useUserContext();
 
     const handleLogout = () => {
         setLoggedIn(false);
         removeSession();
     };
-
-    useEffect(() => {
-        if (loggedInState !== null)
-            setLoggedIn(!loggedIn);
-    }, [loggedInState]);
 
     const handleSearch = async () => {
         const urlParams = {

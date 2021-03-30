@@ -10,13 +10,14 @@ import CategoriesFilter from '../../components/CategoriesFilter';
 import ItemNotFound from '../../components/ItemNotFound';
 import ListCard from "../ListCard";
 import {removeSpaces} from "../../utilities/AppUrl";
+import {useBreadcrumbContext} from "../../AppContext";
 import * as qs from 'query-string';
 
 import './shop.css';
 
 let page = 0;
 
-const Shop = ({setBreadcrumb}) => {
+const Shop = () => {
 
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState({category: null, subcategory: null});
@@ -25,6 +26,7 @@ const Shop = ({setBreadcrumb}) => {
     const [loading, setLoading] = useState(true);
     const history = useHistory();
     const urlParams = qs.parse(history.location.search);
+    const {setBreadcrumb} = useBreadcrumbContext();
 
     useEffect(() => {
         setLoading(true);
@@ -131,7 +133,7 @@ const Shop = ({setBreadcrumb}) => {
                     </div>
                 </div>
 
-                <div style={!gridLayout ? { display: 'unset' } : null} className="shop-products">
+                <div style={!gridLayout ? {display: 'unset'} : null} className="shop-products">
                     {products.map(product => gridLayout ? (
                         <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)}/>
                     ) : (

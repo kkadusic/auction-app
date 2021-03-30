@@ -4,14 +4,16 @@ import {Button, Form} from 'react-bootstrap';
 import {Formik} from 'formik';
 import {loginUrl} from '../../utilities/AppUrl';
 import {forgotPassword} from "../../utilities/ServerCall";
+import {useBreadcrumbContext} from "../../AppContext";
 import * as yup from 'yup';
 
 import './forgotPassword.css';
 
-const ForgotPassword = ({setBreadcrumb}) => {
+const ForgotPassword = () => {
 
     const history = useHistory();
     const [loading, setLoading] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
 
     useEffect(() => {
         setBreadcrumb("FORGOT PASSWORD", []);

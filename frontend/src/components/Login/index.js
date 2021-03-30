@@ -4,17 +4,21 @@ import {Button, Form} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
 import {loginUser} from '../../utilities/ServerCall';
 import {setSession, setRememberInfo, getRememberInfo, removeRememberInfo} from '../../utilities/Common';
+import {useAlertContext, useBreadcrumbContext, useUserContext} from "../../AppContext";
 // import {SiFacebook, SiGmail} from 'react-icons/si';
 import * as yup from 'yup';
 
 import './login.css';
 
-const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
+const Login = () => {
 
     const history = useHistory();
     const rememberInfo = getRememberInfo();
     const [loginError, setLoginError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
+    const {setLoggedIn} = useUserContext();
 
     useEffect(() => {
         setBreadcrumb("LOGIN", []);
@@ -32,8 +36,7 @@ const Login = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
                 removeRememberInfo();
             setLoading(false);
             history.push("/");
-            changeLoggedInState();
-            showMessage("success", "Logged in successfully.");
+            setLoggedIn(true);
         } catch (e) {
             setLoginError(true);
             showMessage("warning", "Wrong email or password.");

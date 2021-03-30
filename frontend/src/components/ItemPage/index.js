@@ -6,11 +6,12 @@ import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
 import {getBidsForProduct, getProduct, bidForProduct} from '../../utilities/ServerCall';
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({match, setBreadcrumb, showMessage}) => {
+const ItemPage = ({match}) => {
 
     let personId = getUserId();
 
@@ -26,6 +27,8 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
     const [minPrice, setMinPrice] = useState(0);
     const [alertVisible, setAlertVisible] = useState(true);
     const [outbid, setOutbid] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
 
     useEffect(() => {
         if (personId == null) {
@@ -90,7 +93,7 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
-            showMessage("warning", "Error: " + e.message());
+            showMessage("warning", "Error: ");
         }
         setLoading(false);
     }

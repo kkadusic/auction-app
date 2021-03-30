@@ -3,10 +3,14 @@ import {getToken} from "./Common";
 
 const hostUrl = process.env.REACT_APP_API_URL;
 
-const config = () => {
+export const config = () => {
+    const token = getToken();
+    if (token === null) {
+        return null;
+    }
     return {
         headers: {
-            'Authorization': 'Bearer ' + getToken()
+            'Authorization': 'Bearer ' + token
         }
     };
 }
@@ -55,8 +59,8 @@ export const getBidsForProduct = async (id) => {
     return (await axios.get(hostUrl + '/bids/product', getParams({id}))).data;
 };
 
-export const bidForProduct = async (price, productId) => {
-    return (await axios.post(hostUrl + '/bids/add', {price, productId}, config())).data;
+export const bidForProduct = async (amount, productId) => {
+    return (await axios.post(hostUrl + '/bids/add', {amount, productId}, config())).data;
 };
 
 export const searchProducts = async (query, category, subcategory, page, sort) => {
@@ -81,4 +85,8 @@ export const resetPassword = async (token, password) => {
 
 export const validResetToken = async (token) => {
     return (await axios.post(hostUrl + '/auth/valid_token', {token})).data;
+};
+
+export const getUserBidProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user/bid', config())).data;
 };

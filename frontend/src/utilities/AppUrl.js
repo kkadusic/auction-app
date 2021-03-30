@@ -2,12 +2,16 @@ export const homeUrl = "/";
 export const allCategoriesUrl = "/all";
 export const loginUrl = "/login";
 export const registerUrl = "/register";
-export const myAccountUrl = "/my_account";
 export const forgotPasswordUrl = "/forgot_password";
 export const resetPasswordUrl = "/reset_password";
 export const allCategoryUrl = "/all";
 export const aboutUrl = "/about";
 export const termsUrl = "/terms";
+export const myAccountUrl = "/my-account";
+export const myAccountSellerUrl = "/my-account/seller";
+export const myAccountBidsUrl = "/my-account/bids";
+export const myAccountWishlistUrl = "/my-account/wishlist";
+export const myAccountSettingsUrl = "/my-account/settings";
 
 export const productUrl = (product) => {
     return `/shop/${removeSpaces(product.categoryName)}/${removeSpaces(product.subcategoryName)}/${product.id}`;

@@ -4,15 +4,19 @@ import {Button, Form} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
 import {registerUser} from '../../utilities/ServerCall';
 import {setSession} from '../../utilities/Common';
+import {useBreadcrumbContext, useAlertContext, useUserContext} from "../../AppContext";
 import * as yup from 'yup';
 
 import './register.css';
 
-const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
+const Register = () => {
 
     const history = useHistory();
     const [emailError, setEmailError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
+    const {setLoggedIn} = useUserContext();
 
     useEffect(() => {
         setBreadcrumb("REGISTER", []);
@@ -55,7 +59,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             setSession(data.person, data.token);
             setLoading(false);
             history.push("/my-account");
-            changeLoggedInState();
+            setLoggedIn(true);
             showMessage("success", "Account created successfully.");
         } catch (error) {
             if (error.response.data.status === 409) {

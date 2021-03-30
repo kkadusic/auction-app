@@ -1,7 +1,10 @@
 import './aboutUs.css'
 import {useEffect} from "react";
+import {useBreadcrumbContext} from "../../AppContext";
 
-const AboutUs = ({setBreadcrumb}) => {
+const AboutUs = () => {
+
+    const {setBreadcrumb} = useBreadcrumbContext();
 
     useEffect(() => {
         setBreadcrumb("ABOUT US", [{text: "SHOP", href: "/shop"}, {text: "ABOUT US"}]);
