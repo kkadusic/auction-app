@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Alert, Button} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import {
     myAccountBidsUrl,
     myAccountSellerUrl,
@@ -63,31 +63,41 @@ const MyAccount = () => {
         }
     }
 
+    const inactiveButton = {
+        backgroundColor: '#F0F0F0',
+        border: '1px #F0F0F0'
+    };
+
     return (
         <div>
             <div className="account-tabs-container">
                 <Button onClick={() => history.push(myAccountUrl)}
-                        variant={activeTab === 1 ? "fill-purple" : "fill-gray"} size="lg">
+                        variant={activeTab === 1 ? "fill-purple" : "fill-gray"} size="lg"
+                        style={activeTab !== 1 ? inactiveButton : {boxShadow: 'none'}}>
                     <FaUser style={{marginRight: 5}}/>
                     Profile
                 </Button>
                 <Button onClick={() => history.push(myAccountSellerUrl)}
-                        variant={activeTab === 2 ? "fill-purple" : "fill-yellow"} size="lg">
+                        variant={activeTab === 2 ? "fill-purple" : "fill-yellow"} size="lg"
+                        style={activeTab !== 2 ? inactiveButton : {boxShadow: 'none'}}>
                     <FaList style={{marginRight: 5}}/>
                     Seller
                 </Button>
                 <Button onClick={() => history.push(myAccountBidsUrl)}
-                        variant={activeTab === 3 ? "fill-purple" : "fill-gray"} size="lg">
+                        variant={activeTab === 3 ? "fill-purple" : "fill-gray"} size="lg"
+                        style={activeTab !== 3 ? inactiveButton : {boxShadow: 'none'}}>
                     <ImHammer2 style={{marginRight: 5}}/>
                     Bids
                 </Button>
                 <Button onClick={() => history.push(myAccountWishlistUrl)}
-                        variant={activeTab === 4 ? "fill-purple" : "fill-gray"} size="lg">
+                        variant={activeTab === 4 ? "fill-purple" : "fill-gray"} size="lg"
+                        style={activeTab !== 4 ? inactiveButton : {boxShadow: 'none'}}>
                     <FaGift style={{marginRight: 5}}/>
                     Wishlist
                 </Button>
                 <Button onClick={() => history.push(myAccountSettingsUrl)}
-                        variant={activeTab === 5 ? "fill-purple" : "fill-gray"} size="lg">
+                        variant={activeTab === 5 ? "fill-purple" : "fill-gray"} size="lg"
+                        style={activeTab !== 5 ? inactiveButton : {boxShadow: 'none'}}>
                     <RiSettings5Fill style={{fontSize: 20, marginRight: 5}}/>
                     Settings
                 </Button>

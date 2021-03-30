@@ -69,12 +69,12 @@ const ProductTable = ({products, type}) => {
                 <thead>
                 <tr className="product-table-header">
                     <th style={{width: 80}}>Item</th>
-                    <th style={{minWidth: 150}}>Name</th>
-                    <th style={{minWidth: 120}}>{getTimeColumnName()}</th>
-                    <th style={{minWidth: 120}}>Your Price</th>
+                    <th>Name</th>
+                    <th style={{minWidth: 110}}>{getTimeColumnName()}</th>
+                    <th style={{minWidth: 130}}>Your Price</th>
                     <th style={{minWidth: 100}}>No. Bids</th>
                     <th style={{minWidth: 130}}>Highest Bid</th>
-                    <th style={{minWidth: 165}}/>
+                    <th style={{minWidth: 160}}/>
                 </tr>
                 </thead>
                 <tbody>
