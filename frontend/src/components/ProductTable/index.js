@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Button, Image, OverlayTrigger, Table, Tooltip} from 'react-bootstrap';
+import {Alert, Button, Image, OverlayTrigger, Table, Tooltip} from 'react-bootstrap';
 import {getDurationBetweenDates, longDateTimeFormat} from "../../utilities/Date";
 import {productUrl} from "../../utilities/AppUrl";
 import {getUserId} from "../../utilities/Common";
@@ -12,6 +12,7 @@ const ProductTable = ({products, type}) => {
 
     const history = useHistory();
     const userId = getUserId();
+    const [alertVisible, setAlertVisible] = useState(true);
 
     const getTimeColumnName = () => {
         switch (type) {
@@ -49,71 +50,88 @@ const ProductTable = ({products, type}) => {
     }
 
     return (
-        <Table variant="gray-transparent" responsive style={{marginTop: '94px'}}>
-            <thead>
-            <tr className="product-table-header">
-                <th style={{width: 80}}>Item</th>
-                <th>Name</th>
-                <th style={{minWidth: 110}}>{getTimeColumnName()}</th>
-                <th style={{minWidth: 130}}>Your Price</th>
-                <th style={{minWidth: 100}}>No. Bids</th>
-                <th style={{minWidth: 130}}>Highest Bid</th>
-                <th/>
-            </tr>
-            </thead>
-            <tbody>
-            {products.map(product => (
-                <tr key={product.id}>
-                    <td>
-                        <Image className="product-table-image"
-                               onClick={() => history.push(productUrl(product))}
-                               src={getImageSrc(product)}/>
-                    </td>
-                    <td>
-                        <div style={{cursor: 'pointer'}} onClick={() => history.push(productUrl(product))}
-                             className="product-table-name">
-                            {product.name}
+        <>
+            {document.getElementById('pay-btn') ?
+                <div style={{marginTop: '50px'}}>
+                    <Alert className="congrats-alert" dismissible
+                           onClose={() => setAlertVisible(false)} transition={false}
+                           show={alertVisible} variant="info">
+                        <div style={{marginLeft: '-7vw'}}>
+                            Congratulations!
+                            <span style={{fontWeight: 'normal'}}>
+                                            {' '}You outbid the competition.
+                                            </span>
                         </div>
-                        <div className="product-table-id">
-                            #{product.id}
-                        </div>
-                    </td>
-                    <td>
-                        {getTimeColumn(product)}
-                    </td>
-                    <td style={type === "bids" && product.personId === userId ? {
-                        color: '#6CC047',
-                        fontWeight: 'bold'
-                    } : null}>
-                        $ {product.price}
-                    </td>
-                    <td>{product.bidCount}</td>
-                    <td style={getMaxBidStyle(product)}>
-                        {product.maxBid !== null ? "$ " + product.maxBid : "/"}
-                    </td>
-                    <td>
-                        {type === "bids" && moment().isSameOrAfter(moment.utc(product.endDate)) && product.personId === userId ?
-                            <Button
-                                size="lg-2"
-                                variant="fill-purple-shadow"
-                                style={{width: 105, backgroundColor: '#8367D8', color: 'white'}}
-                            >
-                                PAY
-                            </Button> :
-                            <Button
-                                size="lg-2"
-                                variant="transparent-black-shadow-disabled"
-                                style={{width: 105, border: '3px solid #E3E3E3'}}
-                                onClick={() => history.push(productUrl(product))}
-                            >
-                                VIEW
-                            </Button>
-                        }
-                    </td>
+                    </Alert>
+                </div> : null
+            }
+            <Table variant="gray-transparent" responsive style={{marginTop: '10px'}}>
+                <thead>
+                <tr className="product-table-header">
+                    <th style={{width: 80}}>Item</th>
+                    <th style={{minWidth: 150}}>Name</th>
+                    <th style={{minWidth: 120}}>{getTimeColumnName()}</th>
+                    <th style={{minWidth: 120}}>Your Price</th>
+                    <th style={{minWidth: 100}}>No. Bids</th>
+                    <th style={{minWidth: 130}}>Highest Bid</th>
+                    <th style={{minWidth: 165}}/>
                 </tr>
-            ))}
-            </tbody>
-        </Table>
+                </thead>
+                <tbody>
+                {products.map(product => (
+                    <tr key={product.id}>
+                        <td>
+                            <Image className="product-table-image"
+                                   onClick={() => history.push(productUrl(product))}
+                                   src={getImageSrc(product)}/>
+                        </td>
+                        <td>
+                            <div style={{cursor: 'pointer'}} onClick={() => history.push(productUrl(product))}
+                                 className="product-table-name">
+                                {product.name}
+                            </div>
+                            <div className="product-table-id">
+                                #{product.id}
+                            </div>
+                        </td>
+                        <td>
+                            {getTimeColumn(product)}
+                        </td>
+                        <td style={type === "bids" && product.personId === userId ? {
+                            color: '#6CC047',
+                            fontWeight: 'bold'
+                        } : null}>
+                            $ {product.price}
+                        </td>
+                        <td>{product.bidCount}</td>
+                        <td style={getMaxBidStyle(product)}>
+                            {product.maxBid !== null ? "$ " + product.maxBid : "/"}
+                        </td>
+                        <td>
+                            {type === "bids" && moment().isSameOrAfter(moment.utc(product.endDate)) && product.personId === userId ?
+                                <Button
+                                    id="pay-btn"
+                                    size="lg-2"
+                                    variant="fill-purple-shadow"
+                                    style={{width: 105, backgroundColor: '#8367D8', color: 'white'}}
+                                >
+                                    PAY
+                                </Button> :
+                                <Button
+                                    size="lg-2"
+                                    variant="transparent-black-shadow-disabled"
+                                    style={{width: 105, border: '3px solid #E3E3E3'}}
+                                    onClick={() => history.push(productUrl(product))}
+                                >
+                                    VIEW
+                                </Button>
+                            }
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </Table>
+        </>
     );
 }
 

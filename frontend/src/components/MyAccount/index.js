@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Button} from 'react-bootstrap';
+import {Alert, Button} from 'react-bootstrap';
 import {
     myAccountBidsUrl,
     myAccountSellerUrl,

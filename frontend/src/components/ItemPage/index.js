@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Image, Modal, Table, Alert} from 'react-bootstrap';
+import {Alert, Button, Form, Image, Modal, Table} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 import {getUserId} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
-import {getBidsForProduct, getProduct, bidForProduct} from '../../utilities/ServerCall';
+import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
 import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import moment from 'moment';
 
@@ -80,9 +80,8 @@ const ItemPage = ({match}) => {
             return;
         }
         setLoading(true);
-        const price = bidPrice;
         try {
-            await bidForProduct(parseFloat(price), product.id);
+            await bidForProduct(parseFloat(bidPrice), product.id);
             const newBids = await getBidsForProduct(product.id);
             setMinPrice(Math.max(...newBids.map(bid => bid.personId === personId ? bid.amount : 0), 0) + 0.01);
             if (personId === newBids[0].personId) {
@@ -165,7 +164,7 @@ const ItemPage = ({match}) => {
                                     Start from - ${product.startPrice}
                                 </div>
                                 {outbid !== false ?
-                                    <div style={{marginTop: 50, maxWidth: 480, minWidth: 220}}>
+                                    <div style={{marginTop: 50, maxWidth: 500, minWidth: 220}}>
                                         <Alert className="congrats-alert" dismissible
                                                onClose={() => setAlertVisible(false)} transition={false}
                                                show={alertVisible} variant="info">
