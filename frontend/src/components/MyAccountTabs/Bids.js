@@ -17,7 +17,7 @@ const Bids = () => {
             try {
                 setProducts(await getUserBidProducts());
             } catch (e) {
-                showMessage("warning", "Error: " + e.message());
+                showMessage("warning", e.response !== undefined ? + e.response.data.message : e.message);
             }
             setLoading(false);
         }
