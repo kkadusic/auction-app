@@ -61,7 +61,7 @@ const Header = () => {
                     </a>
                 </div>
                 <Nav className="topbar-nav-links">
-                    {loggedIn ?
+                    {loggedIn && user !== null ?
                         (
                             <>
                                 <Image style={{marginRight: '0.5rem'}} roundedCircle className="avatar-image-tiny"
@@ -70,7 +70,8 @@ const Header = () => {
                                     {user.firstName + ' ' + user.lastName}
                                 </div>
                                 |
-                                <Link style={{ paddingRight: 0, paddingLeft: 5 }} className="white-nav-link nav-link" onClick={handleLogout} to={homeUrl}>
+                                <Link style={{paddingRight: 0, paddingLeft: 5}} className="white-nav-link nav-link"
+                                      onClick={handleLogout} to={homeUrl}>
                                     Log out
                                 </Link>
                             </>
