@@ -56,7 +56,7 @@ const ItemPage = ({match}) => {
                     }
                 }
             } catch (e) {
-                showMessage("warning", "Error: " + e.message());
+                showMessage("warning", e.response !== undefined ? + e.response.data.message : e.message);
             }
         }
 
@@ -92,7 +92,7 @@ const ItemPage = ({match}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
-            showMessage("warning", "Error: ");
+            showMessage("warning", e.response !== undefined ? + e.response.data.message : e.message);
         }
         setLoading(false);
     }
