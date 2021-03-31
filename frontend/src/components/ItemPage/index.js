@@ -184,9 +184,13 @@ const ItemPage = ({match}) => {
                                                       className="form-control-gray place-bid-form" size="xl-18"
                                                       type="text"
                                                       onChange={e => setBidPrice(e.target.value)}/>
+                                        {minPrice < 9999999 ?
                                         <div className="place-bid-label">
                                             Enter ${minPrice} or more
-                                        </div>
+                                        </div> :
+                                        <div className="place-bid-label">
+                                            Maximum bid amount reached
+                                        </div> }
                                     </div>
                                     <Button
                                         disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}

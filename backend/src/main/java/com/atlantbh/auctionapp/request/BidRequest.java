@@ -10,7 +10,7 @@ public class BidRequest {
 
     @NotNull(message = "Amount must be supplied")
     @DecimalMin(value = "0.01", message = "Amount can't be less than $0.01")
-    @DecimalMax(value = "999999.99", message = "Amount can't be more than $99999999.99")
+    @DecimalMax(value = "9999999", message = "Amount can't be more than $9999999")
     private BigDecimal amount;
 
     @NotNull(message = "Product must be supplied")
