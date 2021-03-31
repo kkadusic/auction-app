@@ -24,7 +24,7 @@ const Register = () => {
     }, []);
 
     let whitespaceRegex = new RegExp("^(?!\\s+$).*");
-    let firstLastNameRegex = new RegExp("^[A-ZÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ][a-zA-Zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžđ∂ðÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ ,.'-]+$", "g");
+    let nameRegex = new RegExp("^[A-ZÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ][a-zA-Zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžđ∂ðÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ ,.'-]+$", "g");
 
     const validationSchema = yup.object().shape({
         firstName: yup.string()
@@ -32,13 +32,13 @@ const Register = () => {
             .max(50, "*First name can't be longer than 50 characters")
             .required("*First name is required")
             .test("whitespace-test", "*First name is not valid", value => whitespaceRegex.test(value))
-            .matches(firstLastNameRegex, "First name is not valid"),
+            .matches(nameRegex, "First name is not valid"),
         lastName: yup.string()
             .min(2, "*Last name must have at least 2 characters")
             .max(50, "*Last name can't be longer than 50 characters")
             .required("*Last name is required")
             .test("whitespace-test", "*Last name is not valid", value => whitespaceRegex.test(value))
-            .matches(firstLastNameRegex, "Last name is not valid"),
+            .matches(nameRegex, "Last name is not valid"),
         email: yup.string()
             .email("*Email must be valid")
             .max(320, "*Email must be less than 320 characters")
