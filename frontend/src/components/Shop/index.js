@@ -82,7 +82,6 @@ const Shop = () => {
         page = 0;
         urlParams.sort = sort;
         history.push({
-            pathname: '/shop',
             search: qs.stringify(urlParams)
         });
     }
