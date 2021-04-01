@@ -6,15 +6,18 @@ import {loginUrl, forgotPasswordUrl} from '../../utilities/AppUrl';
 import {resetPassword, validResetToken} from "../../utilities/ServerCall";
 import * as qs from 'query-string';
 import * as yup from 'yup';
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 
 import '../ForgotPassword/forgotPassword.css';
 
-const ResetPassword = ({setBreadcrumb, showMessage}) => {
+const ResetPassword = () => {
+
     const history = useHistory();
     const urlParams = qs.parse(history.location.search);
     const [validToken, setValidToken] = useState(false);
-
     const [loading, setLoading] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
 
     useEffect(() => {
         setBreadcrumb("RESET PASSWORD", []);

@@ -30,8 +30,8 @@ public class BidController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody @Valid BidRequest bidRequest) {
+    public ResponseEntity<BidRequest> add(@RequestBody @Valid BidRequest bidRequest) {
         bidService.add(bidRequest);
-        return ResponseEntity.ok("Bid added");
+        return ResponseEntity.ok(bidRequest);
     }
 }

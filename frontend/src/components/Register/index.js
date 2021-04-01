@@ -4,36 +4,41 @@ import {Button, Form} from 'react-bootstrap';
 import {Link, useHistory} from 'react-router-dom';
 import {registerUser} from '../../utilities/ServerCall';
 import {setSession} from '../../utilities/Common';
+import {useBreadcrumbContext, useAlertContext, useUserContext} from "../../AppContext";
 import * as yup from 'yup';
 
 import './register.css';
 
-const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
+const Register = () => {
 
     const history = useHistory();
     const [emailError, setEmailError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
+    const {setLoggedIn} = useUserContext();
 
     useEffect(() => {
         setBreadcrumb("REGISTER", []);
         // eslint-disable-next-line
     }, []);
 
+    let whitespaceRegex = new RegExp("^(?!\\s+$).*");
+    let nameRegex = new RegExp("^[A-ZÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ][a-zA-Zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžđ∂ðÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ ,.'-]+$", "g");
+
     const validationSchema = yup.object().shape({
         firstName: yup.string()
             .min(2, "*First name must have at least 2 characters")
             .max(50, "*First name can't be longer than 50 characters")
             .required("*First name is required")
-            .test("number-test", "*First name can't contain numbers", value => /^([^0-9]*)$/.test(value))
-            .test("symbol-test", "*First name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value))
-            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "First name must be valid"),
+            .test("whitespace-test", "*First name is not valid", value => whitespaceRegex.test(value))
+            .matches(nameRegex, "First name is not valid"),
         lastName: yup.string()
             .min(2, "*Last name must have at least 2 characters")
             .max(50, "*Last name can't be longer than 50 characters")
             .required("*Last name is required")
-            .test("number-test", "*Last name can't contain numbers", value => /^([^0-9]*)$/.test(value))
-            .test("symbol-test", "*Last name can't contain special characters", value => /^[^\p{P}\p{S}]*$/u.test(value))
-            .matches(/\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/gm, "Last name must be valid"),
+            .test("whitespace-test", "*Last name is not valid", value => whitespaceRegex.test(value))
+            .matches(nameRegex, "Last name is not valid"),
         email: yup.string()
             .email("*Email must be valid")
             .max(320, "*Email must be less than 320 characters")
@@ -41,8 +46,8 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
         password: yup.string()
             .max(128, "*Password can't be longer than 128 characters")
             .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                "Password must contain 8 characters, one uppercase, one lowercase, one number and one special case character"
+                /^(?=.*?[A-ZÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆŠŽĐ])(?=(.*[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçšžđ∂ð])+)(?=(.*[\d])+)(?!.*\s).{8,}$/,
+                "Password must contain 8 characters, one uppercase, one lowercase and one number"
             )
             .required("*Password is required"),
     });
@@ -54,7 +59,7 @@ const Register = ({changeLoggedInState, showMessage, setBreadcrumb}) => {
             setSession(data.person, data.token);
             setLoading(false);
             history.push("/my-account");
-            changeLoggedInState();
+            setLoggedIn(true);
             showMessage("success", "Account created successfully.");
         } catch (error) {
             if (error.response.data.status === 409) {

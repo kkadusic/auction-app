@@ -174,4 +174,15 @@ public class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
     }
+
+    @Test
+    public void getUserBids() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/user/bid")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+    }
 }

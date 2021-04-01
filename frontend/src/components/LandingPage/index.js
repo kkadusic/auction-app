@@ -10,18 +10,15 @@ import {
 import {IoIosArrowForward} from "react-icons/io";
 import {useHistory} from 'react-router-dom';
 import {categoryUrl, allCategoriesUrl, productUrl} from "../../utilities/AppUrl";
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 
 import './landingPage.css';
 
-const LandingPage = ({setBreadcrumb, showMessage}) => {
+const LandingPage = () => {
 
     const history = useHistory();
-
-    useEffect(() => {
-        setBreadcrumb(null, []);
-        // eslint-disable-next-line
-    }, [])
-
+    const {removeBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
     const [categories, setCategories] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [randomSubcategories, setRandomSubcategories] = useState([]);
@@ -29,6 +26,7 @@ const LandingPage = ({setBreadcrumb, showMessage}) => {
     const [activeTab, setActiveTab] = useState(0);
 
     useEffect(() => {
+        removeBreadcrumb();
         const fetchData = async () => {
             try {
                 setCategories(await getCategories());

@@ -1,7 +1,6 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
-
 import LandingPage from '../components/LandingPage';
 import Shop from '../components/Shop';
 import Login from '../components/Login';
@@ -16,20 +15,20 @@ import AllCategories from "../components/AllCategories";
 import ForgotPassword from "../components/ForgotPassword";
 import ResetPassword from "../components/ResetPassword";
 
-const UserRoutes = (props) => {
+const UserRoutes = () => {
     return (
         <Switch>
-            <Route exact path="/" render={() => <LandingPage {...props} />}/>
-            <Route path="/all" render={() => <AllCategories {...props} />} />
-            <Route path="/shop/*/*/:id" render={() => <ItemPage {...props} />}/>
-            <Route path="/shop*" render={() => <Shop {...props} />}/>
-            <Route path="/about" render={() => <AboutUs {...props} />}/>
-            <Route path="/privacy" render={() => <PrivacyPolicy {...props} />}/>
-            <Route path="/terms" render={() => <TermsConditions {...props} />}/>
-            <Route path="/login" render={() => <Login {...props} />}/>
-            <Route path="/register" render={() => <Register {...props} />}/>
-            <Route path="/forgot_password" render={() => <ForgotPassword {...props} />} />
-            <Route path="/reset_password" render={() => <ResetPassword {...props} />} />
+            <Route exact path="/" component={LandingPage}/>
+            <Route path="/all" component={AllCategories}/>
+            <Route path="/shop/*/*/:id" component={ItemPage}/>
+            <Route path="/shop*" component={Shop}/>
+            <Route path="/about" component={AboutUs}/>
+            <Route path="/privacy" component={PrivacyPolicy}/>
+            <Route path="/terms" component={TermsConditions}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/register" component={Register}/>
+            <Route path="/forgot_password" component={ForgotPassword}/>
+            <Route path="/reset_password" component={ResetPassword}/>
             <PrivateRoute path="/my-account" component={MyAccount}/>
             <Route component={PageNotFound}/>
         </Switch>
