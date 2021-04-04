@@ -32,8 +32,8 @@ const ProductTable = ({products, type}) => {
             case "sold":
                 return moment.utc(product.endDate).local().format(longDateTimeFormat);
             default:
-                const productEndDate = moment.utc(product.endDate);
-                return moment().isSameOrAfter(productEndDate) ? 0 : getDurationBetweenDates(moment(), productEndDate);
+                const productEndDate = moment(product.endDate);
+                return moment().isSameOrAfter(productEndDate) ? "Auction ended" : getDurationBetweenDates(moment(), productEndDate);
         }
     }
 
