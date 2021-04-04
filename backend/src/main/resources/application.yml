@@ -1,14 +1,18 @@
 spring:
+  application:
+    name: auction-hub
   datasource:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
   jpa:
-    hibernate:
-      ddl-auto: ${SCHEMA_DB}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        time_zone: UTC
+    hibernate:
+      ddl-auto: ${SCHEMA_DB}
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpiration: ${JWT_EXPIRATION}

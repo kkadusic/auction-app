@@ -23,7 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "INNER JOIN image i ON p.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE p.featured = true AND i.featured = true AND p.start_date <= now() AND p.end_date > now() " +
+            "WHERE p.featured = true AND i.featured = true AND p.start_date <= (now() + interval '2 hours') AND p.end_date > (now() + interval '2 hours') " +
             "ORDER BY RANDOM() " +
             "LIMIT 5",
             nativeQuery = true)
@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "INNER JOIN image i ON p.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE start_date <= now() AND end_date > now() AND i.featured = true " +
+            "WHERE start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND i.featured = true " +
             "ORDER BY start_date DESC " +
             "LIMIT 8",
             nativeQuery = true)
@@ -47,7 +47,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "INNER JOIN image i ON p.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE start_date <= now() AND end_date > now() AND i.featured = true " +
+            "WHERE start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND i.featured = true " +
             "ORDER BY end_date " +
             "LIMIT 8",
             nativeQuery = true)
@@ -71,7 +71,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "WHERE lower(pr.name) LIKE %:query% " +
             "AND (case when :category = '' then true else lower(c.name) = :category end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = :subcategory end) " +
-            "AND i.featured = true AND start_date <= now() AND end_date > now() " +
+            "AND i.featured = true AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, i.url, c.name, s.name, pr.creation_date)",
             nativeQuery = true)
     Slice<SimpleProductResponse> search(String query, String category, String subcategory, Pageable pageable);
@@ -81,7 +81,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "                INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "                INNER JOIN category c on c.id = s.category_id " +
             "WHERE lower(pr.name) LIKE %:query% " +
-            "AND i.featured = true AND start_date <= now() AND end_date > now() " +
+            "AND i.featured = true AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
             "GROUP BY (c.name, s.name) " +
             "ORDER BY (c.name, s.name)",
             nativeQuery = true)
