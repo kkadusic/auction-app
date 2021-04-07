@@ -10,12 +10,13 @@ import CategoriesFilter from '../../components/CategoriesFilter';
 import ItemNotFound from '../../components/ItemNotFound';
 import ListCard from "../ListCard";
 import {removeSpaces} from "../../utilities/AppUrl";
-import {useBreadcrumbContext} from "../../AppContext";
+import {useBreadcrumbContext, useAlertContext} from "../../AppContext";
 import * as qs from 'query-string';
 
 import './shop.css';
 
 let page = 0;
+let queryChanged = true;
 
 const Shop = () => {
 
@@ -27,6 +28,7 @@ const Shop = () => {
     const history = useHistory();
     const urlParams = qs.parse(history.location.search);
     const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
 
     useEffect(() => {
         setLoading(true);
@@ -34,11 +36,19 @@ const Shop = () => {
         // eslint-disable-next-line
     }, [history.location.pathname, history.location.search])
 
+    useEffect(() => {
+        queryChanged = true;
+    }, [urlParams.query]);
+
     const formCategoryName = (name) => {
         if (name === undefined)
             return null;
         name = name.split("_").join(" ");
         return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    const capitalizeFirstLetter = (word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
     }
 
     const formBreadcrumb = () => {
@@ -66,6 +76,23 @@ const Shop = () => {
         const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
         setProducts(data.products);
         setLastPage(data.lastPage);
+        if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
+            showMessage("warning", (
+                <>
+                    Did you mean?
+                    <span
+                        className="font-18"
+                        style={{marginLeft: 20, color: '#8367D8', cursor: 'pointer'}}
+                        onClick={() => history.push({
+                            search: qs.stringify({...urlParams, query: data.didYouMean})
+                        })}
+                    >
+                            {capitalizeFirstLetter(data.didYouMean)}
+                        </span>
+                </>
+            ));
+            queryChanged = false;
+        }
         setLoading(false);
     }
 

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {SiFacebook, SiTwitter, SiInstagram} from 'react-icons/si';
 import {FaGooglePlus} from 'react-icons/fa';
 import {GrFormSearch} from 'react-icons/gr';
@@ -27,6 +27,13 @@ const Header = () => {
         setLoggedIn(false);
         removeSession();
     };
+
+    useEffect(() => {
+        const urlParams = qs.parse(history.location.search);
+        if (searchInput !== urlParams.query)
+            setSearchInput(urlParams.query);
+        // eslint-disable-next-line
+    }, [history.location.search])
 
     const handleSearch = async () => {
         const urlParams = {
@@ -99,11 +106,12 @@ const Header = () => {
                 </Link>
                 <div className="navbar-search">
                     <FormControl
-                        value={searchInput}
+                        value={searchInput || ""}
                         onChange={(e) => setSearchInput(e.target.value)}
                         size="xl-18"
                         type="text"
                         placeholder="Try enter: Shoes"
+                        maxLength="255"
                         onKeyUp={(e) => e.key === 'Enter' ? handleSearch() : null}
                     />
                     <GrFormSearch className="navbar-search-icon" onClick={handleSearch}/>
