@@ -13,10 +13,12 @@ import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
 import com.atlantbh.auctionapp.response.SimpleProductResponse;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
+import com.atlascopco.hunspell.Hunspell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,14 +30,32 @@ import java.util.TreeSet;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final Hunspell speller;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, Hunspell speller) {
         this.productRepository = productRepository;
+        this.speller = speller;
     }
 
     public List<SimpleProductProjection> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
+    }
+
+    private String getSuggestion(String query) {
+        String[] queryWords = query.split(" ");
+        List<String> suggestedWords = new ArrayList<>(queryWords.length);
+        for (String queryWord : queryWords) {
+            if (!speller.spell(queryWord)) {
+                List<String> suggestions = speller.suggest(queryWord);
+                if (suggestions.isEmpty())
+                    suggestedWords.add(queryWord);
+                else
+                    suggestedWords.add(suggestions.get(0));
+            } else
+                suggestedWords.add(queryWord);
+        }
+        return String.join(" ", suggestedWords);
     }
 
     public List<SimpleProductProjection> getNewProducts() {
@@ -92,20 +112,24 @@ public class ProductService {
                 pageRequest = PageRequest.of(page, 12, Sort.by("start_price").descending());
                 break;
             default:
-                pageRequest = PageRequest.of(page, 12, Sort.by("name").and(Sort.by("id")));
+                pageRequest = PageRequest.of(page, 12, JpaSort.unsafe(Sort.Direction.DESC,
+                        "(similarity)").and(Sort.by("name")).and(Sort.by("id")));
                 break;
         }
+
         Slice<SimpleProductResponse> searchResult = productRepository.search(
                 query.toLowerCase(),
+                query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & "),
                 category.toLowerCase(),
                 subcategory.toLowerCase(),
                 pageRequest
         );
-        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext());
+
+        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), getSuggestion(query));
     }
 
     public List<CategoryCountResponse> searchCount(String query) {
-        List<ProductCountResponse> data = productRepository.searchCount(query.toLowerCase());
+        List<ProductCountResponse> data = productRepository.searchCount(query, query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & "));
         List<CategoryCountResponse> response = new ArrayList<>();
 
         for (ProductCountResponse product : data) {

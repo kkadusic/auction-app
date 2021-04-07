@@ -6,6 +6,7 @@ public class ProductPageResponse {
 
     private List<SimpleProductResponse> products;
     private Boolean lastPage;
+    private String didYouMean;
 
     public ProductPageResponse() {
     }
@@ -13,6 +14,12 @@ public class ProductPageResponse {
     public ProductPageResponse(List<SimpleProductResponse> products, Boolean lastPage) {
         this.products = products;
         this.lastPage = lastPage;
+    }
+
+    public ProductPageResponse(List<SimpleProductResponse> products, Boolean lastPage, String didYouMean) {
+        this.products = products;
+        this.lastPage = lastPage;
+        this.didYouMean = didYouMean;
     }
 
     public List<SimpleProductResponse> getProducts() {
@@ -29,5 +36,13 @@ public class ProductPageResponse {
 
     public void setLastPage(Boolean lastPage) {
         this.lastPage = lastPage;
+    }
+
+    public String getDidYouMean() {
+        return didYouMean;
+    }
+
+    public void setDidYouMean(String didYouMean) {
+        this.didYouMean = didYouMean;
     }
 }
