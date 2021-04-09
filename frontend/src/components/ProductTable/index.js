@@ -28,12 +28,12 @@ const ProductTable = ({products, type}) => {
     const getTimeColumn = (product) => {
         switch (type) {
             case "scheduled":
-                return moment.utc(product.startDate).local().format(longDateTimeFormat);
+                return moment(product.startDate).local().format(longDateTimeFormat);
             case "sold":
-                return moment.utc(product.endDate).local().format(longDateTimeFormat);
+                return moment(product.endDate).local().format(longDateTimeFormat);
             default:
-                const productEndDate = moment.utc(product.endDate);
-                return moment().isSameOrAfter(productEndDate) ? 0 : getDurationBetweenDates(moment(), productEndDate);
+                const productEndDate = moment(product.endDate);
+                return moment().isSameOrAfter(productEndDate) ? "Auction ended" : getDurationBetweenDates(moment(), productEndDate);
         }
     }
 
@@ -108,7 +108,7 @@ const ProductTable = ({products, type}) => {
                             {product.maxBid !== null ? "$ " + product.maxBid : "/"}
                         </td>
                         <td>
-                            {type === "bids" && moment().isSameOrAfter(moment.utc(product.endDate)) && product.personId === userId ?
+                            {type === "bids" && moment().isSameOrAfter(moment(product.endDate)) && product.personId === userId ?
                                 <Button
                                     id="pay-btn"
                                     size="lg-2"

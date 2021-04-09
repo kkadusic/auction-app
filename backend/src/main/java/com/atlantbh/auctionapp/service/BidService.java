@@ -41,10 +41,10 @@ public class BidService {
         if (product.getStartPrice().compareTo(bidRequest.getAmount()) > 0) {
             throw new BadRequestException("Price can't be lower than the product start price");
         }
-        if (product.getStartDate().isAfter(LocalDateTime.now())) {
+        if (product.getStartDate().isAfter(LocalDateTime.now().plusHours(2))) {
             throw new BadRequestException("Auction is yet to start for this product");
         }
-        if (product.getEndDate().isBefore(LocalDateTime.now())) {
+        if (product.getEndDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new BadRequestException("Auction ended for this product");
         }
         Long id = JwtTokenUtil.getRequestPersonId();
