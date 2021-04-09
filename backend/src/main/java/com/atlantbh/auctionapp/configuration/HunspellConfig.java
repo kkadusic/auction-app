@@ -9,8 +9,8 @@ public class HunspellConfig {
 
     @Bean
     public Hunspell speller() {
-        String dicPath = "backend/src/main/resources/dictionary/en_US.dic";
-        String affPath = "backend/src/main/resources/dictionary/en_US.aff";
+        String dicPath = "src/main/resources/dictionary/en_US.dic";
+        String affPath = "src/main/resources/dictionary/en_US.aff";
         return new Hunspell(dicPath, affPath);
     }
 }
