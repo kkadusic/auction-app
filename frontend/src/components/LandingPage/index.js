@@ -64,7 +64,8 @@ const LandingPage = () => {
                 {featuredProducts.length !== 0 ?
                     <div className="featured-product-container">
                         <div className="featured-product-container-inner">
-                            <h1 style={{marginBottom: "5px"}}>
+                            <h1 style={{marginBottom: "5px", cursor: "pointer"}}
+                                onClick={() => history.push(productUrl(featuredProducts[0]))}>
                                 {featuredProducts[0].name}
                             </h1>
                             <div className="featured-product-price">
@@ -83,8 +84,9 @@ const LandingPage = () => {
                                 <IoIosArrowForward style={{fontSize: 24}}/>
                             </Button>
                         </div>
-                        <Image width="484px" height="294px" style={{marginLeft: "20px"}}
-                               src={featuredProducts[0].imageUrl}/>
+                        <Image width="484px" height="294px" style={{marginLeft: "20px", cursor: "pointer"}}
+                               src={featuredProducts[0].imageUrl}
+                               onClick={() => history.push(productUrl(featuredProducts[0]))}/>
                     </div> : null}
             </div>
 
