@@ -5,6 +5,7 @@ import {getUserId} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
+import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
 import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
 import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import moment from 'moment';
@@ -56,7 +57,7 @@ const ItemPage = ({match}) => {
                     }
                 }
             } catch (e) {
-                showMessage("warning", e.response !== undefined ? + e.response.data.message : e.message);
+                showMessage("warning", e.response !== undefined ? +e.response.data.message : e.message);
             }
         }
 
@@ -92,7 +93,7 @@ const ItemPage = ({match}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
-            showMessage("warning", e.response !== undefined ? + e.response.data.message : e.message);
+            showMessage("warning", e.response !== undefined ? +e.response.data.message : e.message);
         }
         setLoading(false);
     }
@@ -120,8 +121,19 @@ const ItemPage = ({match}) => {
             {product !== null ? (
                 <>
                     <Modal size="xl" centered show={showFullscreen} onHide={() => setShowFullscreen(false)}>
-                        <Image onClick={() => setShowFullscreen(false)} width="100%"
+                        {activePhoto !== 0 ?
+                            <MdKeyboardArrowLeft
+                                onClick={() => setActivePhoto(activePhoto - 1)}
+                                className="fullscreen-image-left-arrow"/>
+                            : null}
+                        <Image onClick={() => setShowFullscreen(false)}
+                               width="100%"
                                src={product.images[activePhoto].url}/>
+                        {product.images.length !== 0 && activePhoto !== product.images.length - 1 ?
+                            <MdKeyboardArrowRight
+                                onClick={() => setActivePhoto(activePhoto + 1)}
+                                className="fullscreen-image-right-arrow"/>
+                            : null}
                     </Modal>
                     <div className="product-container">
                         <div className="images-container">
@@ -139,7 +151,7 @@ const ItemPage = ({match}) => {
                                 onMouseEnter={() => setShowFullscreenIcon(true)}
                                 onMouseLeave={() => setShowFullscreenIcon(false)}
                                 style={!showFullscreenIcon ? {display: 'none'} : null}
-                                className="fullscreen-icon"
+                                className="fullscreen-image-icon"
                                 onClick={() => setShowFullscreen(true)}
                             />
                             {product.images.map((photo, i) => (
@@ -185,12 +197,12 @@ const ItemPage = ({match}) => {
                                                       type="text"
                                                       onChange={e => setBidPrice(e.target.value)}/>
                                         {minPrice < 9999999 ?
-                                        <div className="place-bid-label">
-                                            Enter ${minPrice} or more
-                                        </div> :
-                                        <div className="place-bid-label">
-                                            Maximum bid amount reached
-                                        </div> }
+                                            <div className="place-bid-label">
+                                                Enter ${minPrice} or more
+                                            </div> :
+                                            <div className="place-bid-label">
+                                                Maximum bid amount reached
+                                            </div>}
                                     </div>
                                     <Button
                                         disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}
