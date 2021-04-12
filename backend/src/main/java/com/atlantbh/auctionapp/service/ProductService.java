@@ -126,9 +126,11 @@ public class ProductService {
                 break;
         }
 
+        String tsQuery = formTsQuery(query);
+
         Slice<SimpleProductProjection> searchResult = productRepository.search(
                 query.toLowerCase(),
-                query.replaceAll("[\\p{P}\\p{S}]", "").trim().replace(" ", " & "),
+                tsQuery,
                 category.toLowerCase(),
                 subcategory.toLowerCase(),
                 minPrice,
@@ -138,7 +140,12 @@ public class ProductService {
                 pageRequest
         );
 
-        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), getSuggestion(query));
+        String suggestion = getSuggestion(query);
+        if (suggestion.equalsIgnoreCase(query) || !productRepository.searchExists(query, tsQuery)) {
+            suggestion = query;
+        }
+
+        return new ProductPageResponse(searchResult.getContent(), !searchResult.hasNext(), suggestion);
     }
 
     public List<CategoryCountResponse> searchCount(String query, Integer minPrice, Integer maxPrice, Color color, Size size) {

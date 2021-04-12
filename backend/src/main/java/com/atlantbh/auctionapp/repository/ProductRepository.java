@@ -147,6 +147,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             nativeQuery = true)
     List<UserProductProjection> getUserBidProducts(@Param("user_id") Long userId);
 
+    @Query(value = "SELECT EXISTS(SELECT 1 " +
+            "FROM product pr " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND start_date <= now() AND end_date > now())",
+            nativeQuery = true)
+    Boolean searchExists(String query, String tsquery);
+
     @Query(value = "SELECT start_price FROM product pr " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
             "INNER JOIN category c on c.id = s.category_id " +
