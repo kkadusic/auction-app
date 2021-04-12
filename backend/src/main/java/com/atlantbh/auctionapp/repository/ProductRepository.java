@@ -1,11 +1,12 @@
 package com.atlantbh.auctionapp.repository;
 
 import com.atlantbh.auctionapp.model.Product;
+import com.atlantbh.auctionapp.projection.ColorCountProjection;
+import com.atlantbh.auctionapp.projection.ProductCountProjection;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
+import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.response.FullProductResponse;
-import com.atlantbh.auctionapp.response.ProductCountResponse;
-import com.atlantbh.auctionapp.response.SimpleProductResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -63,7 +65,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<FullProductResponse> getProduct(@Param("product_id") Long productId, @Param("user_id") Long userId);
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
-            "i.url, c.name categoryName, s.name subcategoryName, pr.creation_date, " +
+            "i.url AS imageUrl, c.name categoryName, s.name subcategoryName, pr.creation_date, " +
             "(SELECT count(id) FROM bid WHERE product_id = pr.id) bids, " +
             "similarity(pr.name, :query) similarity " +
             "FROM product pr INNER JOIN image i on pr.id = i.product_id " +
@@ -73,10 +75,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = :category end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = :subcategory end) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
             "AND i.featured = true AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, i.url, c.name, s.name, pr.creation_date)",
             nativeQuery = true)
-    Slice<SimpleProductResponse> search(String query, String tsquery, String category, String subcategory, Pageable pageable);
+    Slice<SimpleProductProjection> search(String query, String tsquery, String category, String subcategory,
+                                          @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice,
+                                          String color, String size, Pageable pageable);
 
     @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
             "FROM product pr INNER JOIN image i on pr.id = i.product_id " +
@@ -84,11 +92,48 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "                INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
             "AND i.featured = true AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
             "GROUP BY (c.name, s.name) " +
             "ORDER BY (c.name, s.name)",
             nativeQuery = true)
-    List<ProductCountResponse> searchCount(String query, String tsquery);
+    List<ProductCountProjection> categoryCount(String query, String tsquery, @Param("min_price") Integer minPrice,
+                                               @Param("max_price") Integer maxPrice, String color, String size);
+
+    @Query(value = "SELECT color, count(color) " +
+            "FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
+            "AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND color IS NOT NULL AND pr.size IS NOT NULL GROUP BY color",
+            nativeQuery = true)
+    List<ColorCountProjection> colorCount(String query, String tsquery, String category, String subcategory,
+                                          @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String size);
+
+    @Query(value = "SELECT pr.size, count(pr.size) " +
+            "FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
+            "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND color IS NOT NULL AND pr.size IS NOT NULL GROUP BY pr.size",
+            nativeQuery = true)
+    List<SizeCountProjection> sizeCount(String query, String tsquery, String category, String subcategory,
+                                        @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String color);
 
     @Query(value = "SELECT p.id, p.name, i.url, max(b.amount) price, s.name subcategoryName, c.name categoryName, " +
             "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
@@ -101,4 +146,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "ORDER BY p.end_date",
             nativeQuery = true)
     List<UserProductProjection> getUserBidProducts(@Param("user_id") Long userId);
+
+    @Query(value = "SELECT start_price FROM product pr " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
+            "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
+            "AND (case when :color = '' then true else pr.color = :color end) " +
+            "AND (case when :size = '' then true else pr.size = :size end) " +
+            "AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') ORDER BY start_price",
+            nativeQuery = true)
+    List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
 }
