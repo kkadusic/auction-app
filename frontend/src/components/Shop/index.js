@@ -4,11 +4,12 @@ import {useHistory} from 'react-router-dom';
 import {productUrl} from "../../utilities/AppUrl";
 import {BsGrid3X3GapFill} from "react-icons/bs";
 import {FaThList} from "react-icons/fa";
-import {searchProducts} from "../../utilities/ServerCall";
+import {searchProducts, filterCountProducts} from "../../utilities/ServerCall";
 import {Button, Form, Spinner} from 'react-bootstrap';
 import CategoriesFilter from '../../components/CategoriesFilter';
 import ItemNotFound from '../../components/ItemNotFound';
 import ListCard from "../ListCard";
+import PriceFilter from "../PriceFilter";
 import {removeSpaces} from "../../utilities/AppUrl";
 import {useBreadcrumbContext, useAlertContext} from "../../AppContext";
 import * as qs from 'query-string';
@@ -21,7 +22,8 @@ let queryChanged = true;
 const Shop = () => {
 
     const [products, setProducts] = useState([]);
-    const [filter, setFilter] = useState({category: null, subcategory: null});
+    const [filterCount, setFilterCount] = useState({});
+    const [filter, setFilter] = useState({category: null, subcategory: null, minPrice: null, maxPrice: null});
     const [gridLayout, setGridLayout] = useState(true);
     const [lastPage, setLastPage] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -70,10 +72,13 @@ const Shop = () => {
         page = 0;
         const newFilter = {
             category: formCategoryName(urlElements[1]),
-            subcategory: formCategoryName(urlElements[2])
+            subcategory: formCategoryName(urlElements[2]),
+            minPrice: urlParams.minPrice,
+            maxPrice: urlParams.maxPrice
         };
         setFilter(newFilter);
-        const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, page, urlParams.sort);
+        const data = await searchProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice, page, urlParams.sort);
+        setFilterCount(await filterCountProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice));
         setProducts(data.products);
         setLastPage(data.lastPage);
         if (queryChanged && urlParams.query !== undefined && data.didYouMean !== "" && urlParams.query !== data.didYouMean) {
@@ -99,7 +104,7 @@ const Shop = () => {
     const exploreMore = async () => {
         setLoading(true);
         page++;
-        const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, page, urlParams.sort);
+        const data = await searchProducts(urlParams.query, filter.category, filter.subcategory, filter.minPrice, filter.maxPrice, page, urlParams.sort);
         setProducts([...products, ...data.products]);
         setLastPage(data.lastPage);
         setLoading(false);
@@ -126,10 +131,21 @@ const Shop = () => {
         });
     }
 
+    const handlePriceClick = (selected) => {
+        urlParams.minPrice = selected.minPrice;
+        urlParams.maxPrice = selected.maxPrice;
+        history.push({
+            search: qs.stringify(urlParams)
+        });
+    }
+
+
     return (
         <div className="shop-container">
             <div className="shop-filters-container">
                 <CategoriesFilter filter={filter} handleClick={handleClick} query={urlParams.query}/>
+                <PriceFilter minPrice={urlParams.minPrice} maxPrice={urlParams.maxPrice} filterCount={filterCount}
+                             handleClick={handlePriceClick}/>
             </div>
 
             <div className="shop-products-container">
