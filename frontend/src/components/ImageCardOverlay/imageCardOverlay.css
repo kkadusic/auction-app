@@ -24,6 +24,18 @@
     background-color: white;
 }
 
+.wishlist-icon-overlay{
+    font-size: 22px;
+    margin-left: 5px;
+    color: black;
+}
+
+.icon-overlay{
+    font-size: 22px;
+    margin-left: 5px;
+    color: black;
+}
+
 @media (max-width: 1199px) {
     .overlay-wishlist-button {
         width: 95%;

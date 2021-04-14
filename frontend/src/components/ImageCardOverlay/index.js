@@ -21,7 +21,7 @@ const ImageCardOverlay = ({children, data, url}) => {
                         variant="fill-white"
                     >
                         Wishlist
-                        <RiHeartFill style={{fontSize: 22, marginLeft: 5, color: 'black'}}/>
+                        <RiHeartFill className="icon-overlay"/>
                     </Button>
                     <Button
                         className="overlay-bid-button font-15"
@@ -29,7 +29,7 @@ const ImageCardOverlay = ({children, data, url}) => {
                         onClick={() => history.push(url)}
                     >
                         Bid
-                        <RiAuctionFill style={{fontSize: 22, marginLeft: 5, color: 'black'}}/>
+                        <RiAuctionFill className="icon-overlay"/>
                     </Button>
                 </div>
             ) : null}
