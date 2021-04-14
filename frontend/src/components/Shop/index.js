@@ -12,6 +12,7 @@ import ListCard from "../ListCard";
 import PriceFilter from "../PriceFilter";
 import {removeSpaces} from "../../utilities/AppUrl";
 import {useBreadcrumbContext, useAlertContext} from "../../AppContext";
+import ImageCardOverlay from "../ImageCardOverlay";
 import * as qs from 'query-string';
 
 import './shop.css';
@@ -177,7 +178,9 @@ const Shop = () => {
 
                 <div style={!gridLayout ? {display: 'unset'} : null} className="shop-products">
                     {products.map(product => gridLayout ? (
-                        <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)}/>
+                        <ImageCardOverlay key={product.id} data={product} url={productUrl(product)}>
+                            <ImageCard key={product.id} data={product} size="xl" url={productUrl(product)}/>
+                        </ImageCardOverlay>
                     ) : (
                         <ListCard key={product.id} data={product} url={productUrl(product)}/>
                     ))}

@@ -1,0 +1,52 @@
+.overlay-container {
+    position: absolute;
+    width: 14.4vw;
+    height: 19.4vw;
+    z-index: 2;
+    cursor: pointer;
+    background-color: #CBC3E5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-wishlist-button {
+    width: 70%;
+    min-height: 36px;
+    background-color: white;
+}
+
+.overlay-bid-button {
+    width: 50%;
+    min-height: 36px;
+    margin-top: 60px;
+    background-color: white;
+}
+
+@media (max-width: 1199px) {
+    .overlay-wishlist-button {
+        width: 95%;
+    }
+
+    .overlay-bid-button {
+        width: 90%;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .overlay-container {
+        width: 100%;
+        height: calc(82% - 25px);
+    }
+
+    .overlay-wishlist-button {
+        width: 70%;
+    }
+
+    .overlay-bid-button {
+        width: 50%;
+        margin-top: 60px;
+    }
+}
