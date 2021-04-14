@@ -19,6 +19,7 @@ const ImageCardOverlay = ({children, data, url}) => {
                     <Button
                         className="overlay-wishlist-button font-15"
                         variant="fill-white"
+                        style={{border: "none"}}
                     >
                         Wishlist
                         <RiHeartFill className="icon-overlay"/>
@@ -27,6 +28,7 @@ const ImageCardOverlay = ({children, data, url}) => {
                         className="overlay-bid-button font-15"
                         variant="fill-white"
                         onClick={() => history.push(url)}
+                        style={{border: "none"}}
                     >
                         Bid
                         <RiAuctionFill className="icon-overlay"/>
