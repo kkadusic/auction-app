@@ -9,6 +9,10 @@
     margin-right: 20px;
 }
 
+.shop-filters-container > div {
+    margin-bottom: 20px;
+}
+
 .sort-select {
     width: 265px;
 }
@@ -23,7 +27,7 @@
 }
 
 .shop-products-container {
-    width: 80%;
+    width: 78%;
 }
 
 .shop-products {

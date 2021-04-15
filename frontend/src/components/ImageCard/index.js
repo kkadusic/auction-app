@@ -11,10 +11,11 @@ const ImageCard = ({data, size, url}) => {
         <div className="item-container">
             <Image
                 className={"item-image-" + size}
-                src={data.url}
+                src={data.imageUrl}
                 onClick={() => history.push(url)}
             />
-            <h3 className={"word-wrap-" + size}>
+            <h3 className={"word-wrap-" + size}
+                onClick={() => history.push(url)}>
                 {data.name}
             </h3>
             Start from ${data.startPrice}

@@ -8,7 +8,7 @@ import {Link, NavLink, useHistory} from 'react-router-dom';
 import {removeSession, getUser} from '../../utilities/Common';
 import {
     loginUrl, registerUrl, forgotPasswordUrl, resetPasswordUrl, myAccountUrl, myAccountSellerUrl, myAccountBidsUrl,
-    myAccountSettingsUrl, myAccountWishlistUrl, homeUrl
+    myAccountSettingsUrl, myAccountWishlistUrl, homeUrl, productUrl
 } from '../../utilities/AppUrl';
 import {useUserContext} from "../../AppContext";
 import * as qs from 'query-string';
@@ -72,8 +72,10 @@ const Header = () => {
                         (
                             <>
                                 <Image style={{marginRight: '0.5rem'}} roundedCircle className="avatar-image-tiny"
-                                       src={user.imageUrl}/>
-                                <div className="topbar-username">
+                                       src={user.imageUrl}
+                                       onClick={() => history.push(myAccountUrl)}/>
+                                <div className="topbar-username"
+                                     onClick={() => history.push(myAccountUrl)}>
                                     {user.firstName + ' ' + user.lastName}
                                 </div>
                                 |

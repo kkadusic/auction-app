@@ -18,10 +18,10 @@ const CategoriesFilter = ({query, filter, handleClick}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setCategories(await searchCountProducts(query));
+            setCategories(await searchCountProducts(query, filter.minPrice, filter.maxPrice));
         }
         fetchData();
-    }, [query]);
+    }, [query, filter.minPrice, filter.maxPrice]);
 
     useEffect(() => {
         setActiveCategory(filter.category || "");

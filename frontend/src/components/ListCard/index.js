@@ -12,7 +12,7 @@ const ListCard = ({data, url}) => {
         <div className="list-item-container">
             <Image
                 className={"list-item-image"}
-                src={data.url}
+                src={data.imageUrl}
                 onClick={() => history.push(url)}
             />
             <div className="list-info-container">

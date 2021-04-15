@@ -25,7 +25,7 @@ public class BidController {
     }
 
     @GetMapping("/product")
-    public ResponseEntity<List<SimpleBidResponse>> getBidsForProduct(@RequestParam(name = "id") Long id) {
+    public ResponseEntity<List<SimpleBidResponse>> getBidsForProduct(@RequestParam Long id) {
         return ResponseEntity.ok(bidService.getBidsForProduct(id));
     }
 

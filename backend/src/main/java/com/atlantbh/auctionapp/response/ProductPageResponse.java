@@ -1,32 +1,34 @@
 package com.atlantbh.auctionapp.response;
 
+import com.atlantbh.auctionapp.projection.SimpleProductProjection;
+
 import java.util.List;
 
 public class ProductPageResponse {
 
-    private List<SimpleProductResponse> products;
+    private List<SimpleProductProjection> products;
     private Boolean lastPage;
     private String didYouMean;
 
     public ProductPageResponse() {
     }
 
-    public ProductPageResponse(List<SimpleProductResponse> products, Boolean lastPage) {
+    public ProductPageResponse(List<SimpleProductProjection> products, Boolean lastPage) {
         this.products = products;
         this.lastPage = lastPage;
     }
 
-    public ProductPageResponse(List<SimpleProductResponse> products, Boolean lastPage, String didYouMean) {
+    public ProductPageResponse(List<SimpleProductProjection> products, Boolean lastPage, String didYouMean) {
         this.products = products;
         this.lastPage = lastPage;
         this.didYouMean = didYouMean;
     }
 
-    public List<SimpleProductResponse> getProducts() {
+    public List<SimpleProductProjection> getProducts() {
         return products;
     }
 
-    public void setProducts(List<SimpleProductResponse> products) {
+    public void setProducts(List<SimpleProductProjection> products) {
         this.products = products;
     }
 

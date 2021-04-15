@@ -2,7 +2,11 @@ package com.atlantbh.auctionapp.controller;
 
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
+import com.atlantbh.auctionapp.request.FilterCountRequest;
+import com.atlantbh.auctionapp.request.SearchCountRequest;
+import com.atlantbh.auctionapp.request.SearchRequest;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
+import com.atlantbh.auctionapp.response.FilterCountResponse;
 import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
 import com.atlantbh.auctionapp.service.ProductService;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,23 +47,49 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ProductResponse> getProduct(@RequestParam(name = "product_id") Long productId,
-                                                      @RequestParam(name = "user_id", defaultValue = "") Long userId) {
+    public ResponseEntity<ProductResponse> getProduct(@RequestParam Long productId,
+                                                      @RequestParam(defaultValue = "") Long userId) {
         return ResponseEntity.ok(productService.getProduct(productId, userId));
     }
 
+
     @GetMapping("/search")
-    public ResponseEntity<ProductPageResponse> search(@RequestParam(name = "query", defaultValue = "") String query,
-                                                      @RequestParam(name = "category", defaultValue = "") String category,
-                                                      @RequestParam(name = "subcategory", defaultValue = "") String subcategory,
-                                                      @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                      @RequestParam(name = "sort", defaultValue = "") String sort) {
-        return ResponseEntity.ok(productService.search(query, category, subcategory, page, sort));
+    public ResponseEntity<ProductPageResponse> search(@Valid SearchRequest searchRequest) {
+        return ResponseEntity.ok(productService.search(
+                searchRequest.getQuery(),
+                searchRequest.getCategory(),
+                searchRequest.getSubcategory(),
+                searchRequest.getPage(),
+                searchRequest.getSort(),
+                searchRequest.getMinPrice(),
+                searchRequest.getMaxPrice(),
+                searchRequest.getColor(),
+                searchRequest.getSize()
+        ));
     }
 
     @GetMapping("/search/count")
-    public ResponseEntity<List<CategoryCountResponse>> searchCount(@RequestParam(name = "query", defaultValue = "") String query) {
-        return ResponseEntity.ok(productService.searchCount(query));
+    public ResponseEntity<List<CategoryCountResponse>> searchCount(@Valid SearchCountRequest searchCountRequest) {
+        return ResponseEntity.ok(productService.searchCount(
+                searchCountRequest.getQuery(),
+                searchCountRequest.getMinPrice(),
+                searchCountRequest.getMaxPrice(),
+                searchCountRequest.getColor(),
+                searchCountRequest.getSize()
+        ));
+    }
+
+    @GetMapping("/filter/count")
+    public ResponseEntity<FilterCountResponse> filterCount(@Valid FilterCountRequest filterCountRequest) {
+        return ResponseEntity.ok(productService.filterCount(
+                filterCountRequest.getQuery(),
+                filterCountRequest.getCategory(),
+                filterCountRequest.getSubcategory(),
+                filterCountRequest.getMinPrice(),
+                filterCountRequest.getMaxPrice(),
+                filterCountRequest.getColor(),
+                filterCountRequest.getSize()
+        ));
     }
 
     @GetMapping("/user/bid")
