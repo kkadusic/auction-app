@@ -185,4 +185,26 @@ public class ProductControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andReturn();
     }
+
+    @Test
+    public void filterPrice() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?maxPrice=10000&minPrice=100")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+    }
+
+    @Test
+    public void filterPriceWithCategorySubcategory() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/search?category=computer&maxPrice=10000&minPrice=100&subcategory=laptop")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+    }
 }
