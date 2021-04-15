@@ -60,6 +60,7 @@
     white-space: nowrap;
     overflow: hidden;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .account-list {
@@ -92,6 +93,7 @@
 @media (max-width: 575px) {
     .topbar-username {
         max-width: 20vw;
+        cursor: pointer;
     }
 
     .topbar-nav-links .nav-link {
