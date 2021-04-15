@@ -72,35 +72,34 @@ const Shop = () => {
         refreshData(urlElements);
     }
 
-
     const removeElement = (array, element) => {
         const index = array.indexOf(element);
         array.splice(index, 1);
     }
 
-
     const updateTags = (category, subcategory) => {
-        if (category != null && subcategory == null) {
-            let contains = false;
-            for (let t of tags) {
-                if (t[0] === category) {
-                    contains = true;
-                    removeElement(tags, t);
+        let contains = false;
+        if (category != null) {
+            if (subcategory == null) {
+                for (let t of tags) {
+                    if (t[0] === category) {
+                        contains = true;
+                        removeElement(tags, t);
+                    }
                 }
-            }
-            if (!contains) {
-                tags.push([category]);
-            }
-        } else if (category != null && subcategory != null) {
-            let contains = false;
-            for (let t of tags) {
-                if (getCategorySubcategoryFromTag(t[0]).subcategory === subcategory) {
-                    contains = true;
-                    removeElement(tags, t);
+                if (!contains) {
+                    tags.push([category]);
                 }
-            }
-            if (!contains) {
-                tags.push([category + ": " + subcategory]);
+            } else {
+                for (let t of tags) {
+                    if (getCategorySubcategoryFromTag(t[0]).subcategory === subcategory) {
+                        contains = true;
+                        removeElement(tags, t);
+                    }
+                }
+                if (!contains) {
+                    tags.push([category + ": " + subcategory]);
+                }
             }
         }
     }
@@ -111,6 +110,22 @@ const Shop = () => {
             return {category: list[0], subcategory: list[1]};
         }
         return {category: tagName, subcategory: null};
+    }
+
+    const updateProducts = (dataProducts, currentProducts) => {
+        for (let d of dataProducts) {
+            let contains = false;
+            for (let t of currentProducts) {
+                if (d.id === t.id) {
+                    contains = true;
+                }
+            }
+            if (!contains) {
+                currentProducts.push(d);
+                contains = false;
+            }
+        }
+        return currentProducts;
     }
 
     const refreshData = async (urlElements) => {
@@ -129,34 +144,12 @@ const Shop = () => {
         let currentProducts = [];
         if (tags.length === 0) {
             data = await searchProducts(urlParams.query, null, null, newFilter.minPrice, newFilter.maxPrice, page, urlParams.sort);
-            for (let d of data.products) {
-                let contains = false;
-                for (let t of currentProducts) {
-                    if (d.id === t.id) {
-                        contains = true;
-                    }
-                }
-                if (!contains) {
-                    currentProducts.push(d);
-                    contains = false;
-                }
-            }
+            currentProducts = updateProducts(data.products, currentProducts);
         } else {
             for (let i = 0; i < tags.length; i++) {
                 let tagName = getCategorySubcategoryFromTag(tags[i][0]);
                 data = await searchProducts(urlParams.query, tagName.category, tagName.subcategory, newFilter.minPrice, newFilter.maxPrice, page, urlParams.sort);
-                for (let d of data.products) {
-                    let contains = false;
-                    for (let t of currentProducts) {
-                        if (d.id === t.id) {
-                            contains = true;
-                        }
-                    }
-                    if (!contains) {
-                        currentProducts.push(d);
-                        contains = false;
-                    }
-                }
+                currentProducts = updateProducts(data.products, currentProducts);
             }
         }
 
