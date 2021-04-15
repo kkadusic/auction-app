@@ -231,6 +231,8 @@ const Shop = () => {
                     removeOnBackspace={true}
                     editable={false}
                     onChange={(newTags) => {
+                        setTags([]);
+                        handleClick({category: null, subcategory: null});
                         setTags(newTags);
                     }}
                 />
