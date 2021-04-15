@@ -102,6 +102,7 @@ const Shop = () => {
                 }
             }
         }
+        setTags([...new Set(tags)]);
     }
 
     const getCategorySubcategoryFromTag = (tagName) => {
@@ -152,6 +153,7 @@ const Shop = () => {
                 currentProducts = updateProducts(data.products, currentProducts);
             }
         }
+
 
         setFilterCount(await filterCountProducts(urlParams.query, newFilter.category, newFilter.subcategory, newFilter.minPrice, newFilter.maxPrice));
         setProducts(currentProducts);
@@ -208,6 +210,9 @@ const Shop = () => {
     }
 
     const handlePriceClick = (selected) => {
+        if ((tags[tags.length - 1] !== tags[tags.length - 2])){
+            tags.push(tags[tags.length - 1]);
+        }
         urlParams.minPrice = selected.minPrice;
         urlParams.maxPrice = selected.maxPrice;
         history.push({
