@@ -93,7 +93,7 @@ const ItemPage = ({match}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
-            showMessage("warning", e.response !== undefined ? +e.response.data.message : e.message);
+            showMessage("warning", "Oops! Something went wrong. Please refresh the page and try again.");
         }
         setLoading(false);
     }
