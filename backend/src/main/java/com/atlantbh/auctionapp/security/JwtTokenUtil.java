@@ -66,6 +66,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public static Long getRequestPersonId() {
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass() != PersonDetails.class) {
+            return null;
+        }
         return ((PersonDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 }

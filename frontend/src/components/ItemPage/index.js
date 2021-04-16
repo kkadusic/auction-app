@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Image, Modal, Table, Alert} from 'react-bootstrap';
+import {Alert, Button, Form, Image, Modal, Table} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 import {getUserId} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
-import {AiOutlineFullscreen} from "react-icons/ai";
-import {getBidsForProduct, getProduct, bidForProduct} from '../../utilities/ServerCall';
+import {GiExpand} from "react-icons/gi";
+import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
+import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({match, setBreadcrumb, showMessage}) => {
+const ItemPage = ({match}) => {
 
     let personId = getUserId();
 
@@ -26,6 +28,8 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
     const [minPrice, setMinPrice] = useState(0);
     const [alertVisible, setAlertVisible] = useState(true);
     const [outbid, setOutbid] = useState(false);
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
 
     useEffect(() => {
         if (personId == null) {
@@ -53,7 +57,7 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                     }
                 }
             } catch (e) {
-                showMessage("warning", "Error: " + e.message());
+                showMessage("warning", e.response !== undefined ? +e.response.data.message : e.message);
             }
         }
 
@@ -77,9 +81,8 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
             return;
         }
         setLoading(true);
-        const price = bidPrice;
         try {
-            await bidForProduct(parseFloat(price), product.id);
+            await bidForProduct(parseFloat(bidPrice), product.id);
             const newBids = await getBidsForProduct(product.id);
             setMinPrice(Math.max(...newBids.map(bid => bid.personId === personId ? bid.amount : 0), 0) + 0.01);
             if (personId === newBids[0].personId) {
@@ -90,7 +93,7 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
-            showMessage("warning", "Error: " + e.message());
+            showMessage("warning", "Oops! Something went wrong. Please refresh the page and try again.");
         }
         setLoading(false);
     }
@@ -118,8 +121,19 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
             {product !== null ? (
                 <>
                     <Modal size="xl" centered show={showFullscreen} onHide={() => setShowFullscreen(false)}>
-                        <Image onClick={() => setShowFullscreen(false)} width="100%"
+                        {activePhoto !== 0 ?
+                            <MdKeyboardArrowLeft
+                                onClick={() => setActivePhoto(activePhoto - 1)}
+                                className="fullscreen-image-left-arrow"/>
+                            : null}
+                        <Image onClick={() => setShowFullscreen(false)}
+                               width="100%"
                                src={product.images[activePhoto].url}/>
+                        {product.images.length !== 0 && activePhoto !== product.images.length - 1 ?
+                            <MdKeyboardArrowRight
+                                onClick={() => setActivePhoto(activePhoto + 1)}
+                                className="fullscreen-image-right-arrow"/>
+                            : null}
                     </Modal>
                     <div className="product-container">
                         <div className="images-container">
@@ -133,11 +147,11 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                                 src={product.images[activePhoto].url}
                                 className="product-image-big"
                             />
-                            <AiOutlineFullscreen
+                            <GiExpand
                                 onMouseEnter={() => setShowFullscreenIcon(true)}
                                 onMouseLeave={() => setShowFullscreenIcon(false)}
                                 style={!showFullscreenIcon ? {display: 'none'} : null}
-                                className="fullscreen-icon"
+                                className="fullscreen-image-icon"
                                 onClick={() => setShowFullscreen(true)}
                             />
                             {product.images.map((photo, i) => (
@@ -166,10 +180,12 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                                         <Alert className="congrats-alert" dismissible
                                                onClose={() => setAlertVisible(false)} transition={false}
                                                show={alertVisible} variant="info">
-                                            Congratulations!
-                                            <span style={{fontWeight: 'normal'}}>
-                                {' '}You outbid the competition.
-                            </span>
+                                            <div style={{marginLeft: '-2vw'}}>
+                                                Congratulations!
+                                                <span style={{fontWeight: 'normal'}}>
+                                            {' '}You outbid the competition.
+                                            </span>
+                                            </div>
                                         </Alert>
                                     </div> : null}
                             </div>
@@ -180,9 +196,13 @@ const ItemPage = ({match, setBreadcrumb, showMessage}) => {
                                                       className="form-control-gray place-bid-form" size="xl-18"
                                                       type="text"
                                                       onChange={e => setBidPrice(e.target.value)}/>
-                                        <div className="place-bid-label">
-                                            Enter ${minPrice} or more
-                                        </div>
+                                        {minPrice < 9999999 ?
+                                            <div className="place-bid-label">
+                                                Enter ${minPrice} or more
+                                            </div> :
+                                            <div className="place-bid-label">
+                                                Maximum bid amount reached
+                                            </div>}
                                     </div>
                                     <Button
                                         disabled={ownProduct || !active || loading || isNaN(bidPrice) || bidPrice < minPrice}

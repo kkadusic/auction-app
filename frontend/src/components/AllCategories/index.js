@@ -2,13 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {categoryUrl, homeUrl, subcategoryUrl} from '../../utilities/AppUrl';
 import {getSubcategories} from '../../utilities/ServerCall';
+import {useBreadcrumbContext} from "../../AppContext";
 
 import './allCategories.css';
 
-const AllCategories = ({setBreadcrumb}) => {
-    const history = useHistory();
+const AllCategories = () => {
 
+    const history = useHistory();
     const [subcategories, setSubcategories] = useState([]);
+    const {setBreadcrumb} = useBreadcrumbContext();
 
     useEffect(() => {
         setBreadcrumb("ALL CATEGORIES", [{text: "HOME", href: homeUrl}, {text: "ALL CATEGORIES"}]);

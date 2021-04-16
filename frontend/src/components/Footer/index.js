@@ -31,7 +31,7 @@ const Footer = () => {
                 Call Us at +123 797-567-2535
                 <a className="white-nav-link" href="mailto:support@auction.com" target="_blank"
                    rel="noopener noreferrer">
-                    support@auction.com
+                    auction-abh@gmail.com
                 </a>
                 <div className="social-media-container">
                     <a className="social-media-link" rel="noopener noreferrer" href="https://www.facebook.com/AtlantBH"

@@ -25,13 +25,13 @@ public class BidController {
     }
 
     @GetMapping("/product")
-    public ResponseEntity<List<SimpleBidResponse>> getBidsForProduct(@RequestParam(name = "id") Long id) {
+    public ResponseEntity<List<SimpleBidResponse>> getBidsForProduct(@RequestParam Long id) {
         return ResponseEntity.ok(bidService.getBidsForProduct(id));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody @Valid BidRequest bidRequest) {
+    public ResponseEntity<BidRequest> add(@RequestBody @Valid BidRequest bidRequest) {
         bidService.add(bidRequest);
-        return ResponseEntity.ok("Bid added");
+        return ResponseEntity.ok(bidRequest);
     }
 }

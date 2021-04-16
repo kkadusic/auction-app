@@ -54,3 +54,65 @@
     top: 9px;
     cursor: pointer;
 }
+
+.topbar-username {
+    max-width: 40vw;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.account-list {
+    position: absolute;
+    z-index: 2;
+    width: 172px;
+    right: 0;
+    top: 80px;
+    text-align: left;
+    border: 1px solid #e5e5e5;
+}
+
+.account-list > .list-group-item {
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    color: #9B9B9B;
+    border-color: white;
+    cursor: pointer;
+}
+
+.account-list > .list-group-item:hover {
+    color: #8367D8;
+}
+
+.account-list > .list-group-item:hover {
+    background-color: white;
+}
+
+
+@media (max-width: 575px) {
+    .topbar-username {
+        max-width: 20vw;
+        cursor: pointer;
+    }
+
+    .topbar-nav-links .nav-link {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .navbar-container {
+        flex-direction: column;
+    }
+
+    .navbar-brand {
+        padding-top: 10px;
+    }
+
+    .navbar-search {
+        width: 90%;
+    }
+
+    .account-list {
+        display: none;
+    }
+}

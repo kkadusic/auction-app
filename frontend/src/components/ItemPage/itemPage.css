@@ -74,6 +74,56 @@
     color: #ECECEC;
 }
 
+.fullscreen-image-icon {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 40px;
+    color: white;
+    filter: drop-shadow(2px 2px 2px black);
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.fullscreen-image-left-arrow {
+    left: -100px;
+}
+
+.fullscreen-image-right-arrow {
+    right: -100px;
+}
+
+.fullscreen-image-left-arrow, .fullscreen-image-right-arrow {
+    position: absolute;
+    font-size: 110px;
+    color: white;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.fullscreen-image-left-arrow:hover, .fullscreen-image-right-arrow:hover {
+    color: #8367D8;
+}
+
+.fullscreen-icon:hover {
+    font-size: 45px;
+    transition: all 0.1s;
+}
+
+.congrats-alert {
+    padding-left: 1.25rem;
+    padding-right: 4rem;
+    background: rgba(131, 103, 216, 0.10);
+    color: #8367D8;
+    font-weight: bold;
+}
+
+.congrats-alert > .close {
+    right: 0;
+}
+
 @media (max-width: 765px) {
     .product-container {
         flex-wrap: wrap;
@@ -99,14 +149,16 @@
     }
 }
 
-.congrats-alert {
-    padding-left: 1.25rem;
-    padding-right: 4rem;
-    background: rgba(131,103,216,0.10);
-    color: #8367D8;
-    font-weight: bold;
-}
+@media (max-width: 575px) {
+    .fullscreen-image-left-arrow, .fullscreen-image-right-arrow {
+        font-size: 80px;
+    }
 
-.congrats-alert>.close {
-    right: 0;
+    .fullscreen-image-left-arrow {
+        left: -20px;
+    }
+
+    .fullscreen-image-right-arrow {
+        right: -20px;
+    }
 }

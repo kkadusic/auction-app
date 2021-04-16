@@ -34,10 +34,22 @@ public class BidControllerTest {
     }
 
     @Test
+    public void getBidsForProduct() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/bids/add")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+    }
+
+    @Test
     public void addBidForProduct() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/bids/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"price\": \"1000\", \"productId\": \"1\"}")
+                .content("{\"amount\": \"1000\", \"productId\": \"1\"}")
         ).andExpect(status().isUnauthorized());
     }
+
 }

@@ -10,18 +10,15 @@ import {
 import {IoIosArrowForward} from "react-icons/io";
 import {useHistory} from 'react-router-dom';
 import {categoryUrl, allCategoriesUrl, productUrl} from "../../utilities/AppUrl";
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 
 import './landingPage.css';
 
-const LandingPage = ({setBreadcrumb, showMessage}) => {
+const LandingPage = () => {
 
     const history = useHistory();
-
-    useEffect(() => {
-        setBreadcrumb(null, []);
-        // eslint-disable-next-line
-    }, [])
-
+    const {removeBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
     const [categories, setCategories] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [randomSubcategories, setRandomSubcategories] = useState([]);
@@ -29,6 +26,7 @@ const LandingPage = ({setBreadcrumb, showMessage}) => {
     const [activeTab, setActiveTab] = useState(0);
 
     useEffect(() => {
+        removeBreadcrumb();
         const fetchData = async () => {
             try {
                 setCategories(await getCategories());
@@ -66,7 +64,8 @@ const LandingPage = ({setBreadcrumb, showMessage}) => {
                 {featuredProducts.length !== 0 ?
                     <div className="featured-product-container">
                         <div className="featured-product-container-inner">
-                            <h1 style={{marginBottom: "5px"}}>
+                            <h1 style={{marginBottom: "5px", cursor: "pointer"}}
+                                onClick={() => history.push(productUrl(featuredProducts[0]))}>
                                 {featuredProducts[0].name}
                             </h1>
                             <div className="featured-product-price">
@@ -85,8 +84,9 @@ const LandingPage = ({setBreadcrumb, showMessage}) => {
                                 <IoIosArrowForward style={{fontSize: 24}}/>
                             </Button>
                         </div>
-                        <Image width="484px" height="294px" style={{marginLeft: "20px"}}
-                               src={featuredProducts[0].imageUrl}/>
+                        <Image width="484px" height="294px" style={{marginLeft: "20px", cursor: "pointer"}}
+                               src={featuredProducts[0].imageUrl}
+                               onClick={() => history.push(productUrl(featuredProducts[0]))}/>
                     </div> : null}
             </div>
 

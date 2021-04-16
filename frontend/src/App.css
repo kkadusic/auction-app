@@ -160,60 +160,6 @@ h3 {
     color: white;
 }
 
-.alert {
-    font-size: 18px;
-    letter-spacing: 0.63px;
-    border: none;
-    text-align: left;
-    padding-left: 11.1%;
-    border-radius: 0;
-    margin-top: -40px;
-}
-
-.alert-warning {
-    background: #F6F2E5;
-    color: #AB944E;
-}
-
-.alert-success {
-    background: #F0F3EE;
-    font-weight: bold;
-    color: #417505;
-}
-
-.breadcrumb {
-    background: #FAFAFA;
-    padding-left: 11.1%;
-    padding-right: 11.1%;
-    text-align: right;
-    justify-content: flex-end;
-    height: 60px;
-    align-items: center;
-    border-radius: 0;
-    margin-bottom: 40px;
-}
-
-.breadcrumb-title {
-    position: absolute;
-    left: 11.1%;
-    font-size: 18px;
-    letter-spacing: 0.63px;
-}
-
-.breadcrumb-item > a {
-    font-weight: lighter;
-    color: #252525;
-}
-
-.breadcrumb-item > a:hover {
-    text-decoration: none;
-    font-weight: normal;
-}
-
-.breadcrumb-item.active {
-    color: #252525;
-}
-
 .grey-line {
     background: #ECECEC;
     width: 100%;
@@ -269,6 +215,7 @@ h3 {
 .avatar-image-tiny {
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 .btn-lg {

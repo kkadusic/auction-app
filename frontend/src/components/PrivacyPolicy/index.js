@@ -1,8 +1,11 @@
 import {useEffect} from 'react';
+import {useBreadcrumbContext} from "../../AppContext";
 
 import './privacyPolicy.css';
 
-const PrivacyPolicy = ({setBreadcrumb}) => {
+const PrivacyPolicy = () => {
+
+    const {setBreadcrumb} = useBreadcrumbContext();
 
     useEffect(() => {
         setBreadcrumb("PRIVACY POLICY", [{text: "SHOP", href: "/shop"}, {text: "PRIVACY POLICY"}]);
