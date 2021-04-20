@@ -91,10 +91,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    @OneToMany
-    @JoinColumn(name = "product_id")
-    private List<Image> images;
-
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
@@ -113,8 +109,8 @@ public class Product {
                    @NotBlank String street, @NotBlank String city,
                    @NotBlank @javax.validation.constraints.Size(max = 32) String zip, @NotBlank String country,
                    @NotBlank @javax.validation.constraints.Size(max = 15) String phoneNumber,
-                   @NotBlank Boolean featured, @NotBlank Boolean shipping, Size size, Color color,
-                   List<Image> images, Person person, Subcategory subcategory) {
+                   @NotBlank Boolean featured, @NotBlank Boolean shipping, Size size, Color color, Person person,
+                   Subcategory subcategory) {
         this.id = id;
         this.creationDate = creationDate;
         this.lastUpdateDate = lastUpdateDate;
@@ -132,7 +128,6 @@ public class Product {
         this.shipping = shipping;
         this.size = size;
         this.color = color;
-        this.images = images;
         this.person = person;
         this.subcategory = subcategory;
     }
@@ -271,14 +266,6 @@ public class Product {
 
     public void setColor(Color color) {
         this.color = color;
-    }
-
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
     }
 
     public Person getPerson() {

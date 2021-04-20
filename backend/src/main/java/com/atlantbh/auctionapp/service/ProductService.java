@@ -9,11 +9,12 @@ import com.atlantbh.auctionapp.projection.ProductCountProjection;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
+import com.atlantbh.auctionapp.repository.ImageRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.CountResponse;
 import com.atlantbh.auctionapp.response.FilterCountResponse;
-import com.atlantbh.auctionapp.response.FullProductResponse;
+import com.atlantbh.auctionapp.projection.FullProductProjection;
 import com.atlantbh.auctionapp.response.PriceCountResponse;
 import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
@@ -32,22 +33,33 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeSet;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
     private final Hunspell speller;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, Hunspell speller) {
+    public ProductService(ProductRepository productRepository, ImageRepository imageRepository, Hunspell speller) {
         this.productRepository = productRepository;
+        this.imageRepository = imageRepository;
         this.speller = speller;
     }
 
     public List<SimpleProductProjection> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
+    }
+
+    public List<SimpleProductProjection> getNewProducts() {
+        return productRepository.getNewArrivalsProducts();
+    }
+
+    public List<SimpleProductProjection> getLastProducts() {
+        return productRepository.getLastChanceProducts();
     }
 
     private String getSuggestion(String query) {
@@ -66,42 +78,11 @@ public class ProductService {
         return String.join(" ", suggestedWords);
     }
 
-    public List<SimpleProductProjection> getNewProducts() {
-        return productRepository.getNewArrivalsProducts();
-    }
-
-    public List<SimpleProductProjection> getLastProducts() {
-        return productRepository.getLastChanceProducts();
-    }
-
     public ProductResponse getProduct(Long productId, Long userId) {
-        List<FullProductResponse> fullProducts = productRepository.getProduct(productId, userId);
-        if (fullProducts.isEmpty()) {
-            throw new NotFoundException("Wrong product id");
-        }
-
-        ProductResponse productResponse = new ProductResponse(
-                fullProducts.get(0).getId(),
-                fullProducts.get(0).getPersonId(),
-                fullProducts.get(0).getName(),
-                fullProducts.get(0).getDescription(),
-                fullProducts.get(0).getStartPrice(),
-                fullProducts.get(0).getStartDate(),
-                fullProducts.get(0).getEndDate(),
-                fullProducts.get(0).getWished(),
-                new ArrayList<>());
-
-        if (fullProducts.get(0).getImageId() != null) {
-            for (var fullProductResponse : fullProducts) {
-                productResponse.getImages().add(new Image(
-                        fullProductResponse.getImageId(),
-                        fullProductResponse.getImageUrl(),
-                        fullProductResponse.getImageFeatured()
-                ));
-            }
-        }
-
-        return productResponse;
+        FullProductProjection product = productRepository.getProduct(productId, userId)
+                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+        List<Image> productPhotos = imageRepository.findAllByProductIdOrderByFeaturedDesc(productId);
+        return new ProductResponse(product, productPhotos);
     }
 
     public ProductPageResponse search(String query, String category, String subcategory, Integer page, String sort,
@@ -149,7 +130,7 @@ public class ProductService {
     }
 
     public List<CategoryCountResponse> searchCount(String query, Integer minPrice, Integer maxPrice, Color color, Size size) {
-        List<ProductCountProjection> data = productRepository.categoryCount(
+        List<ProductCountProjection> productCounts = productRepository.categoryCount(
                 query,
                 formTsQuery(query),
                 minPrice,
@@ -160,21 +141,19 @@ public class ProductService {
 
         List<CategoryCountResponse> response = new ArrayList<>();
 
-        for (ProductCountProjection product : data) {
-            CategoryCountResponse newCategory = new CategoryCountResponse(product.getCategoryName(), product.getCount(), new TreeSet<>());
-            int i = response.indexOf(newCategory);
-            if (i == -1) {
-                newCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
-                response.add(newCategory);
-            } else {
-                CategoryCountResponse oldCategory = response.get(i);
-                oldCategory.setCount(oldCategory.getCount() + product.getCount());
-                oldCategory.addSubcategory(new CountResponse(product.getSubcategoryName(), product.getCount()));
+        Set<CountResponse> subcategoryCount = new TreeSet<>();
+        for (ProductCountProjection productCount : productCounts) {
+            if (productCount.getSubcategoryName() != null) {
+                subcategoryCount.add(new CountResponse(productCount.getSubcategoryName(), productCount.getCount()));
+            } else if (productCount.getCategoryName() != null) {
+                response.add(new CategoryCountResponse(productCount.getCategoryName(), productCount.getCount(), subcategoryCount));
+                subcategoryCount = new TreeSet<>();
             }
         }
         response.sort(Comparator.comparing(CategoryCountResponse::getCount).reversed());
         return response;
     }
+
 
     public FilterCountResponse filterCount(String query, String category, String subcategory, Integer minPrice,
                                            Integer maxPrice, Color color, Size size) {

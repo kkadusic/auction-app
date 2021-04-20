@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -22,17 +24,21 @@ public class Image {
     @Column(nullable = false)
     private Boolean featured = false;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     public Image() {
+    }
+
+    public Image(@NotBlank String url) {
+        this.url = url;
     }
 
     public Image(Long id, @NotBlank String url, @NotBlank Boolean featured) {
         this.id = id;
         this.url = url;
         this.featured = featured;
-    }
-
-    public Image(@NotBlank String url) {
-        this.url = url;
     }
 
     public Long getId() {

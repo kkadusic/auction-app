@@ -5,11 +5,11 @@ import com.atlantbh.auctionapp.exception.UnprocessableException;
 import com.atlantbh.auctionapp.model.Bid;
 import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.model.Product;
+import com.atlantbh.auctionapp.projection.SimpleBidProjection;
 import com.atlantbh.auctionapp.repository.BidRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.request.BidRequest;
-import com.atlantbh.auctionapp.response.SimpleBidResponse;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class BidService {
         this.productRepository = productRepository;
     }
 
-    public List<SimpleBidResponse> getBidsForProduct(Long id) {
+    public List<SimpleBidProjection> getBidsForProduct(Long id) {
         return bidRepository.getBidsForProduct(id);
     }
 

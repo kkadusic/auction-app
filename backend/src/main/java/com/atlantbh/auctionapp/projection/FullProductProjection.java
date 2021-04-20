@@ -1,9 +1,9 @@
-package com.atlantbh.auctionapp.response;
+package com.atlantbh.auctionapp.projection;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public interface FullProductResponse {
+public interface FullProductProjection {
 
     Long getId();
 
@@ -20,10 +20,4 @@ public interface FullProductResponse {
     LocalDateTime getEndDate();
 
     Boolean getWished();
-
-    Long getImageId();
-
-    String getImageUrl();
-
-    Boolean getImageFeatured();
 }

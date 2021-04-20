@@ -1,7 +1,7 @@
 package com.atlantbh.auctionapp.controller;
 
+import com.atlantbh.auctionapp.projection.SimpleBidProjection;
 import com.atlantbh.auctionapp.request.BidRequest;
-import com.atlantbh.auctionapp.response.SimpleBidResponse;
 import com.atlantbh.auctionapp.service.BidService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ public class BidController {
     }
 
     @GetMapping("/product")
-    public ResponseEntity<List<SimpleBidResponse>> getBidsForProduct(@RequestParam Long id) {
+    public ResponseEntity<List<SimpleBidProjection>> getBidsForProduct(@RequestParam Long id) {
         return ResponseEntity.ok(bidService.getBidsForProduct(id));
     }
 

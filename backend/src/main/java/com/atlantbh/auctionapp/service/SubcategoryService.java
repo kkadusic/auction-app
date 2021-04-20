@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.service;
 
 import com.atlantbh.auctionapp.model.Subcategory;
+import com.atlantbh.auctionapp.projection.SimpleSubcategoryProjection;
 import com.atlantbh.auctionapp.repository.SubcategoryRepository;
 import com.atlantbh.auctionapp.response.SubcategoriesResponse;
 import com.atlantbh.auctionapp.response.SubcategoryResponse;
@@ -21,7 +22,7 @@ public class SubcategoryService {
         this.subcategoryRepository = subcategoryRepository;
     }
 
-    public List<Subcategory> getRandomSubcategories() {
+    public List<SimpleSubcategoryProjection> getRandomSubcategories() {
         return subcategoryRepository.getRandomSubcategories();
     }
 

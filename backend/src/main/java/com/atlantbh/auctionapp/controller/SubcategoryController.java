@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.controller;
 
 import com.atlantbh.auctionapp.model.Subcategory;
+import com.atlantbh.auctionapp.projection.SimpleSubcategoryProjection;
 import com.atlantbh.auctionapp.response.SubcategoriesResponse;
 import com.atlantbh.auctionapp.service.SubcategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class SubcategoryController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<List<Subcategory>> getRandomSubcategories() {
+    public ResponseEntity<List<SimpleSubcategoryProjection>> getRandomSubcategories() {
         return ResponseEntity.ok(subcategoryService.getRandomSubcategories());
     }
 }

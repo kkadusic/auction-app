@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.response;
 
 import com.atlantbh.auctionapp.model.Image;
+import com.atlantbh.auctionapp.projection.FullProductProjection;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +20,18 @@ public class ProductResponse {
     private List<Image> images;
 
     public ProductResponse() {
+    }
+
+    public ProductResponse(FullProductProjection product, List<Image> images) {
+        this.id = product.getId();
+        this.personId = product.getPersonId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.startPrice = product.getStartPrice();
+        this.startDate = product.getStartDate();
+        this.endDate = product.getEndDate();
+        this.wished = product.getWished();
+        this.images = images;
     }
 
     public ProductResponse(Long id, Long personId, String name, String description, BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate, Boolean wished, List<Image> images) {

@@ -1,8 +1,9 @@
-package com.atlantbh.auctionapp.response;
+package com.atlantbh.auctionapp.projection;
 
 import java.math.BigDecimal;
 
-public interface SimpleSubcategoryResponse {
+public interface SimpleSubcategoryProjection {
+
     Long getId();
 
     String getName();
