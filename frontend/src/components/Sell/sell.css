@@ -15,7 +15,12 @@
     border-radius: 50%;
 }
 
-.RFS-StepperContainer>.RFS-StepContainer>.RFS-ConnectorContainer {
+.RFS-StepperContainer > .RFS-StepContainer > .RFS-ConnectorContainer {
     margin-left: -6px;
     margin-right: -6px;
+}
+
+.sell-stepper {
+    width: 700px;
+    margin: 0 auto;
 }

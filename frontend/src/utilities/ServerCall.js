@@ -106,3 +106,15 @@ export const validResetToken = async (token) => {
 export const getUserBidProducts = async () => {
     return (await axios.get(hostUrl + '/products/user/bid', config())).data;
 };
+
+export const getProductFilters = async () => {
+    return (await axios.get(hostUrl + '/products/filters')).data;
+};
+
+export const getSubcategoriesForCategory = async (id) => {
+    return (await axios.get(hostUrl + '/subcategories/category', getParams({id}))).data;
+}
+
+export const addProduct = async (product) => {
+    return (await axios.post(hostUrl + '/products/add', {...product}, config())).data;
+};

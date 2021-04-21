@@ -1,44 +1,76 @@
 import React, {useEffect, useState} from 'react';
 import {useBreadcrumbContext} from "../../AppContext";
-import {myAccountSellerUrl, myAccountUrl} from "../../utilities/AppUrl";
+import {myAccountSellerUrl, myAccountUrl, myAccountSellerSellUrl} from "../../utilities/AppUrl";
 import {Step, Stepper} from 'react-form-stepper';
-import SellerTab1 from "../SellerTabs/SellerTab1";
-import SellerTab2 from "../SellerTabs/SellerTab2";
-import SellerTab3 from "../SellerTabs/SellerTab3";
+import {addProduct, getCategories, getSubcategoriesForCategory, getProductFilters} from "../../utilities/ServerCall";
+import SellerTab1 from "../SellerTabs/SellTab1";
+import SellerTab2 from "../SellerTabs/SellTab2";
+import SellTab3 from "../SellerTabs/SellTab3";
 
 import './sell.css';
 
 const Sell = () => {
+
     const {setBreadcrumb} = useBreadcrumbContext();
-
     const [activeTab, setActiveTab] = useState(0);
+    const [product, setProduct] = useState({});
+    const [categories, setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [filters, setFilters] = useState({colors: [], sizes: []});
 
-    useEffect(() => {
-        setBreadcrumb("MY ACCOUNT", [{text: "MY ACCOUNT", href: myAccountUrl}, {
-            text: "BECOME SELLER",
-            href: myAccountSellerUrl
-        }]);
-        // eslint-disable-next-line
-    }, [])
+    const selectCategory = async (e, handleChange) => {
+        handleChange(e);
+        setSubcategories([]);
+        setSubcategories(await getSubcategoriesForCategory(e.target.value));
+    }
 
-    const renderTab = () => {
-        switch (activeTab) {
-            case 0:
-                return (
-                    <SellerTab1/>
-                )
-            case 1:
-                return (
-                    <SellerTab2/>
-                )
-            case 2:
-                return (
-                    <SellerTab3/>
-                )
-            default:
-                return null;
+    const onDone = async (product) => {
+        product.phone = product.callCode + product.phone;
+        delete product.callCode;
+        try {
+            const id = await addProduct(product);
+            const categoryName = categories.filter(category => category.id === parseInt(product.categoryId))[0].name;
+            const subcategoryName = subcategories.filter(subcategory => subcategory.id === parseInt(product.subcategoryId))[0].name;
+            return {
+                id, categoryName, subcategoryName
+            };
+        } catch (e) {
+            return null;
         }
     }
+
+    const tabs = [
+        <SellerTab1
+            categories={categories}
+            filters={filters}
+            subcategories={subcategories}
+            selectCategory={selectCategory}
+            product={product}
+            setProduct={setProduct}
+            setActiveTab={setActiveTab}
+        />,
+        <SellerTab2 product={product} setProduct={setProduct} setActiveTab={setActiveTab}/>,
+        <SellTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} onDone={onDone}/>
+    ];
+
+    useEffect(() => {
+        setBreadcrumb("MY ACCOUNT", [
+            {text: "MY ACCOUNT", href: myAccountUrl},
+            {text: "SELLER", href: myAccountSellerUrl},
+            {text: "SELL", href: myAccountSellerSellUrl}
+        ]);
+
+        const fetchData = async () => {
+            try {
+                setCategories(await getCategories());
+                setFilters(await getProductFilters());
+            } catch (e) {
+            }
+        }
+
+        fetchData();
+        // eslint-disable-next-line
+    }, [])
 
     const renderStep = (active) => (
         <Step>
@@ -67,12 +99,13 @@ const Sell = () => {
                     disabledColor: '#D8D8D8',
                     size: '5px'
                 }}
+                className="sell-stepper"
             >
                 {renderStep(activeTab >= 0)}
                 {renderStep(activeTab >= 1)}
                 {renderStep(activeTab >= 2)}
             </Stepper>
-            {renderTab()}
+            {tabs[activeTab]}
         </>
     );
 }
