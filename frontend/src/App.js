@@ -1,6 +1,6 @@
 import {BrowserRouter as Router} from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './shared/Header';
+import Footer from './shared/Footer';
 import MyRoutes from './utilities/MyRoutes';
 import MyBreadcrumb from './shared/MyBreadcrumb';
 import MyAlert from "./shared/MyAlert";

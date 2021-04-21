@@ -3,9 +3,9 @@ import {useBreadcrumbContext} from "../../AppContext";
 import {myAccountSellerUrl, myAccountUrl, myAccountSellerSellUrl} from "../../utilities/AppUrl";
 import {Step, Stepper} from 'react-form-stepper';
 import {addProduct, getCategories, getSubcategoriesForCategory, getProductFilters} from "../../utilities/ServerCall";
-import SellerTab1 from "../SellerTabs/SellTab1";
-import SellerTab2 from "../SellerTabs/SellTab2";
-import SellTab3 from "../SellerTabs/SellTab3";
+import SellerTab1 from "../../components/SellerTabs/SellTab1";
+import SellerTab2 from "../../components/SellerTabs/SellTab2";
+import SellTab3 from "../../components/SellerTabs/SellTab3";
 
 import './sell.css';
 

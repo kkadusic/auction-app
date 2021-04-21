@@ -8,11 +8,11 @@ import {
     myAccountUrl,
     myAccountWishlistUrl
 } from '../../utilities/AppUrl';
-import Profile from '../MyAccountTabs/Profile';
-import Seller from '../MyAccountTabs/Seller';
-import Bids from '../MyAccountTabs/Bids';
-import Wishlist from '../MyAccountTabs/Wishlist';
-import Settings from '../MyAccountTabs/Settings';
+import Profile from '../../components/MyAccountTabs/Profile';
+import Seller from '../../components/MyAccountTabs/Seller';
+import Bids from '../../components/MyAccountTabs/Bids';
+import Wishlist from '../../components/MyAccountTabs/Wishlist';
+import Settings from '../../components/MyAccountTabs/Settings';
 import PageNotFound from '../PageNotFound';
 import {FaGift, FaList, FaUser} from 'react-icons/fa';
 import {ImHammer2} from 'react-icons/im';
