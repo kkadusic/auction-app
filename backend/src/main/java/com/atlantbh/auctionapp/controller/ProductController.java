@@ -109,8 +109,8 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody @Valid ProductRequest productRequest) {
-        productService.add(productRequest);
-        return ResponseEntity.ok("Product added");
+    public ResponseEntity<Long> add(@RequestBody @Valid ProductRequest productRequest) {
+        Long productId = productService.add(productRequest);
+        return ResponseEntity.ok(productId);
     }
 }
