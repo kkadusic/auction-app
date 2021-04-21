@@ -1,4 +1,4 @@
-package com.atlantbh.auctionapp.configuration;
+package com.atlantbh.auctionapp.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

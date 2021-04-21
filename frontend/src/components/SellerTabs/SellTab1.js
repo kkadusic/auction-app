@@ -7,6 +7,7 @@ import SubmitButtons from './SubmitButtons';
 import * as yup from 'yup';
 import Dropzone from "../Dropzone";
 import {uploadImage} from "../../utilities/ServerCall";
+import {MdClear} from 'react-icons/md';
 
 import './sellerTabs.css';
 
@@ -29,6 +30,8 @@ const SellTab1 = ({
     const [images, setImages] = useState(product.images || []);
     const [uploading, setUploading] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [color, setColor] = useState(product.color || "Select Color");
+    const [size, setSize] = useState(product.size || "Select Size");
     const maxImages = 10;
 
     const [nameLength, setNameLength] = useState(0);
@@ -209,7 +212,11 @@ const SellTab1 = ({
                                     <Form.Control
                                         defaultValue={product.color || "Select Color"}
                                         name="color"
-                                        onChange={handleChange}
+                                        onChange={e => {
+                                            handleChange(e);
+                                            setColor(e.target.value);
+                                        }}
+                                        value={color}
                                         size="xl-18"
                                         as="select"
                                     >
@@ -218,13 +225,24 @@ const SellTab1 = ({
                                             <option key={color} value={color}>{color}</option>
                                         ))}
                                     </Form.Control>
+                                    <MdClear
+                                        onClick={() => {
+                                            setFieldValue("color", null);
+                                            setColor("Select Color");
+                                        }}
+                                        className="select-clear"
+                                    />
                                 </Form.Group>
 
                                 <Form.Group className="form-half-width">
                                     <Form.Control
                                         defaultValue={product.size || "Select Size"}
                                         name="size"
-                                        onChange={handleChange}
+                                        onChange={e => {
+                                            handleChange(e);
+                                            setSize(e.target.value);
+                                        }}
+                                        value={size}
                                         size="xl-18"
                                         as="select"
                                     >
@@ -233,6 +251,13 @@ const SellTab1 = ({
                                             <option key={size} value={size}>{size.replace("_", " ")}</option>
                                         ))}
                                     </Form.Control>
+                                    <MdClear
+                                        onClick={() => {
+                                            setFieldValue("size", null);
+                                            setSize("Select Size");
+                                        }}
+                                        className="select-clear"
+                                    />
                                 </Form.Group>
                             </Form.Group>
 

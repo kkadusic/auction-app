@@ -1,4 +1,4 @@
-package com.atlantbh.auctionapp.configuration;
+package com.atlantbh.auctionapp.config;
 
 import com.atlantbh.auctionapp.security.JwtAuthenticationEntryPoint;
 import com.atlantbh.auctionapp.security.JwtRequestFilter;

@@ -371,3 +371,14 @@ select.form-control {
 .custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
     background-color: rgba(131, 103, 216, 0.31);
 }
+
+.select-clear {
+    position: absolute;
+    right: 38px;
+    font-size: 30px;
+    top: 12px;
+    color: #919191;
+    cursor: pointer;
+    padding-right: 6px;
+    border-right: 1px solid #D8D8D8;
+}

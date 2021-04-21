@@ -12,7 +12,7 @@ import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({match}) => {
+const ItemPage = ({match, location}) => {
 
     let personId = getUserId();
 
@@ -47,6 +47,9 @@ const ItemPage = ({match}) => {
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
                 setBids(bids);
+                if (location.state !== undefined && location.state.newProduct) {
+                    showMessage("success", "You have successfully added a new product!");
+                }
 
                 if (!moment().isBetween(moment(data.startDate), moment(data.endDate)) && highestBidFromUser > 0) {
                     setOutbid(true);
