@@ -24,10 +24,10 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Auction App")
+        return new ApiInfoBuilder().title("AuctionHub")
                 .description("API documentation")
                 .license("Apache 2.0")
-                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
                 .version("1.0.0")
                 .build();
     }
