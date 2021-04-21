@@ -162,7 +162,6 @@ const SellTab2 = ({product, setProduct, setActiveTab}) => {
                                     saveValues(values);
                                     setActiveTab(0)
                                 }}
-                                lastTab={false}
                             />
                         </Form>
                     )}

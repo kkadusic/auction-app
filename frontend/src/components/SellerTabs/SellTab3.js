@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Formik, getIn} from 'formik';
+import {Formik} from 'formik';
 import {Form, InputGroup} from 'react-bootstrap';
 import SubmitButtons from './SubmitButtons';
 import {countries, citiesByCountry, callCodeForCountry, codeForCountry} from "../../utilities/Location";
 import parsePhoneNumberFromString from 'libphonenumber-js';
-import {myAccountUrl, productUrl} from "../../utilities/AppUrl";
+import {productUrl} from "../../utilities/AppUrl";
 import * as yup from 'yup';
 
 import './sellerTabs.css';
@@ -56,7 +56,7 @@ const SellTab3 = ({product, setProduct, setActiveTab, onDone}) => {
         if (newProduct === null)
             setLoading(false);
         else
-            history.push(myAccountUrl);
+            history.push(productUrl(newProduct));
     }
 
     return (
@@ -94,7 +94,7 @@ const SellTab3 = ({product, setProduct, setActiveTab, onDone}) => {
                                     size="xl-18"
                                     name="street"
                                     defaultValue={product.street || ""}
-                                    placeholder="e.g. Obala Kulina bana"
+                                    placeholder="e.g. 432 Park Avenue"
                                     onChange={handleChange}
                                     maxLength={255}
                                     isInvalid={touched.street && errors.street}
@@ -154,7 +154,7 @@ const SellTab3 = ({product, setProduct, setActiveTab, onDone}) => {
                                     size="xl-18"
                                     name="zip"
                                     defaultValue={product.zip || ""}
-                                    placeholder="e.g. 71000"
+                                    placeholder="e.g. 10022"
                                     onChange={handleChange}
                                     maxLength={32}
                                     isInvalid={touched.zip && errors.zip}
@@ -175,7 +175,7 @@ const SellTab3 = ({product, setProduct, setActiveTab, onDone}) => {
                                         size="xl-18"
                                         name="phone"
                                         defaultValue={product.phone || ""}
-                                        placeholder="e.g. 62123456"
+                                        placeholder="e.g. 555-1234"
                                         onChange={handleChange}
                                         maxLength={100}
                                         isInvalid={touched.phone && errors.phone}

@@ -27,6 +27,7 @@ const Sell = () => {
     const onDone = async (product) => {
         product.phone = product.callCode + product.phone;
         delete product.callCode;
+        product.images = product.images.map(image => image.url);
         try {
             const id = await addProduct(product);
             const categoryName = categories.filter(category => category.id === parseInt(product.categoryId))[0].name;
