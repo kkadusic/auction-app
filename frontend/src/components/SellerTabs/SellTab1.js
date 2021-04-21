@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import Dropzone from "../Dropzone";
 import {uploadImage} from "../../utilities/ServerCall";
 import {MdClear} from 'react-icons/md';
+import {v4 as uuid} from 'uuid';
 
 import './sellerTabs.css';
 
@@ -73,7 +74,11 @@ const SellTab1 = ({
         }));
         setImages(newImages);
         setLoading(false);
-        setProduct({...product, ...data, images: newImages});
+        if (images.length === 0) {
+            setProduct({...product, ...data, images: ["https://i.stack.imgur.com/y9DpT.jpg"]});
+        } else {
+            setProduct({...product, ...data, images: newImages});
+        }
         setActiveTab(1);
     }
 
@@ -85,7 +90,7 @@ const SellTab1 = ({
             reader.onload = function (e) {
                 setImages(prevState => [
                     ...prevState,
-                    {src: e.target.result, file}
+                    {src: e.target.result, file, id: uuid()}
                 ]);
             };
             reader.readAsDataURL(file);
