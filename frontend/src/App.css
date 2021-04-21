@@ -17,6 +17,8 @@ h1 {
     line-height: 52px;
     margin-bottom: 0;
     font-weight: normal;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 h2 {
@@ -25,6 +27,8 @@ h2 {
     margin-bottom: 0;
     font-weight: normal;
     line-height: unset;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 h3 {

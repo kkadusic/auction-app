@@ -148,6 +148,7 @@ const ItemPage = ({match, location}) => {
                                 width="100%"
                                 height="438px"
                                 src={product.images[activePhoto].url}
+                                style={product.images[activePhoto] === undefined ? {objectFit: 'cover'} : null}
                                 className="product-image-big"
                             />
                             <GiExpand
@@ -236,7 +237,8 @@ const ItemPage = ({match, location}) => {
                                         <RiHeartFill className="wishlist-icon"/>
                                     )}
                                 </Button>
-                                <div className="font-18" style={{marginTop: 15}}>
+                                <div className="font-18"
+                                     style={{marginTop: 15, maxWidth: '100%', wordWrap: 'break-word'}}>
                                     Details
                                     <div className="grey-line"/>
                                     <div className="font-15">

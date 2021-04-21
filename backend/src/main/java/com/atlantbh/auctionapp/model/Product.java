@@ -38,11 +38,11 @@ public class Product {
     private LocalDateTime lastUpdateDate;
 
     @NotBlank
-    @javax.validation.constraints.Size(max = 100)
+    @javax.validation.constraints.Size(max = 60)
     @Column(nullable = false)
     private String name;
 
-    @javax.validation.constraints.Size(max = 1000)
+    @javax.validation.constraints.Size(max = 700)
     private String description;
 
     @PositiveOrZero
