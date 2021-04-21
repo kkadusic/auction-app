@@ -9,6 +9,7 @@ export const aboutUrl = "/about";
 export const termsUrl = "/terms";
 export const myAccountUrl = "/my-account";
 export const myAccountSellerUrl = "/my-account/seller";
+export const myAccountSellerSellUrl = "/my-account/seller/sell";
 export const myAccountBidsUrl = "/my-account/bids";
 export const myAccountWishlistUrl = "/my-account/wishlist";
 export const myAccountSettingsUrl = "/my-account/settings";

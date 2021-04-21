@@ -14,25 +14,27 @@ import ItemPage from "../components/ItemPage";
 import AllCategories from "../components/AllCategories";
 import ForgotPassword from "../components/ForgotPassword";
 import ResetPassword from "../components/ResetPassword";
+import Sell from "../components/Sell";
 
 const UserRoutes = () => {
-    return (
-        <Switch>
-            <Route exact path="/" component={LandingPage}/>
-            <Route path="/all" component={AllCategories}/>
-            <Route path="/shop/*/*/:id" component={ItemPage}/>
-            <Route path="/shop*" component={Shop}/>
-            <Route path="/about" component={AboutUs}/>
-            <Route path="/privacy" component={PrivacyPolicy}/>
-            <Route path="/terms" component={TermsConditions}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/register" component={Register}/>
-            <Route path="/forgot_password" component={ForgotPassword}/>
-            <Route path="/reset_password" component={ResetPassword}/>
-            <PrivateRoute path="/my-account" component={MyAccount}/>
-            <Route component={PageNotFound}/>
-        </Switch>
-    );
+        return (
+            <Switch>
+                    <Route exact path="/" component={LandingPage}/>
+                    <Route path="/all" component={AllCategories}/>
+                    <Route path="/shop/*/*/:id" component={ItemPage}/>
+                    <Route path="/shop*" component={Shop}/>
+                    <Route path="/about" component={AboutUs}/>
+                    <Route path="/privacy" component={PrivacyPolicy}/>
+                    <Route path="/terms" component={TermsConditions}/>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/register" component={Register}/>
+                    <Route path="/forgot_password" component={ForgotPassword}/>
+                    <Route path="/reset_password" component={ResetPassword}/>
+                    <PrivateRoute path="/my-account/seller/sell" component={Sell} />
+                    <PrivateRoute path="/my-account" component={MyAccount}/>
+                    <Route component={PageNotFound}/>
+            </Switch>
+        );
 }
 
 export default UserRoutes;
