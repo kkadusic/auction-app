@@ -1,7 +1,9 @@
 package com.atlantbh.auctionapp.repository;
 
+import com.atlantbh.auctionapp.model.Category;
 import com.atlantbh.auctionapp.model.Subcategory;
 import com.atlantbh.auctionapp.projection.SimpleSubcategoryProjection;
+import com.atlantbh.auctionapp.projection.SubcategoryProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,5 +19,7 @@ public interface SubcategoryRepository extends JpaRepository<Subcategory, Long> 
             "GROUP BY (sc.id, sc.name, c.name, sc.image_url) " +
             "ORDER BY RANDOM() LIMIT 4",
             nativeQuery = true)
-    List<SimpleSubcategoryProjection> getRandomSubcategories();
+    List<SubcategoryProjection> getRandomSubcategories();
+
+    List<SimpleSubcategoryProjection> findAllByCategory(Category category);
 }

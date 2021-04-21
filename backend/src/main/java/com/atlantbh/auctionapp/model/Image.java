@@ -20,7 +20,6 @@ public class Image {
     @Column(nullable = false)
     private String url;
 
-    @NotBlank
     @Column(nullable = false)
     private Boolean featured = false;
 
@@ -31,14 +30,9 @@ public class Image {
     public Image() {
     }
 
-    public Image(@NotBlank String url) {
+    public Image(@NotBlank String url, Product product) {
         this.url = url;
-    }
-
-    public Image(Long id, @NotBlank String url, @NotBlank Boolean featured) {
-        this.id = id;
-        this.url = url;
-        this.featured = featured;
+        this.product = product;
     }
 
     public Long getId() {
@@ -63,5 +57,13 @@ public class Image {
 
     public void setFeatured(Boolean featured) {
         this.featured = featured;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

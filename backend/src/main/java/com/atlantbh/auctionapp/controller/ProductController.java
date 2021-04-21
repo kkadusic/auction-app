@@ -1,18 +1,24 @@
 package com.atlantbh.auctionapp.controller;
 
+import com.atlantbh.auctionapp.enumeration.Color;
+import com.atlantbh.auctionapp.enumeration.Size;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.request.FilterCountRequest;
+import com.atlantbh.auctionapp.request.ProductRequest;
 import com.atlantbh.auctionapp.request.SearchCountRequest;
 import com.atlantbh.auctionapp.request.SearchRequest;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.FilterCountResponse;
+import com.atlantbh.auctionapp.response.FilterResponse;
 import com.atlantbh.auctionapp.response.ProductPageResponse;
 import com.atlantbh.auctionapp.response.ProductResponse;
 import com.atlantbh.auctionapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,5 +101,16 @@ public class ProductController {
     @GetMapping("/user/bid")
     public ResponseEntity<List<UserProductProjection>> getUserBidProducts() {
         return ResponseEntity.ok(productService.getUserBidProducts());
+    }
+
+    @GetMapping("/filters")
+    public ResponseEntity<FilterResponse> getFilters() {
+        return ResponseEntity.ok(new FilterResponse(Color.values(), Size.values()));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> add(@RequestBody @Valid ProductRequest productRequest) {
+        productService.add(productRequest);
+        return ResponseEntity.ok("Product added");
     }
 }

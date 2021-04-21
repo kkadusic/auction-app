@@ -47,10 +47,12 @@ public class BidService {
         if (product.getEndDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new BadRequestException("Auction ended for this product");
         }
-        Long id = JwtTokenUtil.getRequestPersonId();
-        if (id == null)
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        if (personId == null) {
             throw new UnprocessableException("Invalid JWT signature");
-        Person person = personRepository.findById(JwtTokenUtil.getRequestPersonId()).orElseThrow(() -> new UnprocessableException("Wrong person id"));
+        }
+        Person person = personRepository.findById(personId).
+                orElseThrow(() -> new UnprocessableException("Wrong person id"));
         if (product.getPerson().getId().equals(person.getId())) {
             throw new BadRequestException("You can't bid on your own product");
         }
