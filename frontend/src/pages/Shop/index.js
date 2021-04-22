@@ -189,6 +189,9 @@ const Shop = () => {
     }
 
     const sortBy = async (sort) => {
+        if ((tags[tags.length - 1] !== tags[tags.length - 2])){
+            tags.push(tags[tags.length - 1]);
+        }
         page = 0;
         urlParams.sort = sort;
         history.push({
