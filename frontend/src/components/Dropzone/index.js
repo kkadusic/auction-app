@@ -75,6 +75,9 @@ const Dropzone = ({onDrop, accept, images, setImages}) => {
                                     Upload photos
                                 </span>
                                 {' '} or just drag and drop
+                                <p>
+                                    + Add at least 1 photo
+                                </p>
                                 <div>
                                     {images.length > 1 ? "(Tip: Drag the images to change their position)" : null}
                                 </div>

@@ -64,6 +64,8 @@ const SellTab1 = ({
     });
 
     const handleSubmit = async (data) => {
+        if (images.length < 1)
+            return;
         setLoading(true);
         const newImages = await Promise.all(images.map(async (image, index) => {
             if (image.url !== undefined)
@@ -74,11 +76,7 @@ const SellTab1 = ({
         }));
         setImages(newImages);
         setLoading(false);
-        if (images.length === 0) {
-            setProduct({...product, ...data, images: ["https://i.stack.imgur.com/y9DpT.jpg"]});
-        } else {
-            setProduct({...product, ...data, images: newImages});
-        }
+        setProduct({...product, ...data, images: newImages});
         setActiveTab(1);
     }
 
