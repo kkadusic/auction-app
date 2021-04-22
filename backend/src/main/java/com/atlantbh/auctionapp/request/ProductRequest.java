@@ -3,6 +3,7 @@ package com.atlantbh.auctionapp.request;
 import com.atlantbh.auctionapp.enumeration.Color;
 import com.atlantbh.auctionapp.enumeration.Size;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
@@ -37,15 +38,19 @@ public class ProductRequest {
     private LocalDateTime endDate;
 
     @NotBlank(message = "Street can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "Address can't be longer than 255 characters")
     private String street;
 
     @NotBlank(message = "City can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "Address can't be longer than 255 characters")
     private String city;
 
     @NotBlank(message = "Country can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "Address can't be longer than 255 characters")
     private String country;
 
     @NotNull(message = "Zip can't be blank")
+    @javax.validation.constraints.Size(max = 255, message = "Address can't be longer than 255 characters")
     private String zip;
 
     @NotBlank(message = "Phone can't be blank")
@@ -55,7 +60,11 @@ public class ProductRequest {
     private Boolean shipping = false;
     private Boolean featured = false;
 
+    @Valid
     private CardRequest card;
+
+    @Valid
+    private PayPalRequest payPal;
 
     public ProductRequest() {
     }
@@ -194,5 +203,13 @@ public class ProductRequest {
 
     public void setCard(CardRequest card) {
         this.card = card;
+    }
+
+    public PayPalRequest getPayPal() {
+        return payPal;
+    }
+
+    public void setPayPal(PayPalRequest payPal) {
+        this.payPal = payPal;
     }
 }

@@ -4,9 +4,11 @@ import com.atlantbh.auctionapp.exception.BadGatewayException;
 import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.exception.ConflictException;
 import com.atlantbh.auctionapp.exception.UnauthorizedException;
+import com.atlantbh.auctionapp.model.Card;
 import com.atlantbh.auctionapp.model.Person;
 
 import com.atlantbh.auctionapp.model.Token;
+import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 
 import com.atlantbh.auctionapp.repository.TokenRepository;
@@ -16,12 +18,16 @@ import com.atlantbh.auctionapp.request.RegisterRequest;
 
 import com.atlantbh.auctionapp.request.ResetPasswordRequest;
 import com.atlantbh.auctionapp.request.TokenRequest;
+import com.atlantbh.auctionapp.request.UpdateProfileRequest;
+import com.atlantbh.auctionapp.security.JwtTokenUtil;
+import com.atlantbh.auctionapp.utilities.UpdateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,9 +37,11 @@ import static com.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsSt
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final CardRepository cardRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
+    private final UpdateMapper updateMapper;
 
     private String hostUrl;
 
@@ -43,11 +51,13 @@ public class PersonService {
     }
 
     @Autowired
-    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailService emailService) {
+    public PersonService(PersonRepository personRepository, CardRepository cardRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailService emailService, UpdateMapper updateMapper) {
         this.personRepository = personRepository;
+        this.cardRepository = cardRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
+        this.updateMapper = updateMapper;
     }
 
     public Person register(RegisterRequest registerRequest) {
@@ -121,5 +131,26 @@ public class PersonService {
     public Boolean validToken(TokenRequest tokenRequest) {
         Token token = tokenRepository.getToken(tokenRequest.getToken()).orElse(new Token());
         return token.getId() != null && personRepository.existsById(token.getPerson().getId());
+    }
+
+    public Person update(UpdateProfileRequest updateProfileRequest) {
+        System.out.println("update u service");
+        if (updateProfileRequest.getDateOfBirth().isAfter(LocalDateTime.now()))
+            throw new BadRequestException("Date of birth can't be after current date");
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+        if (updateProfileRequest.getCard() != null) {
+            Card card = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
+            String maskedCardNumber = card.getMaskedCardNumber();
+            if (maskedCardNumber != null && maskedCardNumber.equals(updateProfileRequest.getCard().getCardNumber()))
+                updateProfileRequest.getCard().setCardNumber(card.getCardNumber());
+            else if (!updateProfileRequest.getCard().getCardNumber().matches("^(\\d*)$"))
+                throw new BadRequestException("Card number can only contain digits");
+            updateMapper.updateCard(updateProfileRequest.getCard(), card);
+            cardRepository.save(card);
+        }
+        updateMapper.updatePerson(updateProfileRequest, person);
+        return personRepository.save(person);
     }
 }

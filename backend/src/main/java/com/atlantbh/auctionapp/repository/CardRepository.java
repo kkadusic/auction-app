@@ -11,4 +11,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
                                                                                     Integer expirationYear,
                                                                                     Integer expirationMonth,
                                                                                     Integer cvc);
+
+    Optional<Card> findByPersonId(Long personId);
 }

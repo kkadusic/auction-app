@@ -101,6 +101,10 @@ public class Product {
     @JoinColumn(name = "card_id")
     private Card card;
 
+    @ManyToOne
+    @JoinColumn(name = "paypal_id")
+    private PayPal payPal;
+
     public Product() {
     }
 
@@ -278,5 +282,13 @@ public class Product {
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public PayPal getPayPal() {
+        return payPal;
+    }
+
+    public void setPayPal(PayPal payPal) {
+        this.payPal = payPal;
     }
 }

@@ -11,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 
 @Entity
 public class Card {
@@ -48,6 +49,10 @@ public class Card {
     private Person person;
 
     public Card() {
+    }
+
+    public Card(Person person) {
+        this.person = person;
     }
 
     public Card(@NotBlank String name, @Size(min = 13, max = 19) String cardNumber,
@@ -114,5 +119,11 @@ public class Card {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public String getMaskedCardNumber() {
+        if (cardNumber == null)
+            return null;
+        return String.join("", Collections.nCopies(cardNumber.length() - 4, "*")) + cardNumber.substring(cardNumber.length() - 4);
     }
 }

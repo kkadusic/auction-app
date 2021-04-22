@@ -1,5 +1,6 @@
 package com.atlantbh.auctionapp.security;
 
+import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.model.Person;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -67,7 +68,7 @@ public class JwtTokenUtil implements Serializable {
 
     public static Long getRequestPersonId() {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass() != PersonDetails.class) {
-            return null;
+            throw new UnauthorizedException("Unauthorized");
         }
         return ((PersonDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }

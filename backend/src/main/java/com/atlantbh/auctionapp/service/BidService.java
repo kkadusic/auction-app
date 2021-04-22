@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.service;
 
 import com.atlantbh.auctionapp.exception.BadRequestException;
+import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.exception.UnprocessableException;
 import com.atlantbh.auctionapp.model.Bid;
 import com.atlantbh.auctionapp.model.Person;
@@ -52,7 +53,7 @@ public class BidService {
             throw new UnprocessableException("Invalid JWT signature");
         }
         Person person = personRepository.findById(personId).
-                orElseThrow(() -> new UnprocessableException("Wrong person id"));
+                orElseThrow(() -> new UnauthorizedException("Wrong person id"));
         if (product.getPerson().getId().equals(person.getId())) {
             throw new BadRequestException("You can't bid on your own product");
         }

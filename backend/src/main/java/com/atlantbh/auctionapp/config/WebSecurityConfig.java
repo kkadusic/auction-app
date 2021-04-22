@@ -36,7 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] protectedRoutes = {
             "/bids/add",
             "/products/user/bid",
-            "/products/add"
+            "/products/add",
+            "/auth/update",
+            "/cards/person"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
