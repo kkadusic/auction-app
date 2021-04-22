@@ -225,7 +225,7 @@ const Shop = () => {
 
     return (
         <>
-            <div style={{marginBottom: "20px", marginTop: "-20px"}}>
+            <div style={{marginBottom: "20px", marginTop: "-10px"}}>
                 <ReactTagInput
                     tags={tags}
                     placeholder=" "
