@@ -226,6 +226,12 @@ h3 {
     height: 46px;
 }
 
+.btn-lg-2 {
+    height: 49px;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+}
+
 .btn-transparent {
     color: black;
     background-color: transparent;
@@ -241,6 +247,12 @@ h3 {
     height: 46px;
     font-size: 16px;
     letter-spacing: 0.56px;
+}
+
+.form-control-lg-18 {
+    height: 46px;
+    font-size: 18px;
+    letter-spacing: 0.63px;
 }
 
 select.form-control {
@@ -385,4 +397,20 @@ select.form-control {
     cursor: pointer;
     padding-right: 6px;
     border-right: 1px solid #D8D8D8;
+}
+
+.verify-phone {
+    background-color: white;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    width: 220px;
+    justify-content: center;
+}
+
+.text-spinner {
+    width: 1rem;
+    height: 1rem;
+    font-size: 10px;
+    margin-left: 8px;
+    margin-top: 2px;
 }

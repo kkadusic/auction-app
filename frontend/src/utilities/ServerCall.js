@@ -4,6 +4,7 @@ import {getToken, getUserId} from "./Common";
 const hostUrl = process.env.REACT_APP_API_URL;
 const cloudName = process.env.REACT_APP_CLOUD_NAME;
 const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
+const ipApiKey = process.env.REACT_APP_IP_API_KEY;
 
 export const config = () => {
     const token = getToken();
@@ -127,3 +128,7 @@ export const uploadImage = async (imageFile) => {
     formData.append('upload_preset', uploadPreset);
     return (await axios.post('https://api.Cloudinary.com/v1_1/' + cloudName + '/image/upload', formData)).data.secure_url;
 }
+
+export const getGeoInfo = async () => {
+    return (await axios.get('http://api.ipstack.com/check', getParams({access_key: ipApiKey}))).data;
+};

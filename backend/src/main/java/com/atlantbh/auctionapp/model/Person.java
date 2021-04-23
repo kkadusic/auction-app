@@ -51,6 +51,8 @@ public class Person {
     @Size(max = 15)
     private String phoneNumber;
 
+    private Boolean verified = false;
+
     @NotBlank
     @Column(nullable = false, unique = true)
     @Size(max = 320)
@@ -225,5 +227,13 @@ public class Person {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }
