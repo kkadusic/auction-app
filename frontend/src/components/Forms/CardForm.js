@@ -140,7 +140,7 @@ const CardForm = ({
                                 size="xl-18"
                                 name="card.name"
                                 defaultValue={card.name || ""}
-                                placeholder="e.g. Lionel Messi"
+                                placeholder="e.g. John Doe"
                                 onChange={handleChange}
                                 onBlur={e => e.target.value === "" ? setFieldValue("card.name", "") : null}
                                 maxLength={255}
@@ -240,13 +240,13 @@ const CardForm = ({
                         </Form.Group>
 
                         <Form.Group className="form-half-width">
-                            <Form.Label>CVC/CW</Form.Label>
+                            <Form.Label>CVC/CVV</Form.Label>
                             <Form.Control
                                 className="form-control-gray-no-shadow"
                                 size="xl-18"
                                 name="card.cvc"
                                 defaultValue={card.cvc || ""}
-                                placeholder="e.g. 1234"
+                                placeholder="e.g. 123"
                                 onChange={handleChange}
                                 onBlur={e => e.target.value === "" ? setFieldValue("card.cvc", "") : null}
                                 maxLength={4}
