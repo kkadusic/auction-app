@@ -350,4 +350,9 @@ public class ProductService {
         images.get(0).setFeatured(true);
         imageRepository.saveAll(images);
     }
+
+    public List<UserProductProjection> getUserProducts() {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserProducts(personId);
+    }
 }

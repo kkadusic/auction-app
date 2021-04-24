@@ -140,3 +140,7 @@ export const getCard = async () => {
 export const updateUser = async (user) => {
     return (await axios.put(hostUrl + '/auth/update', user, config())).data;
 };
+
+export const getUserProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user', config())).data;
+};

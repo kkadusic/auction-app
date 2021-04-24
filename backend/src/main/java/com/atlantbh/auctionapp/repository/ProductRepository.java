@@ -165,4 +165,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') ORDER BY start_price",
             nativeQuery = true)
     List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
+
+    @Query(value = "SELECT p.id, p.name, i.url, p.start_price price, s.name subcategoryName, c.name categoryName, " +
+            "p.start_date startDate, p.end_date endDate, count(b.id) bidCount, max(b.amount) maxBid " +
+            "FROM product p " +
+            "LEFT OUTER JOIN image i on p.id = i.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
+            "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
+            "WHERE p.person_id = :user_id AND (i.featured = true OR i.featured IS NULL) " +
+            "GROUP BY (p.id, p.name, p.start_price, s.name, c.name, i.url, p.start_price, p.start_date, p.end_date) " +
+            "ORDER BY p.creation_date DESC",
+            nativeQuery = true)
+    List<UserProductProjection> getUserProducts(@Param("user_id") Long userId);
 }
