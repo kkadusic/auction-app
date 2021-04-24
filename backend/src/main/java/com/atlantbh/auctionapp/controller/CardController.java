@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.controller;
 
 import com.atlantbh.auctionapp.response.CardResponse;
+import com.atlantbh.auctionapp.response.EmptyResponse;
 import com.atlantbh.auctionapp.service.CardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,11 @@ public class CardController {
     }
 
     @GetMapping("/person")
-    public ResponseEntity<CardResponse> getCard() {
-        return ResponseEntity.ok(cardService.getCard());
+    public ResponseEntity<Object> getCard() {
+        CardResponse card = cardService.getCard();
+        if (card.getName() == null)
+            return ResponseEntity.ok(new EmptyResponse());
+        else
+            return ResponseEntity.ok(card);
     }
 }

@@ -132,3 +132,7 @@ export const uploadImage = async (imageFile) => {
 export const getGeoInfo = async () => {
     return (await axios.get('http://api.ipstack.com/check', getParams({access_key: ipApiKey}))).data;
 };
+
+export const getCard = async () => {
+    return (await axios.get(hostUrl + '/cards/person', config())).data;
+};

@@ -1,30 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getIn} from 'formik';
 import {Form, Image} from 'react-bootstrap';
-import moment, {months} from 'moment';
-import {getNextYears} from "../../utilities/Date";
+import {getCurrentMonth, getCurrentYear, getNextYears, getMonth} from "../../utilities/Date";
 import {PayPalButton} from 'react-paypal-button-v2';
+import {MdClear} from 'react-icons/md';
 import * as yup from 'yup';
 
-export const cardFormSchema = yup.object().shape({
-    name: yup.string()
-        .required("*Name is required")
-        .max(255, "*Name can't be longer than 255 characters"),
-    cardNumber: yup.string()
-        .required("*Card number is required")
-        .min(13, "*Card number must have at least 13 characters")
-        .max(19, "*Card number can't be longer than 19 characters")
-        .test("digits-only", "Card number can only contain digits", value => /^\d*$/.test(value)),
-    expirationYear: yup.number()
-        .required("*Expiration year is required"),
-    expirationMonth: yup.number()
-        .required("*Expiration month is required"),
-    cvc: yup.number()
-        .typeError("*CVC must be a number")
-        .required("*CVC is required")
-        .min(100, "*CVC must have at least 3 characters")
-        .max(9999, "*CVC can't be longer than 4 characters")
-});
+export const cardFormSchema = (notRequired, initialCardNumber) => {
+    return yup.object().shape({
+        name: yup.string()
+            .test("custom-required", "*Name is required", value => notRequired || value)
+            .max(255, "*Name can't be longer than 255 characters"),
+        cardNumber: yup.string()
+            .test("custom-required", "*Card number is required", value => notRequired || value)
+            .min(13, "*Card number must have at least 13 characters")
+            .max(19, "*Card number can't be longer than 19 characters")
+            .test("digits-only", "Card number can only contain digits", value => notRequired || value === initialCardNumber || /^\d*$/.test(value)),
+        expirationYear: yup.number()
+            .test("custom-required", "*Expiration year is required", value => notRequired || value),
+        expirationMonth: yup.number()
+            .test("custom-required", "*Expiration month is required", value => notRequired || value),
+        cvc: yup.number()
+            .typeError("*CVC must be a number")
+            .test("custom-required", "*CVC is required", value => notRequired || value)
+            .min(100, "*CVC must have at least 3 characters")
+            .max(9999, "*CVC can't be longer than 4 characters")
+    });
+};
 
 export const payPalFormSchema = yup.object().shape({
     orderId: yup.string()
@@ -61,8 +63,23 @@ const CardForm = ({
                   }) => {
 
     const [currentMonth, setCurrentMonth] = useState(0);
-    const [payPal, setPayPal] = useState(Object.keys(payPalObj).length !== 0 || false);
+    const [payPal, setPayPal] = useState(payPalObj !== undefined ? (Object.keys(payPalObj).length !== 0 || false) : false);
     const [creditCard, setCreditCard] = useState(payPalDisabled || Object.keys(card).length !== 0);
+    const [expirationYear, setExpirationYear] = useState(card.expirationYear || "Year");
+    const [expirationMonth, setExpirationMonth] = useState(card.expirationMonth || "Month");
+
+    useEffect(() => {
+        if (Object.keys(card).length === 0)
+            return;
+        setFieldValue("card.name", card.name);
+        setFieldValue("card.cardNumber", card.cardNumber);
+        setFieldValue("card.expirationYear", card.expirationYear);
+        setFieldValue("card.expirationMonth", card.expirationMonth);
+        setFieldValue("card.cvc", card.cvc);
+
+        setExpirationYear(card.expirationYear);
+        setExpirationMonth(card.expirationMonth);
+    }, [card, setFieldValue])
 
     return (
         <>
@@ -125,6 +142,7 @@ const CardForm = ({
                                 defaultValue={card.name || ""}
                                 placeholder="e.g. Lionel Messi"
                                 onChange={handleChange}
+                                onBlur={e => e.target.value === "" ? setFieldValue("card.name", "") : null}
                                 maxLength={255}
                                 isInvalid={getIn(touched, 'card.name') && getIn(errors, 'card.name')}
                             />
@@ -142,6 +160,7 @@ const CardForm = ({
                                 defaultValue={card.cardNumber || ""}
                                 placeholder="e.g. 1234 5678 9876 5432"
                                 onChange={handleChange}
+                                onBlur={e => e.target.value === "" ? setFieldValue("card.cardNumber", "") : null}
                                 maxLength={19}
                                 isInvalid={getIn(touched, 'card.cardNumber') && getIn(errors, 'card.cardNumber')}
                             />
@@ -156,16 +175,17 @@ const CardForm = ({
                             display: 'flex',
                             justifyContent: 'space-between',
                             flexWrap: 'wrap',
-                            alignItems: 'end'
+                            alignItems: 'flex-end'
                         }} className="form-half-width">
+                            <Form.Label style={{width: '100%'}}>Expiration Date</Form.Label>
                             <Form.Group className="form-half-width">
-                                <Form.Label style={{whiteSpace: 'nowrap'}}>Expiration Date</Form.Label>
                                 <Form.Control
-                                    defaultValue={card.expirationYear || "Year"}
+                                    value={expirationYear}
                                     name="card.expirationYear"
-                                    onChange={(e) => {
-                                        setCurrentMonth(e.target.value === moment().year().toString() ? moment().month() : 0);
+                                    onChange={e => {
+                                        setCurrentMonth(parseInt(e.target.value) === getCurrentYear() ? getCurrentMonth() : 0);
                                         handleChange(e);
+                                        setExpirationYear(e.target.value);
                                     }}
                                     size="xl-18"
                                     as="select"
@@ -176,6 +196,13 @@ const CardForm = ({
                                         <option key={year} value={year}>{year}</option>
                                     ))}
                                 </Form.Control>
+                                <MdClear
+                                    onClick={() => {
+                                        setFieldValue("card.expirationYear", "");
+                                        setExpirationYear("Year");
+                                    }}
+                                    className="select-clear"
+                                />
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationYear')}
                                 </Form.Control.Feedback>
@@ -183,18 +210,29 @@ const CardForm = ({
 
                             <Form.Group className="form-half-width">
                                 <Form.Control
-                                    defaultValue={card.expirationMonth || "Month"}
+                                    value={expirationMonth}
                                     name="card.expirationMonth"
-                                    onChange={handleChange}
+                                    onChange={e => {
+                                        handleChange(e);
+                                        setExpirationMonth(e.target.value);
+                                    }}
                                     size="xl-18"
                                     as="select"
                                     isInvalid={getIn(touched, 'card.expirationMonth') && getIn(errors, 'card.expirationMonth')}
                                 >
                                     <option value="Month" disabled hidden>Month</option>
                                     {[...Array(12 - currentMonth).keys()].map(x => (
-                                        <option key={x} value={currentMonth + x + 1}>{months(currentMonth + x)}</option>
+                                        <option key={x}
+                                                value={currentMonth + x + 1}>{getMonth(currentMonth + x)}</option>
                                     ))}
                                 </Form.Control>
+                                <MdClear
+                                    onClick={() => {
+                                        setFieldValue("card.expirationMonth", "");
+                                        setExpirationMonth("Month");
+                                    }}
+                                    className="select-clear"
+                                />
                                 <Form.Control.Feedback className="inline-feedback-error" type="invalid">
                                     {getIn(errors, 'card.expirationMonth')}
                                 </Form.Control.Feedback>
@@ -210,6 +248,7 @@ const CardForm = ({
                                 defaultValue={card.cvc || ""}
                                 placeholder="e.g. 1234"
                                 onChange={handleChange}
+                                onBlur={e => e.target.value === "" ? setFieldValue("card.cvc", "") : null}
                                 maxLength={4}
                                 isInvalid={getIn(touched, 'card.cvc') && getIn(errors, 'card.cvc')}
                             />
