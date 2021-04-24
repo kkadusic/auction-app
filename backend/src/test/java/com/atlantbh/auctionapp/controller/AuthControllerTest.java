@@ -164,4 +164,13 @@ public class AuthControllerTest {
                 .content("{\"token\": \"token\"}")
         ).andExpect(status().isOk());
     }
+
+    @Test
+    @Order(17)
+    public void deactivateAccount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/deactivate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"password\": \"User123!\"}")
+        ).andExpect(status().isUnauthorized());
+    }
 }
