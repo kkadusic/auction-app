@@ -17,7 +17,7 @@ export const requiredFormSchema = {
         .required("*Last name is required"),
     gender: yup.string()
         .required("*Gender is required")
-        .test("gender-test", "*Gender is required", value => value === "Male" || value === "Female"),
+        .test("gender-test", "*Gender is required", value => value === "MALE" || value === "FEMALE"),
     day: yup.number()
         .typeError("*Day is required")
         .min(0, "*Day is required")
@@ -42,7 +42,8 @@ export const requiredFormSchema = {
 };
 
 export const requiredFormInitialValues = (user) => {
-    const dob = user.dateOfBirth !== undefined ? moment(user.dateOfBirth) : null;
+    const dob = user.birthDate !== undefined ? moment(user.birthDate) : null;
+
     return {
         firstName: user.firstName || "",
         lastName: user.lastName || "",
@@ -50,7 +51,7 @@ export const requiredFormInitialValues = (user) => {
         day: dob !== null ? dob.day() : -1,
         month: dob !== null ? dob.month() : -1,
         year: dob !== null ? dob.year() : -1,
-        phone: user.phone || "",
+        phone: user.phoneNumber || "",
         email: user.email || "",
         verified: user.verified || false
     };
@@ -74,8 +75,13 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
         setLoading(true);
         let country = countryCode;
         if (country === null) {
-            country = (await getGeoInfo()).country_code;
-            setCountryCode(country);
+            try {
+                country = (await getGeoInfo()).country_code;
+                setCountryCode(country);
+            } catch (e) {
+                setLoading(false);
+                return;
+            }
         }
         const isValid = validPhoneNumber(phone, country, true);
         setVerified(isValid);
@@ -139,8 +145,8 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                     isInvalid={touched.gender && errors.gender}
                 >
                     <option value="Gender" disabled hidden>Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
                     {errors.gender}
@@ -168,8 +174,8 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                     />
                     <InputGroup.Append onClick={() => verifyPhoneNumber(values.phone)}>
                         <InputGroup.Text
-                            style={verified ? {color: 'var(--success)'} : {
-                                color: 'var(--text-secondary)',
+                            style={verified ? {color: '#417505'} : {
+                                color: '#9B9B9B',
                                 cursor: 'pointer'
                             }}
                             className="verify-phone"

@@ -136,3 +136,7 @@ export const getGeoInfo = async () => {
 export const getCard = async () => {
     return (await axios.get(hostUrl + '/cards/person', config())).data;
 };
+
+export const updateUser = async (user) => {
+    return (await axios.put(hostUrl + '/auth/update', user, config())).data;
+};

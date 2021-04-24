@@ -67,17 +67,21 @@ const SellTab1 = ({
         if (images.length < 1)
             return;
         setLoading(true);
-        const newImages = await Promise.all(images.map(async (image, index) => {
-            if (image.url !== undefined)
+        try {
+            const newImages = await Promise.all(images.map(async (image) => {
+                if (image.url !== undefined)
+                    return image;
+                setUploading(true);
+                image.url = await uploadImage(image.file);
                 return image;
-            setUploading(true);
-            image.url = await uploadImage(image.file);
-            return image;
-        }));
-        setImages(newImages);
-        setLoading(false);
-        setProduct({...product, ...data, images: newImages});
-        setActiveTab(1);
+            }));
+            setImages(newImages);
+            setLoading(false);
+            setProduct({...product, ...data, images: newImages});
+            setActiveTab(1);
+        } catch (e) {
+            setLoading(false);
+        }
     }
 
     const onDrop = useCallback(acceptedFiles => {

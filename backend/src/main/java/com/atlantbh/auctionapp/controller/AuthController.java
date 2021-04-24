@@ -74,7 +74,6 @@ public class AuthController {
 
     @PutMapping("/update")
     public ResponseEntity<Person> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
-        System.out.println("update u controleru");
         return ResponseEntity.ok(personService.update(updateProfileRequest));
     }
 }

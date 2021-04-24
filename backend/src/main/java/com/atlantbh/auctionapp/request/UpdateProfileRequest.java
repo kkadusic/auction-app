@@ -43,7 +43,7 @@ public class UpdateProfileRequest {
     @Valid
     private CardRequest card;
 
-    @Size(max = 255, message = "Address can't be longer than 255 characters")
+    @Size(max = 255, message = "Street can't be longer than 255 characters")
     private String street;
 
     @Size(max = 255, message = "Country can't be longer than 255 characters")

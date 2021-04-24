@@ -19,9 +19,7 @@ export const getCurrentMonth = () => {
 }
 
 export const getDurationBetweenDates = (date1, date2) => {
-    return moment.duration(date2.diff(date1)).format("Y [years], M [months], W [weeks], D [days], h[h] m[m]", {
-        trim: "all"
-    });
+    return moment.duration(date2.diff(date1)).format("D [days] h [hours] m [minutes]", {trim: "all"});
 }
 
 export const getNextYears = (n) => {
@@ -47,4 +45,8 @@ export const getDaysInMonth = (month, year) => {
     if (month == null || year == null)
         return 0;
     return moment(year + "-" + month, "YYYY-MM").daysInMonth();
+}
+
+export const getDate = (day, month, year) => {
+    return moment().set({"date": day, "month": month, "year": year}).toDate();
 }

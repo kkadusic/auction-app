@@ -12,6 +12,7 @@ import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 
 import com.atlantbh.auctionapp.repository.TokenRepository;
+import com.atlantbh.auctionapp.request.CardRequest;
 import com.atlantbh.auctionapp.request.ForgotPasswordRequest;
 import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -134,23 +136,52 @@ public class PersonService {
     }
 
     public Person update(UpdateProfileRequest updateProfileRequest) {
-        System.out.println("update u service");
         if (updateProfileRequest.getDateOfBirth().isAfter(LocalDateTime.now()))
             throw new BadRequestException("Date of birth can't be after current date");
         Long personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
-        if (updateProfileRequest.getCard() != null) {
+        if (!person.getEmail().equals(updateProfileRequest.getEmail())
+                && personRepository.existsByEmail(updateProfileRequest.getEmail()))
+            throw new ConflictException("Email already in use");
+        updateCard(updateProfileRequest.getCard(), person);
+        updateMapper.updatePerson(updateProfileRequest, person);
+        setBlankPropsToNull(person);
+        Person savedPerson = personRepository.save(person);
+        savedPerson.setPassword(null);
+        return savedPerson;
+    }
+
+    private void updateCard(CardRequest updatedCard, Person person) {
+        if (updatedCard != null) {
             Card card = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
             String maskedCardNumber = card.getMaskedCardNumber();
-            if (maskedCardNumber != null && maskedCardNumber.equals(updateProfileRequest.getCard().getCardNumber()))
-                updateProfileRequest.getCard().setCardNumber(card.getCardNumber());
-            else if (!updateProfileRequest.getCard().getCardNumber().matches("^(\\d*)$"))
+            if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
+                updatedCard.setCardNumber(card.getCardNumber());
+            else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
                 throw new BadRequestException("Card number can only contain digits");
-            updateMapper.updateCard(updateProfileRequest.getCard(), card);
+            updateMapper.updateCard(updatedCard, card);
             cardRepository.save(card);
+        } else {
+            List<Card> cards = cardRepository.findAllByPersonId(person.getId());
+            for (Card card : cards) {
+                card.setPerson(null);
+                cardRepository.save(card);
+            }
         }
-        updateMapper.updatePerson(updateProfileRequest, person);
-        return personRepository.save(person);
+    }
+
+
+    private void setBlankPropsToNull(Person person) {
+        if (person.getStreet().equals(""))
+            person.setStreet(null);
+        if (person.getCountry().equals(""))
+            person.setCountry(null);
+        if (person.getCity().equals(""))
+            person.setCity(null);
+        if (person.getState().equals(""))
+            person.setState(null);
+        if (person.getZip().equals(""))
+            person.setZip(null);
     }
 }

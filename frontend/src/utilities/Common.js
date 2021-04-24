@@ -35,6 +35,10 @@ export const getUser = () => {
     return user ? JSON.parse(user) : null;
 };
 
+export const setUser = (user) => {
+    localStorage.setItem('auction-user', JSON.stringify(user));
+};
+
 // Return user id from the local storage
 export const getUserId = () => {
     const user = localStorage.getItem('auction-user');
