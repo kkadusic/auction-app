@@ -136,17 +136,24 @@ public class PersonService {
     }
 
     public Person update(UpdateProfileRequest updateProfileRequest) {
-        if (updateProfileRequest.getDateOfBirth().isAfter(LocalDateTime.now()))
+        if (updateProfileRequest.getBirthDate().isAfter(LocalDateTime.now()))
             throw new BadRequestException("Date of birth can't be after current date");
         Long personId = JwtTokenUtil.getRequestPersonId();
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+
         if (!person.getEmail().equals(updateProfileRequest.getEmail())
                 && personRepository.existsByEmail(updateProfileRequest.getEmail()))
             throw new ConflictException("Email already in use");
         updateCard(updateProfileRequest.getCard(), person);
         updateMapper.updatePerson(updateProfileRequest, person);
         setBlankPropsToNull(person);
+        person.setBirthDate(updateProfileRequest.getBirthDate());
+        person.setPhoneNumber(updateProfileRequest.getPhoneNumber());
+        System.out.println(updateProfileRequest.getBirthDate());
+        if (updateProfileRequest.getImageUrl() != "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif"){
+            person.setImageUrl(updateProfileRequest.getImageUrl());
+        }
         Person savedPerson = personRepository.save(person);
         savedPerson.setPassword(null);
         return savedPerson;

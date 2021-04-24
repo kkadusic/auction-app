@@ -30,7 +30,7 @@ export const requiredFormSchema = {
         .typeError("*Year is required")
         .min(0, "*Year is required")
         .required("*Year is required"),
-    phone: yup.string()
+    phoneNumber: yup.string()
         .required("*Phone number is required")
         .test("digits-only", "Phone number only contain digits", value => /^\d*$/.test(value))
         .max(32, "*Phone number can't be longer than 32 characters"),
@@ -51,7 +51,7 @@ export const requiredFormInitialValues = (user) => {
         day: dob !== null ? dob.day() : -1,
         month: dob !== null ? dob.month() : -1,
         year: dob !== null ? dob.year() : -1,
-        phone: user.phoneNumber || "",
+        phoneNumber: user.phoneNumber || "",
         email: user.email || "",
         verified: user.verified || false
     };
@@ -63,10 +63,10 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
     const [loading, setLoading] = useState(false);
     const [countryCode, setCountryCode] = useState(null);
 
-    const verifyPhoneNumber = async (phone) => {
+    const verifyPhoneNumber = async (phoneNumber) => {
         if (verified)
             return;
-        if (phone === "" || errors.phone) {
+        if (phoneNumber === "" || errors.phoneNumber) {
             setVerified(false);
             setFieldValue("verified", false);
             setInvalid(true);
@@ -83,7 +83,7 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                 return;
             }
         }
-        const isValid = validPhoneNumber(phone, country, true);
+        const isValid = validPhoneNumber(phoneNumber, country, true);
         setVerified(isValid);
         setFieldValue("verified", isValid);
         setInvalid(!isValid);
@@ -107,7 +107,7 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                     size="lg-18"
                     name="firstName"
                     defaultValue={values.firstName || ""}
-                    placeholder="e.g. Lionel"
+                    placeholder="e.g. John"
                     onChange={handleChange}
                     maxLength={100}
                     isInvalid={touched.firstName && errors.firstName}
@@ -124,7 +124,7 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                     size="lg-18"
                     name="lastName"
                     defaultValue={values.lastName || ""}
-                    placeholder="e.g. Messi"
+                    placeholder="e.g. Doe"
                     onChange={handleChange}
                     maxLength={100}
                     isInvalid={touched.lastName && errors.lastName}
@@ -162,17 +162,17 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                     <Form.Control
                         className="form-control-gray-no-shadow"
                         size="lg-18"
-                        name="phone"
-                        defaultValue={values.phone || ""}
+                        name="phoneNumber"
+                        defaultValue={values.phoneNumber || ""}
                         placeholder="e.g. 62123456"
                         onChange={e => {
                             setVerified(initialPhoneNumber === e.target.value);
                             handleChange(e);
                         }}
                         maxLength={32}
-                        isInvalid={touched.phone && errors.phone}
+                        isInvalid={touched.phoneNumber && errors.phoneNumber}
                     />
-                    <InputGroup.Append onClick={() => verifyPhoneNumber(values.phone)}>
+                    <InputGroup.Append onClick={() => verifyPhoneNumber(values.phoneNumber)}>
                         <InputGroup.Text
                             style={verified ? {color: '#417505'} : {
                                 color: '#9B9B9B',
@@ -185,7 +185,7 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                         </InputGroup.Text>
                     </InputGroup.Append>
                     <Form.Control.Feedback type="invalid">
-                        {errors.phone}
+                        {errors.phoneNumber}
                     </Form.Control.Feedback>
                 </InputGroup>
             </Form.Group>

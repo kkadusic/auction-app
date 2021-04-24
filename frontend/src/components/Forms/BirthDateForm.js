@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form} from 'react-bootstrap';
-import {getDaysArrayInMonth, getDaysInMonth, getMonth, getPastYears} from "../../utilities/Date";
+import {getDaysArrayInMonth, getDaysInMonth, getMonths, getPastYears} from "../../utilities/Date";
 
 export const BirthDateForm = ({handleChange, touched, values, errors, setFieldValue}) => (
     <Form.Group>
@@ -20,7 +20,7 @@ export const BirthDateForm = ({handleChange, touched, values, errors, setFieldVa
                 style={{width: '40%', marginRight: 20}}
             >
                 <option value={-1} disabled hidden>Month</option>
-                {getMonth().map((month, i) => (
+                {getMonths().map((month, i) => (
                     <option key={month} value={i}>{month}</option>
                 ))}
             </Form.Control>

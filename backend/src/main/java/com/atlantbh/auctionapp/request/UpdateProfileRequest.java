@@ -25,7 +25,7 @@ public class UpdateProfileRequest {
     private Gender gender;
 
     @NotNull(message = "Date of birth is required")
-    private LocalDateTime dateOfBirth;
+    private LocalDateTime birthDate;
 
     @NotBlank(message = "Email can't be blank")
     @Email(message = "Wrong email format")
@@ -34,11 +34,11 @@ public class UpdateProfileRequest {
 
     @NotBlank(message = "Phone can't be blank")
     @Size(max = 32, message = "Phone can't be longer than 32 characters")
-    private String phone;
+    private String phoneNumber;
 
     private Boolean verified = false;
 
-    private String photo = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
+    private String imageUrl = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
 
     @Valid
     private CardRequest card;
@@ -67,10 +67,10 @@ public class UpdateProfileRequest {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
+        this.birthDate = dateOfBirth;
         this.email = email;
-        this.phone = phone;
-        this.photo = photo;
+        this.phoneNumber = phone;
+        this.imageUrl = photo;
         this.card = card;
         this.street = street;
         this.country = country;
@@ -103,12 +103,12 @@ public class UpdateProfileRequest {
         this.gender = gender;
     }
 
-    public LocalDateTime getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDateTime getBirthDate() {
+        return birthDate;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setBirthDate(LocalDateTime birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getEmail() {
@@ -119,20 +119,20 @@ public class UpdateProfileRequest {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public CardRequest getCard() {

@@ -59,11 +59,11 @@ const Profile = () => {
     const handleSubmit = async (data) => {
         setUploading(true);
         const userData = {...data};
-        userData.dateOfBirth = getDate(data.day, data.month, data.year);
+        userData.birthDate = getDate(data.day, data.month, data.year);
         deleteProperties(userData);
         try {
             if (imageFile !== null) {
-                userData.photo = await uploadImage(imageFile);
+                userData.imageUrl = await uploadImage(imageFile);
             }
             const newUser = await updateUser(userData);
             setUser(newUser);
@@ -125,7 +125,7 @@ const Profile = () => {
 
                             <div className="profile-tab-form">
                                 <RequiredForm
-                                    initialPhoneNumber={user.verified ? user.phone : null}
+                                    initialPhoneNumber={user.verified ? user.phoneNumber : null}
                                     handleChange={handleChange}
                                     touched={touched}
                                     errors={errors}

@@ -46,7 +46,7 @@ public class Person {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     @Size(max = 15)
     private String phoneNumber;
@@ -141,11 +141,11 @@ public class Person {
         this.gender = gender;
     }
 
-    public Date getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
