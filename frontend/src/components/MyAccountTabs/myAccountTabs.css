@@ -68,6 +68,43 @@
     box-shadow: none;
 }
 
+.settings-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.settings-tab {
+    width: calc(50% - 10px);
+    min-width: 309px;
+    height: 290px;
+    border: 1px solid #D8D8D8;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.settings-tab-title {
+    display: flex;
+    align-items: center;
+    background: #F0F0F0;
+    font-size: 18px;
+    letter-spacing: 0.63px;
+    height: 50px;
+    padding: 10px 10px 10px 33px;
+}
+
+.settings-tab-content {
+    font-size: 18px;
+    letter-spacing: 0.63px;
+    padding: 33px
+}
+
+@media (max-width: 991px) {
+    .settings-tab {
+        width: 100%;
+    }
+}
+
 @media (max-width: 767px) {
     .seller-tab-buttons {
         flex-direction: column;

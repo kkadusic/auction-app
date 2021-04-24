@@ -144,3 +144,7 @@ export const updateUser = async (user) => {
 export const getUserProducts = async () => {
     return (await axios.get(hostUrl + '/products/user', config())).data;
 };
+
+export const deactivate = async (password) => {
+    return (await axios.post(hostUrl + '/auth/deactivate', {password}, config())).data;
+};

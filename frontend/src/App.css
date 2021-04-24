@@ -414,3 +414,13 @@ select.form-control {
     margin-left: 8px;
     margin-top: 2px;
 }
+
+.btn-danger {
+    color: white;
+    background: #ED4747;
+    border: none;
+}
+
+.btn-danger:hover {
+    color: #D8D8D8;
+}

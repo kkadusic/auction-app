@@ -37,9 +37,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM product p " +
             "INNER JOIN image i ON p.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND i.featured = true " +
-            "ORDER BY start_date DESC " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on p.person_id = p2.id " +
+            "WHERE start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND i.featured = true AND p2.active " +
+            "ORDER BY start_date DESC  " +
             "LIMIT 8",
             nativeQuery = true)
     List<SimpleProductProjection> getNewArrivalsProducts();
@@ -49,8 +49,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "FROM product p " +
             "INNER JOIN image i ON p.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND i.featured = true " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on p.person_id = p2.id " +
+            "WHERE start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') AND i.featured = true AND p2.active " +
             "ORDER BY end_date " +
             "LIMIT 8",
             nativeQuery = true)
@@ -60,7 +60,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.start_date startDate, p.end_date endDate, " +
             "EXISTS(SELECT * FROM wishlist " +
             "WHERE product_id = :product_id AND person_id = :user_id) wished " +
-            "FROM product p WHERE p.id = :product_id ", nativeQuery = true)
+            "FROM product p INNER JOIN person p2 on p.person_id = p2.id " +
+            "WHERE p.id = :product_id AND p2.active",
+            nativeQuery = true)
     Optional<FullProductProjection> getProduct(@Param("product_id") Long productId, @Param("user_id") Long userId);
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
@@ -69,8 +71,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "similarity(pr.name, :query) similarity " +
             "FROM product pr INNER JOIN image i on pr.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on pr.person_id = p2.id " +
+            "WHERE p2.active AND (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = :category end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = :subcategory end) " +
@@ -87,8 +89,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
             "FROM product pr INNER JOIN subcategory s on s.id = pr.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on pr.person_id = p2.id " +
+            "WHERE p2.active AND (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
             "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
@@ -104,8 +106,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT color, count(color) " +
             "FROM product pr " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on pr.person_id = p2.id " +
+            "WHERE p2.active AND (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
@@ -120,8 +122,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT pr.size, count(pr.size) " +
             "FROM product pr " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on pr.person_id = p2.id " +
+            "WHERE p2.active AND (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
@@ -146,17 +148,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<UserProductProjection> getUserBidProducts(@Param("user_id") Long userId);
 
     @Query(value = "SELECT EXISTS(SELECT 1 " +
-            "FROM product pr " +
-            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
-            "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
-            "AND start_date <= now() AND end_date > now())",
+            "FROM product pr INNER JOIN person p2 on pr.person_id = p2.id " +
+            "WHERE p2.active AND (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "to_tsvector('english', pr.name || ' ' || pr.description) @@ to_tsquery('english', :tsquery)) " +
+            "AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours'))",
             nativeQuery = true)
     Boolean searchExists(String query, String tsquery);
 
     @Query(value = "SELECT start_price FROM product pr " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
-            "INNER JOIN category c on c.id = s.category_id " +
-            "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
+            "INNER JOIN category c on c.id = s.category_id INNER JOIN person p2 on pr.person_id = p2.id " +
+            "WHERE p2.active AND (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :category = '' then true else lower(c.name) = lower(:category) end) " +
             "AND (case when :subcategory = '' then true else lower(s.name) = lower(:subcategory) end) " +
@@ -176,4 +178,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "ORDER BY p.creation_date DESC",
             nativeQuery = true)
     List<UserProductProjection> getUserProducts(@Param("user_id") Long userId);
+
+    @Query(value = "SELECT * FROM product p " +
+            "INNER JOIN person p2 on p2.id = p.person_id " +
+            "INNER JOIN subcategory s on s.id = p.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE p2.active AND p.id = :id",
+            nativeQuery = true)
+    Optional<Product> findByIdAndIsActive(Long id);
+
+    @Query(value = "SELECT EXISTS " +
+            "(SELECT 1 FROM product p INNER JOIN person p2 on p2.id = p.person_id " +
+            "AND p2.active AND p.id = :id)",
+            nativeQuery = true)
+    Boolean existsByIdAndIsActive(Long id);
 }

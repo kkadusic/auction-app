@@ -3,6 +3,7 @@ package com.atlantbh.auctionapp.controller;
 import com.atlantbh.auctionapp.exception.BadGatewayException;
 import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.model.Person;
+import com.atlantbh.auctionapp.request.DeactivateRequest;
 import com.atlantbh.auctionapp.request.ForgotPasswordRequest;
 import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
@@ -75,5 +76,11 @@ public class AuthController {
     @PutMapping("/update")
     public ResponseEntity<Person> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
         return ResponseEntity.ok(personService.update(updateProfileRequest));
+    }
+
+    @PostMapping("/deactivate")
+    public ResponseEntity<String> deactivate(@RequestBody @Valid DeactivateRequest deactivateRequest) {
+        personService.deactivate(deactivateRequest.getPassword());
+        return ResponseEntity.ok("User deactivated");
     }
 }
