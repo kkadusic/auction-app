@@ -18,7 +18,7 @@ const StartSellingTab = () => {
                     You do not have any scheduled items for sale.
                 </div>
                 <Button
-                    style={{width: 303}}
+                    style={{width: 303, boxShadow: "3px 3px 0 0 rgba(131, 103, 216, 0.31)"}}
                     size="xxl"
                     variant="transparent-black-shadow"
                     onClick={() => history.push(myAccountSellerSellUrl)}

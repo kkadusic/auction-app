@@ -78,6 +78,13 @@ h3 {
     box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
 }
 
+.btn-fill-gray-2 {
+    font-weight: normal;
+    color: #252525;
+    background: #FAFAFA;
+    border: 1px solid #D8D8D8;
+}
+
 .form-control {
     border-radius: 0;
     color: #9B9B9B;
@@ -136,6 +143,7 @@ h3 {
 .black-nav-link {
     color: #252525;
 }
+
 
 .black-nav-link:hover {
     color: #8367D8;
@@ -210,6 +218,14 @@ h3 {
 
 .table-gray-transparent thead tr th:first-child, .table-gray-transparent tbody tr td:first-child {
     padding-left: 50px;
+}
+
+.table-gray-transparent > tbody tr:first-child td {
+    padding-top: 20px;
+}
+
+.table-gray-transparent > tbody tr:last-child td {
+    padding-bottom: 20px;
 }
 
 .nav {

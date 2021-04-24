@@ -4,6 +4,8 @@ import {MdClear} from 'react-icons/md';
 import {countries, citiesByCountry} from "../../utilities/Location";
 import * as yup from 'yup';
 
+import "./forms.css";
+
 export const optionalFormSchema = {
     street: yup.string()
         .max(255, "*Address can't be longer than 255 characters"),
@@ -90,10 +92,14 @@ const OptionalForm = ({handleChange, touched, errors, values, setFieldValue}) =>
                     <Form.Control
                         value={city}
                         name="city"
-                        onChange={handleChange}
+                        onChange={e => {
+                            setCity(e.target.value);
+                            handleChange(e);
+                        }}
                         size="lg-18"
                         as="select"
                         isInvalid={touched.city && errors.city}
+                        style={city !== "Select City" ? {paddingRight: 66} : null}
                     >
                         <option value="Select City" hidden>Select City</option>
                         {citiesByCountry(country).map(city => (

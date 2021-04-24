@@ -113,7 +113,7 @@ const Profile = () => {
                                 <Button
                                     size="lg-2"
                                     variant="transparent-black-shadow-disabled"
-                                    style={{width: '100%', marginTop: 10}}
+                                    style={{width: '100%', marginTop: 10, border: "3px solid #E3E3E3", boxShadow: "3px 3px 0 0 #ECECEC"}}
                                     onClick={() => inputFile.current.click()}
                                     disabled={loading}
                                 >
@@ -176,7 +176,7 @@ const Profile = () => {
                     </div>
 
                     <Button
-                        style={{width: 243, marginLeft: 'calc(100% - 243px)'}}
+                        style={{width: 243, marginLeft: 'calc(100% - 243px)', boxShadow: "3px 3px 0 0 rgba(131, 103, 216, 0.31)"}}
                         size="xxl"
                         variant="transparent-black-shadow"
                         type="submit"

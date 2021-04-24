@@ -18,7 +18,7 @@ const Settings = () => {
                     Do you want to deactivate your account?
                     <Button
                         size="xxl"
-                        style={{width: 243, marginTop: 38}}
+                        style={{width: 243, marginTop: 38, border: "3px solid #E3E3E3", boxShadow: "3px 3px 0 0 #ECECEC"}}
                         variant="transparent-black-shadow-disabled"
                         onClick={() => setShowModal(true)}
                     >
