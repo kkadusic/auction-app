@@ -64,9 +64,9 @@ const ListCard = ({data, url}) => {
                     >
                         Wishlist
                         {wished ? (
-                            <RiHeartFill style={{fontSize: 22, marginLeft: 5, color: '#CD5C5C'}}/>
+                            <RiHeartFill className="wishlist-icon-wished"/>
                         ) : (
-                            <RiHeartFill style={{fontSize: 22, marginLeft: 5, color: '#ECECEC'}}/>
+                            <RiHeartFill className="wishlist-icon"/>
                         )}
                     </Button>
                     <Button
