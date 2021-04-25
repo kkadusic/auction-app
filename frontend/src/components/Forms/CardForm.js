@@ -4,7 +4,7 @@ import {Form, Image, OverlayTrigger, Popover} from 'react-bootstrap';
 import {getCurrentMonth, getCurrentYear, getNextYears, getMonth} from "../../utilities/Date";
 import {PayPalButton} from 'react-paypal-button-v2';
 import {MdClear} from 'react-icons/md';
-import { FaQuestionCircle } from 'react-icons/fa';
+import {FaQuestionCircle} from 'react-icons/fa';
 import * as yup from 'yup';
 
 export const cardFormSchema = (notRequired, initialCardNumber) => {
@@ -256,21 +256,28 @@ const CardForm = ({
                             <OverlayTrigger
                                 trigger="click"
                                 placement="right"
-                                popperConfig={{ modifiers: [{ name: "flip", enabled: true, options: { fallbackPlacements: ["bottom", "top"] } },], }}
+                                popperConfig={{
+                                    modifiers: [{
+                                        name: "flip",
+                                        enabled: true,
+                                        options: {fallbackPlacements: ["bottom", "top"]}
+                                    },],
+                                }}
                                 overlay={
                                     <Popover>
-                                        <Popover.Title as="h3">What is CVC/CVV code and where can I find it on my card?</Popover.Title>
+                                        <Popover.Title as="h3">What is CVC/CVV code and where can I find it on my
+                                            card?</Popover.Title>
                                         <Popover.Content>
                                             The CVV/CVC code (Card Verification Value/Code) is located on the back of
                                             your credit/debit card on the right side of the white signature strip;
                                             it is always the last 3 digits in case of VISA and MasterCard.
-                                            <Image style={{ marginTop: 5 }} width="100%" src="/images/cvc.png" />
+                                            <Image style={{marginTop: 5}} width="100%" src="/images/cvc.png"/>
                                         </Popover.Content>
                                     </Popover>
                                 }
                                 rootClose
                             >
-                                <FaQuestionCircle className="cvc-question" />
+                                <FaQuestionCircle className="cvc-question"/>
                             </OverlayTrigger>
 
                             <Form.Control.Feedback className="inline-feedback-error" type="invalid">

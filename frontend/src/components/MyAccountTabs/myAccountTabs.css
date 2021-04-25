@@ -99,6 +99,29 @@
     padding: 33px
 }
 
+#btn-deactivate-account {
+    width: 243px;
+    margin-top: 38px;
+    border: 3px solid #E3E3E3;
+    box-shadow: 3px 3px 0 0 #ECECEC;
+}
+
+#btn-seller-tab{
+    width: 120px;
+    height: 48px;
+    border: 1px solid #D9D9D9;
+    box-shadow: none;
+}
+
+#btn-add-new-item{
+    width: 200px;
+    height: 48px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    box-shadow: none;
+}
+
 @media (max-width: 991px) {
     .settings-tab {
         width: 100%;

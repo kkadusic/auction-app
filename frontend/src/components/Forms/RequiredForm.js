@@ -164,7 +164,7 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                         size="lg-18"
                         name="phoneNumber"
                         defaultValue={values.phoneNumber || ""}
-                        placeholder="e.g. 62123456"
+                        placeholder="e.g. 61222333"
                         onChange={e => {
                             setVerified(initialPhoneNumber === e.target.value);
                             handleChange(e);
@@ -198,7 +198,7 @@ const RequiredForm = ({initialPhoneNumber, handleChange, touched, errors, values
                     name="email"
                     type="email"
                     defaultValue={values.email || ""}
-                    placeholder="e.g. example@gmail.com"
+                    placeholder="e.g. john.doe@gmail.com"
                     onChange={handleChange}
                     maxLength={100}
                     isInvalid={touched.email && errors.email}

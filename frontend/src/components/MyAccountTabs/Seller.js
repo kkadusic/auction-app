@@ -38,22 +38,22 @@ const Seller = () => {
     return (
         <>
             <div className="seller-tab-buttons">
-                <Button style={{width: 120, border: '1px solid #D9D9D9', boxShadow: 'none'}}
+                <Button id="btn-seller-tab"
                         onClick={() => setActiveTab(0)}
                         variant={activeTab === 0 ? "fill-purple" : "fill-gray-2"} size="lg-3">
                     Scheduled
                 </Button>
-                <Button style={{width: 120, height: 48, border: '1px solid #D9D9D9', boxShadow: 'none'}}
+                <Button id="btn-seller-tab"
                         onClick={() => setActiveTab(1)}
                         variant={activeTab === 1 ? "fill-purple" : "fill-gray-2"} size="lg-3">
                     Active
                 </Button>
-                <Button style={{width: 120, border: '1px solid #D9D9D9', boxShadow: 'none'}}
+                <Button id="btn-seller-tab"
                         onClick={() => setActiveTab(2)}
                         variant={activeTab === 2 ? "fill-purple" : "fill-gray-2"} size="lg-3">
                     Sold
                 </Button>
-                <Button style={{width: 200, height: 48, position: 'absolute', right: 0, bottom: 0, boxShadow: 'none'}}
+                <Button id="btn-add-new-item"
                         onClick={() => history.push(myAccountSellerSellUrl)}
                         variant="fill-purple" size="xl">
                     <FaPlus style={{fontSize: 22, marginRight: 8}}/>
