@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String[] protectedRoutes = {
             "/bids/add",
+            "/bids/remove",
             "/products/user/bid",
             "/products/add",
             "/products/user",
