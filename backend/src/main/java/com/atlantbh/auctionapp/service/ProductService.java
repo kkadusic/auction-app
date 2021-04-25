@@ -135,6 +135,13 @@ public class ProductService {
                 break;
         }
 
+        Long id = null;
+        try {
+            id = JwtTokenUtil.getRequestPersonId();
+        } catch (UnauthorizedException ignore) {
+
+        }
+
         String tsQuery = formTsQuery(query);
 
         Slice<SimpleProductProjection> searchResult = productRepository.search(
@@ -142,6 +149,7 @@ public class ProductService {
                 tsQuery,
                 category.toLowerCase(),
                 subcategory.toLowerCase(),
+                id == null ? -1 : id,
                 minPrice,
                 maxPrice,
                 color == null ? "" : color.toString(),
@@ -354,5 +362,10 @@ public class ProductService {
     public List<UserProductProjection> getUserProducts() {
         Long personId = JwtTokenUtil.getRequestPersonId();
         return productRepository.getUserProducts(personId);
+    }
+
+    public List<UserProductProjection> getUserWishlistProducts() {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserWishlistProducts(personId);
     }
 }

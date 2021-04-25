@@ -118,4 +118,9 @@ public class ProductController {
     public ResponseEntity<List<UserProductProjection>> getUserProducts() {
         return ResponseEntity.ok(productService.getUserProducts());
     }
+
+    @GetMapping("/user/wishlist")
+    public ResponseEntity<List<UserProductProjection>> getUserWishlistProducts() {
+        return ResponseEntity.ok(productService.getUserWishlistProducts());
+    }
 }

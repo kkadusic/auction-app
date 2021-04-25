@@ -40,7 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/products/user",
             "/auth/update",
             "/auth/deactivate",
-            "/cards/person"
+            "/cards/person",
+            "/wishlist/add",
+            "/wishlist/remove",
+            "/products/user/wishlist"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
