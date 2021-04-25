@@ -9,17 +9,17 @@ import moment from 'moment';
 import './tables.css';
 
 const WishlistTable = ({products}) => {
+
     const history = useHistory();
     const userId = getUserId();
 
     const getTimeColumn = (product) => {
         const productEndDate = moment.utc(product.endDate);
-        return moment().isSameOrAfter(productEndDate) ? "0s" : getDurationBetweenDates(moment(), productEndDate);
+        return moment().isSameOrAfter(productEndDate) ? "Auction ended" : getDurationBetweenDates(moment(), productEndDate);
     }
 
     const isClosed = (endDate) => moment().isSameOrAfter(moment.utc(endDate));
-
-    const getImageSrc = (product) => product.url !== null ? product.url : "/images/placeholder-image-gray.png";
+    const getImageSrc = (product) => product.url !== null ? product.url : "";
 
     return (
         <Table variant="gray-transparent" responsive style={{marginTop: '10px'}}>
@@ -74,12 +74,7 @@ const WishlistTable = ({products}) => {
                             <Button
                                 size="lg-2"
                                 variant="transparent-black-shadow-disabled"
-                                style={{
-                                    width: 105,
-                                    marginLeft: 20,
-                                    border: "3px solid #E3E3E3",
-                                    boxShadow: "3px 3px 0 0 #ECECEC"
-                                }}
+                                id="wishlist-btn-bid"
                                 onClick={() => history.push(productUrl(product))}
                             >
                                 {isClosed(product.endDate) ? "VIEW" : "BID"}

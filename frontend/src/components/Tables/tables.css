@@ -31,3 +31,10 @@
     font-size: 14px;
     letter-spacing: 0.49px;
 }
+
+#wishlist-btn-bid{
+    width: 105px;
+    margin-left: 20px;
+    border: 3px solid #E3E3E3;
+    box-shadow: 3px 3px 0 0 #ECECEC;
+}
