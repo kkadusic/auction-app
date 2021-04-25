@@ -4,7 +4,6 @@ import {getToken, getUserId} from "./Common";
 const hostUrl = process.env.REACT_APP_API_URL;
 const cloudName = process.env.REACT_APP_CLOUD_NAME;
 const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
-const ipApiKey = process.env.REACT_APP_IP_API_KEY;
 
 export const config = () => {
     const token = getToken();
@@ -130,7 +129,7 @@ export const uploadImage = async (imageFile) => {
 }
 
 export const getGeoInfo = async () => {
-    return (await axios.get('http://api.ipstack.com/check', getParams({access_key: ipApiKey}))).data;
+    return (await axios.get('https://ipapi.co/json',)).data;
 };
 
 export const getCard = async () => {
