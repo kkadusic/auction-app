@@ -6,7 +6,7 @@ import {productUrl} from "../../utilities/AppUrl";
 import {getUserId} from "../../utilities/Common";
 import moment from 'moment';
 
-import './productTable.css';
+import './tables.css';
 
 const ProductTable = ({products, type}) => {
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Spinner} from 'react-bootstrap';
-import ProductTable from '../../components/ProductTable';
+import {Spinner} from 'react-bootstrap';
+import ProductTable from '../Tables/ProductTable';
 import {getUserBidProducts} from "../../utilities/ServerCall";
 import {useAlertContext} from "../../AppContext";
 
