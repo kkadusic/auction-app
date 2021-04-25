@@ -1,0 +1,33 @@
+.product-table-header > th {
+    background-color: #FAFAFA;
+}
+
+.product-table-name {
+    font-weight: bold;
+    max-width: 325px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-table-id {
+    color: #8367D8;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    width: max-content;
+}
+
+.product-table-image {
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+#wishlist-table-button:disabled {
+    background: #F0F0F0;
+    border: 3px solid #F0F0F0;
+    width: 105px;
+    opacity: 1;
+    font-size: 14px;
+    letter-spacing: 0.49px;
+}
