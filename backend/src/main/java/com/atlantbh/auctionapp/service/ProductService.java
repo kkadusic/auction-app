@@ -60,6 +60,7 @@ public class ProductService {
     private final CardRepository cardRepository;
     private final Hunspell speller;
 
+    @Autowired
     public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
                           SubcategoryRepository subcategoryRepository, PersonRepository personRepository,
                           CardRepository cardRepository, Hunspell speller) {
@@ -70,9 +71,6 @@ public class ProductService {
         this.cardRepository = cardRepository;
         this.speller = speller;
     }
-
-    @Autowired
-
 
     public List<SimpleProductProjection> getFeaturedRandomProducts() {
         return productRepository.getFeaturedRandomProducts();
