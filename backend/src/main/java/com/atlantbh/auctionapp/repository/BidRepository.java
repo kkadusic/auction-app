@@ -1,7 +1,7 @@
 package com.atlantbh.auctionapp.repository;
 
 import com.atlantbh.auctionapp.model.Bid;
-import com.atlantbh.auctionapp.response.SimpleBidResponse;
+import com.atlantbh.auctionapp.projection.SimpleBidProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +17,7 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
             "WHERE b.product_id = :id " +
             "ORDER BY b.amount DESC, b.date",
             nativeQuery = true)
-    List<SimpleBidResponse> getBidsForProduct(Long id);
+    List<SimpleBidProjection> getBidsForProduct(Long id);
 
     @Query(value = "SELECT MAX(amount) " +
             "FROM bid " +

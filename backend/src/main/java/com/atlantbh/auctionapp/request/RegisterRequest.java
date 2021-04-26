@@ -7,17 +7,23 @@ import javax.validation.constraints.Size;
 public class RegisterRequest {
 
     @NotBlank(message = "First name can't be empty")
+    @Size(min = 2, message = "First name must have at least 2 characters")
+    @Size(max = 50, message = "First name can't be longer than 50 characters")
     private String firstName;
 
     @NotBlank(message = "Last name can't be empty")
+    @Size(min = 2, message = "First name must have at least 2 characters")
+    @Size(max = 50, message = "First name can't be longer than 50 characters")
     private String lastName;
 
     @NotBlank(message = "Email can't be empty")
     @Email(message = "Email format is not valid")
+    @Size(max = 320, message = "Email can't be longer than 320 characters")
     private String email;
 
     @NotBlank(message = "Password can't be empty")
     @Size(min = 8, message = "Password must contain at least 8 characters")
+    @Size(max = 255, message = "Password can't be longer than 255 characters")
     private String password;
 
     public RegisterRequest() {

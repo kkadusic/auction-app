@@ -64,6 +64,7 @@ const Footer = () => {
                 </p>
                 <div className="footer-newsletter-bottom">
                     <Form.Control className="footer-email-input" size="xl-16" type="text"
+                                  style={{backgroundColor: "#3B3B3B", border: "none"}}
                                   placeholder="Your Email address"/>
                     <Button style={{width: 116}} size="xl" variant="transparent-white">
                         GO

@@ -8,11 +8,11 @@ import {searchProducts, filterCountProducts} from "../../utilities/ServerCall";
 import {Button, Form, Spinner} from 'react-bootstrap';
 import CategoriesFilter from '../../components/CategoriesFilter';
 import ItemNotFound from '../../components/ItemNotFound';
-import ListCard from "../ListCard";
-import PriceFilter from "../PriceFilter";
+import ListCard from "../../components/ListCard";
+import PriceFilter from "../../components/PriceFilter";
 import {removeSpaces} from "../../utilities/AppUrl";
 import {useBreadcrumbContext, useAlertContext} from "../../AppContext";
-import ImageCardOverlay from "../ImageCardOverlay";
+import ImageCardOverlay from "../../components/ImageCardOverlay";
 import * as qs from 'query-string';
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
@@ -189,6 +189,9 @@ const Shop = () => {
     }
 
     const sortBy = async (sort) => {
+        if ((tags[tags.length - 1] !== tags[tags.length - 2])){
+            tags.push(tags[tags.length - 1]);
+        }
         page = 0;
         urlParams.sort = sort;
         history.push({
@@ -222,7 +225,7 @@ const Shop = () => {
 
     return (
         <>
-            <div style={{marginBottom: "20px", marginTop: "-20px"}}>
+            <div style={{marginBottom: "20px", marginTop: "-10px"}}>
                 <ReactTagInput
                     tags={tags}
                     placeholder=" "

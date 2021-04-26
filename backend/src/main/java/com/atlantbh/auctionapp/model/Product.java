@@ -38,11 +38,11 @@ public class Product {
     private LocalDateTime lastUpdateDate;
 
     @NotBlank
-    @javax.validation.constraints.Size(max = 100)
+    @javax.validation.constraints.Size(max = 60)
     @Column(nullable = false)
     private String name;
 
-    @javax.validation.constraints.Size(max = 1000)
+    @javax.validation.constraints.Size(max = 700)
     private String description;
 
     @PositiveOrZero
@@ -77,11 +77,9 @@ public class Product {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @NotBlank
     @Column(nullable = false)
     private Boolean featured = false;
 
-    @NotBlank
     @Column(nullable = false)
     private Boolean shipping = false;
 
@@ -91,10 +89,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    @OneToMany
-    @JoinColumn(name = "product_id")
-    private List<Image> images;
-
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
@@ -103,23 +97,17 @@ public class Product {
     @JoinColumn(name = "subcategory_id", nullable = false)
     private Subcategory subcategory;
 
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
+
     public Product() {
     }
 
-    public Product(Long id, LocalDateTime creationDate, LocalDateTime lastUpdateDate,
-                   @NotBlank @javax.validation.constraints.Size(max = 100) String name,
-                   @javax.validation.constraints.Size(max = 1000) String description,
-                   @PositiveOrZero BigDecimal startPrice, LocalDateTime startDate, LocalDateTime endDate,
-                   @NotBlank String street, @NotBlank String city,
-                   @NotBlank @javax.validation.constraints.Size(max = 32) String zip, @NotBlank String country,
-                   @NotBlank @javax.validation.constraints.Size(max = 15) String phoneNumber,
-                   @NotBlank Boolean featured, @NotBlank Boolean shipping, Size size, Color color,
-                   List<Image> images, Person person, Subcategory subcategory) {
-        this.id = id;
-        this.creationDate = creationDate;
-        this.lastUpdateDate = lastUpdateDate;
+    public Product(@NotBlank String name, @PositiveOrZero BigDecimal startPrice, LocalDateTime startDate,
+                   LocalDateTime endDate, @NotBlank String street, @NotBlank String city, @NotBlank String zip,
+                   @NotBlank String country, @NotBlank String phoneNumber, Person person, Subcategory subcategory) {
         this.name = name;
-        this.description = description;
         this.startPrice = startPrice;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -128,11 +116,6 @@ public class Product {
         this.zip = zip;
         this.country = country;
         this.phoneNumber = phoneNumber;
-        this.featured = featured;
-        this.shipping = shipping;
-        this.size = size;
-        this.color = color;
-        this.images = images;
         this.person = person;
         this.subcategory = subcategory;
     }
@@ -273,14 +256,6 @@ public class Product {
         this.color = color;
     }
 
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
     public Person getPerson() {
         return person;
     }
@@ -295,5 +270,13 @@ public class Product {
 
     public void setSubcategory(Subcategory subcategory) {
         this.subcategory = subcategory;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
     }
 }

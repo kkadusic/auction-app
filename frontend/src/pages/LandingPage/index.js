@@ -81,7 +81,7 @@ const LandingPage = () => {
                                 onClick={() => history.push(productUrl(featuredProducts[0]))}
                             >
                                 BID NOW
-                                <IoIosArrowForward style={{fontSize: 24}}/>
+                                <IoIosArrowForward style={{ fontSize: 24, marginRight: -5, marginLeft: 5 }} />
                             </Button>
                         </div>
                         <Image width="484px" height="294px" style={{marginLeft: "20px", cursor: "pointer"}}

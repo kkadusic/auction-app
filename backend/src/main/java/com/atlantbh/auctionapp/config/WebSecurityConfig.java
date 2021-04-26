@@ -1,4 +1,4 @@
-package com.atlantbh.auctionapp.configuration;
+package com.atlantbh.auctionapp.config;
 
 import com.atlantbh.auctionapp.security.JwtAuthenticationEntryPoint;
 import com.atlantbh.auctionapp.security.JwtRequestFilter;
@@ -35,7 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String[] protectedRoutes = {
             "/bids/add",
-            "/products/user/bid"
+            "/products/user/bid",
+            "/products/add"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

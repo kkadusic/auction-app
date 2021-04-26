@@ -12,7 +12,7 @@ import moment from 'moment';
 
 import './itemPage.css';
 
-const ItemPage = ({match}) => {
+const ItemPage = ({match, location}) => {
 
     let personId = getUserId();
 
@@ -47,6 +47,9 @@ const ItemPage = ({match}) => {
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
                 setBids(bids);
+                if (location.state !== undefined && location.state.newProduct) {
+                    showMessage("success", "You have successfully added a new product!");
+                }
 
                 if (!moment().isBetween(moment(data.startDate), moment(data.endDate)) && highestBidFromUser > 0) {
                     setOutbid(true);
@@ -145,6 +148,7 @@ const ItemPage = ({match}) => {
                                 width="100%"
                                 height="438px"
                                 src={product.images[activePhoto].url}
+                                style={product.images[activePhoto] === undefined ? {objectFit: 'cover'} : null}
                                 className="product-image-big"
                             />
                             <GiExpand
@@ -233,7 +237,8 @@ const ItemPage = ({match}) => {
                                         <RiHeartFill className="wishlist-icon"/>
                                     )}
                                 </Button>
-                                <div className="font-18" style={{marginTop: 15}}>
+                                <div className="font-18"
+                                     style={{marginTop: 15, maxWidth: '100%', wordWrap: 'break-word'}}>
                                     Details
                                     <div className="grey-line"/>
                                     <div className="font-15">

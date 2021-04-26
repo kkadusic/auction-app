@@ -1,71 +1,44 @@
-package com.atlantbh.auctionapp.model;
+package com.atlantbh.auctionapp.request;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity
-public class Card {
+public class CardRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank
-    @Column(nullable = false)
+    @NotBlank(message = "Name can't be blank")
     private String name;
 
-    @NotBlank
-    @Size(min = 13, max = 19)
-    @Column(nullable = false)
+    @NotBlank(message = "Card number can't be blank")
+    @Size(min = 13, max = 19, message = "Card number must contain between 13 and 19 digits")
     private String cardNumber;
 
-    @Min(2000)
-    @Max(9999)
-    @Column(nullable = false)
+    @NotNull(message = "Expiration year is required")
+    @Min(value = 2000, message = "Expiration year can't be before 2000")
+    @Max(value = 9999, message = "Expiration year can't be after 9999")
     private Integer expirationYear;
 
-    @Column(nullable = false)
-    @Min(1)
-    @Max(12)
+    @NotNull(message = "Expiration month is required")
+    @Min(value = 1, message = "Expiration month can't be less than 1")
+    @Max(value = 12, message = "Expiration month can't be more than 12")
     private Integer expirationMonth;
 
-    @Column(nullable = false)
-    @Min(100)
-    @Max(9999)
+    @NotNull(message = "CVC is required")
+    @Min(value = 100, message = "Cvc can't be less than 3 characters")
+    @Max(value = 9999, message = "Cvc can't be more than 4 characters")
     private Integer cvc;
 
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
-
-    public Card() {
+    public CardRequest() {
     }
 
-    public Card(@NotBlank String name, @Size(min = 13, max = 19) String cardNumber,
-                @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(2) Integer expirationMonth,
-                @Min(100) @Max(999) Integer cvc) {
+    public CardRequest(String name, String cardNumber, Integer expirationYear, Integer expirationMonth, Integer cvc) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.cvc = cvc;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -106,13 +79,5 @@ public class Card {
 
     public void setCvc(Integer cvc) {
         this.cvc = cvc;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 }

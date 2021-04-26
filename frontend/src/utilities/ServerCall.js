@@ -2,6 +2,8 @@ import axios from 'axios';
 import {getToken, getUserId} from "./Common";
 
 const hostUrl = process.env.REACT_APP_API_URL;
+const cloudName = process.env.REACT_APP_CLOUD_NAME;
+const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
 
 export const config = () => {
     const token = getToken();
@@ -106,3 +108,22 @@ export const validResetToken = async (token) => {
 export const getUserBidProducts = async () => {
     return (await axios.get(hostUrl + '/products/user/bid', config())).data;
 };
+
+export const getProductFilters = async () => {
+    return (await axios.get(hostUrl + '/products/filters')).data;
+};
+
+export const getSubcategoriesForCategory = async (id) => {
+    return (await axios.get(hostUrl + '/subcategories/category', getParams({id}))).data;
+}
+
+export const addProduct = async (product) => {
+    return (await axios.post(hostUrl + '/products/add', {...product}, config())).data;
+};
+
+export const uploadImage = async (imageFile) => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    formData.append('upload_preset', uploadPreset);
+    return (await axios.post('https://api.Cloudinary.com/v1_1/' + cloudName + '/image/upload', formData)).data.secure_url;
+}

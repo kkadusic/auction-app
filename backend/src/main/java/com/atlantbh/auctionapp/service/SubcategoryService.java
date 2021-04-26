@@ -1,6 +1,11 @@
 package com.atlantbh.auctionapp.service;
 
+import com.atlantbh.auctionapp.exception.UnprocessableException;
+import com.atlantbh.auctionapp.model.Category;
 import com.atlantbh.auctionapp.model.Subcategory;
+import com.atlantbh.auctionapp.projection.SimpleSubcategoryProjection;
+import com.atlantbh.auctionapp.projection.SubcategoryProjection;
+import com.atlantbh.auctionapp.repository.CategoryRepository;
 import com.atlantbh.auctionapp.repository.SubcategoryRepository;
 import com.atlantbh.auctionapp.response.SubcategoriesResponse;
 import com.atlantbh.auctionapp.response.SubcategoryResponse;
@@ -15,13 +20,15 @@ import java.util.List;
 public class SubcategoryService {
 
     private final SubcategoryRepository subcategoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public SubcategoryService(SubcategoryRepository subcategoryRepository) {
+    public SubcategoryService(SubcategoryRepository subcategoryRepository, CategoryRepository categoryRepository) {
         this.subcategoryRepository = subcategoryRepository;
+        this.categoryRepository = categoryRepository;
     }
 
-    public List<Subcategory> getRandomSubcategories() {
+    public List<SubcategoryProjection> getRandomSubcategories() {
         return subcategoryRepository.getRandomSubcategories();
     }
 
@@ -42,5 +49,11 @@ public class SubcategoryService {
         }
         response.sort(Comparator.comparing(SubcategoriesResponse::getName));
         return response;
+    }
+
+    public List<SimpleSubcategoryProjection> getSubcategoriesForCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new UnprocessableException("Wrong category id"));
+        return subcategoryRepository.findAllByCategory(category);
     }
 }

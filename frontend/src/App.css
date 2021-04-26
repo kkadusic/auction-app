@@ -17,6 +17,8 @@ h1 {
     line-height: 52px;
     margin-bottom: 0;
     font-weight: normal;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 h2 {
@@ -25,6 +27,8 @@ h2 {
     margin-bottom: 0;
     font-weight: normal;
     line-height: unset;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 h3 {
@@ -248,4 +252,137 @@ select.form-control {
     background-position-y: 0.5em;
     border: 3px solid #ECECEC;
     box-shadow: none;
+}
+
+.form-control-gray-no-shadow {
+    background: #FCFCFC;
+    border: 1px solid #D8D8D8;
+    box-shadow: none;
+}
+
+.input-group-text {
+    border-radius: 0;
+    font-size: 18px;
+    letter-spacing: 0.63px;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: #252525;
+    background-color: #F0F0F0;
+}
+
+
+.react-datepicker {
+    font-size: 1em;
+    border-radius: 0;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container > input {
+    background-image: url("data:image/svg+xml;ut8,<svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 1024 1024' style='font-size: 24px;' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z'></path></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 96%;
+    background-position-y: 50%;
+}
+
+.react-datepicker__header {
+    padding-top: 0.8em;
+    background-color: #FCFCFC;
+    border-bottom: none;
+}
+
+.react-datepicker__current-month {
+    border-bottom: 1px solid #ECECEC;
+    padding-bottom: 6px;
+}
+
+.react-datepicker__navigation {
+    top: 1em;
+    line-height: 1.7em;
+    border: 0.45em solid transparent;
+}
+
+.react-datepicker__month {
+    font-size: 1em;
+    margin: 0 1em 0.4em 1em;
+}
+
+.react-datepicker__day-names {
+    margin-top: 0.4em;
+    background-color: white;
+}
+
+.react-datepicker__day--keyboard-selected {
+    background-color: #8367D8;
+}
+
+.react-datepicker__day--keyboard-selected:hover {
+    background-color: #573BAC;
+}
+
+.react-datepicker__day, .react-datepicker__day-name {
+    width: 1.9em;
+    line-height: 1.9em;
+    margin: 0.366em;
+}
+
+.react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range {
+    background-color: #8367D8;
+}
+
+.react-datepicker__day--selected:hover, .react-datepicker__day--in-selecting-range:hover, .react-datepicker__day--in-range:hover {
+    background-color: #573BAC;
+}
+
+.react-datepicker__navigation--previous {
+    border-right-color: #8367D8;
+    left: 1em;
+}
+
+.react-datepicker__navigation--next {
+    border-left-color: #8367D8;
+    right: 1em;
+}
+
+.react-datepicker__navigation--previous:hover {
+    border-right-color: #573BAC;
+}
+
+.react-datepicker__navigation--next:hover {
+    border-left-color: #573BAC;
+}
+
+.custom-control-label::before {
+    border-color: #D8D8D8;
+    top: 0.4rem;
+}
+
+.custom-control-label::after {
+    top: 0.4rem;
+}
+
+.custom-checkbox .custom-control-label::before {
+    border-radius: 0;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #8367D8;
+    border-color: #8367D8;
+}
+
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background-color: rgba(131, 103, 216, 0.31);
+}
+
+.select-clear {
+    position: absolute;
+    right: 38px;
+    font-size: 30px;
+    top: 12px;
+    color: #919191;
+    cursor: pointer;
+    padding-right: 6px;
+    border-right: 1px solid #D8D8D8;
 }

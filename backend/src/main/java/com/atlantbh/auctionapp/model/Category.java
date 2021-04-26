@@ -15,7 +15,7 @@ public class Category {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String name;
 
     public Category() {

@@ -1,4 +1,4 @@
-package com.atlantbh.auctionapp.configuration;
+package com.atlantbh.auctionapp.config;
 
 import com.atlascopco.hunspell.Hunspell;
 import org.springframework.context.annotation.Bean;

@@ -6,7 +6,7 @@ import com.atlantbh.auctionapp.projection.ProductCountProjection;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
-import com.atlantbh.auctionapp.response.FullProductResponse;
+import com.atlantbh.auctionapp.projection.FullProductProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -55,14 +56,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             nativeQuery = true)
     List<SimpleProductProjection> getLastChanceProducts();
 
-    @Query(value = "SELECT p.id, p.person_id personId, p.name, p.description, p.start_price startPrice, p.start_date startDate, p.end_date endDate, " +
+    @Query(value = "SELECT p.id, p.person_id personId, p.name, p.description, p.start_price startPrice, " +
+            "p.start_date startDate, p.end_date endDate, " +
             "EXISTS(SELECT * FROM wishlist " +
-            "WHERE product_id = :product_id AND person_id = :user_id) wished, i.id AS imageId, i.url AS imageUrl, i.featured AS photoFeatured " +
-            "FROM product p LEFT OUTER JOIN image i on p.id = i.product_id " +
-            "WHERE p.id = :product_id " +
-            "ORDER BY i.featured DESC",
-            nativeQuery = true)
-    List<FullProductResponse> getProduct(@Param("product_id") Long productId, @Param("user_id") Long userId);
+            "WHERE product_id = :product_id AND person_id = :user_id) wished " +
+            "FROM product p WHERE p.id = :product_id ", nativeQuery = true)
+    Optional<FullProductProjection> getProduct(@Param("product_id") Long productId, @Param("user_id") Long userId);
 
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
             "i.url AS imageUrl, c.name categoryName, s.name subcategoryName, pr.creation_date, " +
@@ -87,17 +86,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                           String color, String size, Pageable pageable);
 
     @Query(value = "SELECT c.name categoryName, s.name subcategoryName, count(s.name) " +
-            "FROM product pr INNER JOIN image i on pr.id = i.product_id " +
-            "                INNER JOIN subcategory s on s.id = pr.subcategory_id " +
-            "                INNER JOIN category c on c.id = s.category_id " +
+            "FROM product pr INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
             "WHERE (lower(pr.name) LIKE lower('%' || :query || '%') OR pr.name % :query OR " +
             "to_tsvector('english', pr.description) @@ to_tsquery('english', :tsquery)) " +
             "AND (case when :min_price <= 0 then true else start_price >= :min_price end) " +
             "AND (case when :max_price >= 1000000 then true else start_price <= :max_price end) " +
             "AND (case when :color = '' then true else pr.color = :color end) " +
             "AND (case when :size = '' then true else pr.size = :size end) " +
-            "AND i.featured = true AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
-            "GROUP BY (c.name, s.name) " +
+            "AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
+            "GROUP BY ROLLUP (c.name, s.name) " +
             "ORDER BY (c.name, s.name)",
             nativeQuery = true)
     List<ProductCountProjection> categoryCount(String query, String tsquery, @Param("min_price") Integer minPrice,
