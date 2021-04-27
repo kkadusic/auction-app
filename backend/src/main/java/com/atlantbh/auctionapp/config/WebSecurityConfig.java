@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/bids/remove",
             "/products/user/bid",
             "/products/add",
+            "/products/remove",
             "/products/user",
             "/auth/update",
             "/auth/deactivate",

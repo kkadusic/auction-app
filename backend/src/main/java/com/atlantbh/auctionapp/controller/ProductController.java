@@ -8,6 +8,7 @@ import com.atlantbh.auctionapp.request.FilterCountRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
 import com.atlantbh.auctionapp.request.SearchCountRequest;
 import com.atlantbh.auctionapp.request.SearchRequest;
+import com.atlantbh.auctionapp.request.WishlistRequest;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.FilterCountResponse;
 import com.atlantbh.auctionapp.response.FilterResponse;
@@ -16,6 +17,7 @@ import com.atlantbh.auctionapp.response.ProductResponse;
 import com.atlantbh.auctionapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -112,6 +114,12 @@ public class ProductController {
     public ResponseEntity<Long> add(@RequestBody @Valid ProductRequest productRequest) {
         Long productId = productService.add(productRequest);
         return ResponseEntity.ok(productId);
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> remove(@RequestBody @Valid WishlistRequest productRequest) {
+        productService.remove(productRequest.getProductId());
+        return ResponseEntity.ok("Product removed");
     }
 
     @GetMapping("/user")
