@@ -56,8 +56,8 @@ const Seller = () => {
                 <Button id="btn-add-new-item"
                         onClick={() => history.push(myAccountSellerSellUrl)}
                         variant="fill-purple" size="xl">
-                    <FaPlus style={{fontSize: 22, marginRight: 8}}/>
-                    ADD NEW ITEM
+                    <FaPlus style={{fontSize: 18, marginRight: 8}}/>
+                    ADD ITEM
                 </Button>
             </div>
             {tabs[activeTab]}
