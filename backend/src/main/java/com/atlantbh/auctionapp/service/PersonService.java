@@ -144,11 +144,9 @@ public class PersonService {
             throw new ConflictException("Email already in use");
         updateCard(updateProfileRequest.getCard(), person);
         updateMapper.updatePerson(updateProfileRequest, person);
-        setBlankPropsToNull(person);
         person.setBirthDate(updateProfileRequest.getBirthDate());
         person.setPhoneNumber(updateProfileRequest.getPhoneNumber());
-        System.out.println(updateProfileRequest.getBirthDate());
-        if (updateProfileRequest.getImageUrl() != "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif") {
+        if (!updateProfileRequest.getImageUrl().equals("http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif")) {
             person.setImageUrl(updateProfileRequest.getImageUrl());
         }
         Person savedPerson = personRepository.save(person);
@@ -173,19 +171,6 @@ public class PersonService {
                 cardRepository.save(card);
             }
         }
-    }
-
-    private void setBlankPropsToNull(Person person) {
-        if (person.getStreet().equals(""))
-            person.setStreet(null);
-        if (person.getCountry().equals(""))
-            person.setCountry(null);
-        if (person.getCity().equals(""))
-            person.setCity(null);
-        if (person.getState().equals(""))
-            person.setState(null);
-        if (person.getZip().equals(""))
-            person.setZip(null);
     }
 
     public void deactivate(String password) {

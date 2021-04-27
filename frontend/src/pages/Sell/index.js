@@ -3,9 +3,9 @@ import {useBreadcrumbContext} from "../../AppContext";
 import {myAccountSellerUrl, myAccountUrl, myAccountSellerSellUrl} from "../../utilities/AppUrl";
 import {Step, Stepper} from 'react-form-stepper';
 import {addProduct, getCategories, getSubcategoriesForCategory, getProductFilters} from "../../utilities/ServerCall";
-import SellerTab1 from "../../components/SellerTabs/SellTab1";
-import SellerTab2 from "../../components/SellerTabs/SellTab2";
-import SellTab3 from "../../components/SellerTabs/SellTab3";
+import SellerTab1 from "../../components/SellerTabs/SellTabOne";
+import SellerTab2 from "../../components/SellerTabs/SellTabTwo";
+import SellTabThree from "../../components/SellerTabs/SellTabThree";
 
 import './sell.css';
 
@@ -51,7 +51,7 @@ const Sell = () => {
             setActiveTab={setActiveTab}
         />,
         <SellerTab2 product={product} setProduct={setProduct} setActiveTab={setActiveTab}/>,
-        <SellTab3 product={product} setProduct={setProduct} setActiveTab={setActiveTab} onDone={onDone}/>
+        <SellTabThree product={product} setProduct={setProduct} setActiveTab={setActiveTab} onDone={onDone}/>
     ];
 
     useEffect(() => {

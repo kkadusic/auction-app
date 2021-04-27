@@ -23,7 +23,6 @@ public class CardController {
         CardResponse card = cardService.getCard();
         if (card.getName() == null)
             return ResponseEntity.ok(new EmptyResponse());
-        else
-            return ResponseEntity.ok(card);
+        return ResponseEntity.ok(card);
     }
 }

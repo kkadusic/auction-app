@@ -10,7 +10,7 @@ import * as yup from 'yup';
 
 import './sellerTabs.css';
 
-const SellTab3 = ({product, setProduct, setActiveTab, onDone}) => {
+const SellTabThree = ({product, setProduct, setActiveTab, onDone}) => {
 
     const history = useHistory();
     const [country, setCountry] = useState(product.country || null);
@@ -214,4 +214,4 @@ const SellTab3 = ({product, setProduct, setActiveTab, onDone}) => {
     );
 }
 
-export default SellTab3;
+export default SellTabThree;
