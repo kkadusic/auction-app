@@ -127,3 +127,23 @@ export const uploadImage = async (imageFile) => {
     formData.append('upload_preset', uploadPreset);
     return (await axios.post('https://api.Cloudinary.com/v1_1/' + cloudName + '/image/upload', formData)).data.secure_url;
 }
+
+export const getGeoInfo = async () => {
+    return (await axios.get('https://ipapi.co/json',)).data;
+};
+
+export const getCard = async () => {
+    return (await axios.get(hostUrl + '/cards/person', config())).data;
+};
+
+export const updateUser = async (user) => {
+    return (await axios.put(hostUrl + '/auth/update', user, config())).data;
+};
+
+export const getUserProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user', config())).data;
+};
+
+export const deactivate = async (password) => {
+    return (await axios.post(hostUrl + '/auth/deactivate', {password}, config())).data;
+};

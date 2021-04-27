@@ -60,9 +60,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             PersonDetails personDetails;
             try {
                 personDetails = personDetailsService.loadUserByUsername(email);
-            } catch (NotFoundException ignore) {
+                if (!personDetails.isEnabled()) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User account is deactivated");
+                    return;
+                }
+            } catch (Exception ignore) {
                 // Wrong email address in signature
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT signature");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Wrong person id");
                 return;
             }
             if (jwtTokenUtil.validateToken(jwtToken, personDetails)) {

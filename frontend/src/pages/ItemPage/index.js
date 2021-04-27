@@ -199,7 +199,8 @@ const ItemPage = ({match, location}) => {
                                         <Form.Control disabled={ownProduct || !active || loading} maxLength="7"
                                                       className="form-control-gray place-bid-form" size="xl-18"
                                                       type="text"
-                                                      onChange={e => setBidPrice(e.target.value)}/>
+                                                      onChange={e => setBidPrice(e.target.value)}
+                                                      onKeyUp={e => e.key === 'Enter' ? bid() : null}/>
                                         {minPrice < 9999999 ?
                                             <div className="place-bid-label">
                                                 Enter ${minPrice} or more

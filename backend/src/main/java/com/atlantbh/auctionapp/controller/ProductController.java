@@ -113,4 +113,9 @@ public class ProductController {
         Long productId = productService.add(productRequest);
         return ResponseEntity.ok(productId);
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<UserProductProjection>> getUserProducts() {
+        return ResponseEntity.ok(productService.getUserProducts());
+    }
 }

@@ -46,10 +46,12 @@ public class Person {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     @Size(max = 15)
     private String phoneNumber;
+
+    private Boolean verified = false;
 
     @NotBlank
     @Column(nullable = false, unique = true)
@@ -139,11 +141,11 @@ public class Person {
         this.gender = gender;
     }
 
-    public Date getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -225,5 +227,13 @@ public class Person {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }

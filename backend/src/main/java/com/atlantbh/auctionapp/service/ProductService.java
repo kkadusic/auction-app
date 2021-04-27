@@ -4,9 +4,11 @@ import com.atlantbh.auctionapp.enumeration.Color;
 import com.atlantbh.auctionapp.enumeration.Size;
 import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.exception.NotFoundException;
+import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.exception.UnprocessableException;
 import com.atlantbh.auctionapp.model.Card;
 import com.atlantbh.auctionapp.model.Image;
+import com.atlantbh.auctionapp.model.PayPal;
 import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.model.Product;
 import com.atlantbh.auctionapp.model.Subcategory;
@@ -17,10 +19,12 @@ import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.ImageRepository;
+import com.atlantbh.auctionapp.repository.PayPalRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.repository.SubcategoryRepository;
 import com.atlantbh.auctionapp.request.CardRequest;
+import com.atlantbh.auctionapp.request.PayPalRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.CountResponse;
@@ -58,17 +62,19 @@ public class ProductService {
     private final SubcategoryRepository subcategoryRepository;
     private final PersonRepository personRepository;
     private final CardRepository cardRepository;
+    private final PayPalRepository payPalRepository;
     private final Hunspell speller;
 
     @Autowired
     public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
                           SubcategoryRepository subcategoryRepository, PersonRepository personRepository,
-                          CardRepository cardRepository, Hunspell speller) {
+                          CardRepository cardRepository, PayPalRepository payPalRepository, Hunspell speller) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.personRepository = personRepository;
         this.cardRepository = cardRepository;
+        this.payPalRepository = payPalRepository;
         this.speller = speller;
     }
 
@@ -253,10 +259,8 @@ public class ProductService {
         Subcategory subcategory = subcategoryRepository.findById(productRequest.getSubcategoryId())
                 .orElseThrow(() -> new UnprocessableException("Wrong subcategory id"));
         Long personId = JwtTokenUtil.getRequestPersonId();
-        if (personId == null)
-            throw new UnprocessableException("Invalid JWT signature");
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new UnprocessableException("Wrong person id"));
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
 
         if (productRequest.getEndDate().isBefore(LocalDateTime.now()))
             throw new BadRequestException("End date can't be before current date");
@@ -264,13 +268,16 @@ public class ProductService {
             throw new BadRequestException("End date must be after start date");
 
         CardRequest cardRequest = productRequest.getCard();
-        if (productRequest.getFeatured() && cardRequest == null)
-            throw new BadRequestException("Featured products must have card details");
-        if (productRequest.getShipping() && cardRequest == null)
-            throw new BadRequestException("Products with shipping must have card details");
+        PayPalRequest payPalRequest = productRequest.getPayPal();
+        if (productRequest.getFeatured() && cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Featured products must have payment details");
+        if (productRequest.getShipping() && cardRequest == null && payPalRequest == null)
+            throw new BadRequestException("Products with shipping must have payment details");
+        if (cardRequest != null && payPalRequest != null)
+            throw new BadRequestException("Conflicting payment details");
 
         Card card = getAndSaveCard(cardRequest);
-
+        PayPal payPal = getAndSavePayPal(payPalRequest);
 
         Product product = new Product(
                 productRequest.getName(),
@@ -291,7 +298,7 @@ public class ProductService {
         product.setFeatured(productRequest.getFeatured());
         product.setShipping(productRequest.getShipping());
         product.setCard(card);
-
+        product.setPayPal(payPal);
 
         Product savedProduct = productRepository.save(product);
         savePhotos(productRequest.getImages(), savedProduct);
@@ -305,6 +312,8 @@ public class ProductService {
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
                             cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
+            if (!cardRequest.getCardNumber().matches("^(\\d*)$"))
+                throw new BadRequestException("Card number can only contain digits");
             card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
                     cardRequest.getName(),
                     cardRequest.getCardNumber(),
@@ -326,11 +335,24 @@ public class ProductService {
         return card;
     }
 
+    private PayPal getAndSavePayPal(PayPalRequest payPalRequest) {
+        PayPal payPal = null;
+        if (payPalRequest != null) {
+            payPal = payPalRepository.save(new PayPal(payPalRequest.getOrderId()));
+        }
+        return payPal;
+    }
+
     private void savePhotos(List<String> photoUrls, Product product) {
         if (photoUrls == null || photoUrls.isEmpty())
             return;
         List<Image> images = photoUrls.stream().map(url -> new Image(url, product)).collect(Collectors.toList());
         images.get(0).setFeatured(true);
         imageRepository.saveAll(images);
+    }
+
+    public List<UserProductProjection> getUserProducts() {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserProducts(personId);
     }
 }

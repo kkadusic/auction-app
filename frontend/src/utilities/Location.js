@@ -1,6 +1,6 @@
-import moment from "moment";
 import countriesJSON from "../assets/json/countries.min.json";
 import countryCodesJSON from "../assets/json/country-codes.min.json";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const countries = Object.keys(countriesJSON);
 
@@ -25,7 +25,16 @@ export const codeForCountry = (country) => {
     return result.length === 1 ? result[0].country_code : "";
 }
 
-export const getNextYears = (n) => {
-    const year = moment().year();
-    return [...Array(n).keys()].map(x => year + x);
+export const validPhoneNumber = (phone, country, isCountryCode) => {
+    const parsedPhoneNumber = parsePhoneNumberFromString(phone, isCountryCode ? country : codeForCountry(country));
+    if ((phone || parsedPhoneNumber) === undefined)
+        return false;
+    return parsedPhoneNumber.isValid();
 }
+
+export const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});

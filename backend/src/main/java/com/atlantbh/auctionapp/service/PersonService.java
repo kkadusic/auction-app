@@ -4,24 +4,32 @@ import com.atlantbh.auctionapp.exception.BadGatewayException;
 import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.exception.ConflictException;
 import com.atlantbh.auctionapp.exception.UnauthorizedException;
+import com.atlantbh.auctionapp.model.Card;
 import com.atlantbh.auctionapp.model.Person;
 
 import com.atlantbh.auctionapp.model.Token;
+import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 
 import com.atlantbh.auctionapp.repository.TokenRepository;
+import com.atlantbh.auctionapp.request.CardRequest;
 import com.atlantbh.auctionapp.request.ForgotPasswordRequest;
 import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
 
 import com.atlantbh.auctionapp.request.ResetPasswordRequest;
 import com.atlantbh.auctionapp.request.TokenRequest;
+import com.atlantbh.auctionapp.request.UpdateProfileRequest;
+import com.atlantbh.auctionapp.security.JwtTokenUtil;
+import com.atlantbh.auctionapp.utilities.UpdateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,9 +39,11 @@ import static com.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsSt
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final CardRepository cardRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
+    private final UpdateMapper updateMapper;
 
     private String hostUrl;
 
@@ -43,11 +53,13 @@ public class PersonService {
     }
 
     @Autowired
-    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailService emailService) {
+    public PersonService(PersonRepository personRepository, CardRepository cardRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailService emailService, UpdateMapper updateMapper) {
         this.personRepository = personRepository;
+        this.cardRepository = cardRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
+        this.updateMapper = updateMapper;
     }
 
     public Person register(RegisterRequest registerRequest) {
@@ -70,7 +82,7 @@ public class PersonService {
             throw new UnauthorizedException("Wrong email or password");
         }
         if (!person.getActive()) {
-            throw new UnauthorizedException("User account disabled");
+            throw new UnauthorizedException("User account is deactivated");
         }
         person.setPassword(null);
         return person;
@@ -106,20 +118,68 @@ public class PersonService {
     public String resetPassword(ResetPasswordRequest resetPassRequest) {
         Token token = tokenRepository.getToken(resetPassRequest.getToken().toString())
                 .orElseThrow(() -> new BadRequestException("Invalid token"));
-        Person person = personRepository.findById(token.getPerson().getId())
+        Person person = personRepository.findByIdAndActiveIsTrue(token.getPerson().getId())
                 .orElseThrow(() -> new BadRequestException("Invalid token"));
-
         person.setPassword(passwordEncoder.encode(resetPassRequest.getPassword()));
         personRepository.save(person);
-
         token.setUsed(true);
         tokenRepository.save(token);
-
         return "You have changed your password";
     }
 
     public Boolean validToken(TokenRequest tokenRequest) {
         Token token = tokenRepository.getToken(tokenRequest.getToken()).orElse(new Token());
-        return token.getId() != null && personRepository.existsById(token.getPerson().getId());
+        return token.getId() != null && personRepository.existsByIdAndActiveIsTrue(token.getPerson().getId());
+    }
+
+    public Person update(UpdateProfileRequest updateProfileRequest) {
+        if (updateProfileRequest.getBirthDate().isAfter(LocalDateTime.now()))
+            throw new BadRequestException("Date of birth can't be after current date");
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+
+        if (!person.getEmail().equals(updateProfileRequest.getEmail())
+                && personRepository.existsByEmail(updateProfileRequest.getEmail()))
+            throw new ConflictException("Email already in use");
+        updateCard(updateProfileRequest.getCard(), person);
+        updateMapper.updatePerson(updateProfileRequest, person);
+        person.setBirthDate(updateProfileRequest.getBirthDate());
+        person.setPhoneNumber(updateProfileRequest.getPhoneNumber());
+        if (!updateProfileRequest.getImageUrl().equals("http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif")) {
+            person.setImageUrl(updateProfileRequest.getImageUrl());
+        }
+        Person savedPerson = personRepository.save(person);
+        savedPerson.setPassword(null);
+        return savedPerson;
+    }
+
+    private void updateCard(CardRequest updatedCard, Person person) {
+        if (updatedCard != null) {
+            Card card = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
+            String maskedCardNumber = card.getMaskedCardNumber();
+            if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
+                updatedCard.setCardNumber(card.getCardNumber());
+            else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
+                throw new BadRequestException("Card number can only contain digits");
+            updateMapper.updateCard(updatedCard, card);
+            cardRepository.save(card);
+        } else {
+            List<Card> cards = cardRepository.findAllByPersonId(person.getId());
+            for (Card card : cards) {
+                card.setPerson(null);
+                cardRepository.save(card);
+            }
+        }
+    }
+
+    public void deactivate(String password) {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+        if (!passwordEncoder.matches(password, person.getPassword()))
+            throw new UnauthorizedException("Wrong password");
+        person.setActive(false);
+        personRepository.save(person);
     }
 }

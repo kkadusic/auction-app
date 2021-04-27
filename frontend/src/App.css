@@ -78,6 +78,13 @@ h3 {
     box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
 }
 
+.btn-fill-gray-2 {
+    font-weight: normal;
+    color: #252525;
+    background: #FAFAFA;
+    border: 1px solid #D8D8D8;
+}
+
 .form-control {
     border-radius: 0;
     color: #9B9B9B;
@@ -136,6 +143,7 @@ h3 {
 .black-nav-link {
     color: #252525;
 }
+
 
 .black-nav-link:hover {
     color: #8367D8;
@@ -212,6 +220,14 @@ h3 {
     padding-left: 50px;
 }
 
+.table-gray-transparent > tbody tr:first-child td {
+    padding-top: 20px;
+}
+
+.table-gray-transparent > tbody tr:last-child td {
+    padding-bottom: 20px;
+}
+
 .nav {
     align-items: center;
 }
@@ -224,6 +240,12 @@ h3 {
 
 .btn-lg {
     height: 46px;
+}
+
+.btn-lg-2 {
+    height: 49px;
+    font-size: 16px;
+    letter-spacing: 0.56px;
 }
 
 .btn-transparent {
@@ -241,6 +263,12 @@ h3 {
     height: 46px;
     font-size: 16px;
     letter-spacing: 0.56px;
+}
+
+.form-control-lg-18 {
+    height: 46px;
+    font-size: 18px;
+    letter-spacing: 0.63px;
 }
 
 select.form-control {
@@ -385,4 +413,30 @@ select.form-control {
     cursor: pointer;
     padding-right: 6px;
     border-right: 1px solid #D8D8D8;
+}
+
+.verify-phone {
+    background-color: white;
+    font-size: 16px;
+    letter-spacing: 0.56px;
+    width: 220px;
+    justify-content: center;
+}
+
+.text-spinner {
+    width: 1rem;
+    height: 1rem;
+    font-size: 10px;
+    margin-left: 8px;
+    margin-top: 2px;
+}
+
+.btn-danger {
+    color: white;
+    background: #ED4747;
+    border: none;
+}
+
+.btn-danger:hover {
+    color: #D8D8D8;
 }
