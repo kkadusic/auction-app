@@ -13,6 +13,7 @@ import com.atlantbh.auctionapp.model.PayPal;
 import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.model.Product;
 import com.atlantbh.auctionapp.model.Subcategory;
+import com.atlantbh.auctionapp.model.Wishlist;
 import com.atlantbh.auctionapp.projection.ColorCountProjection;
 import com.atlantbh.auctionapp.projection.ProductCountProjection;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
@@ -25,6 +26,7 @@ import com.atlantbh.auctionapp.repository.PayPalRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.repository.SubcategoryRepository;
+import com.atlantbh.auctionapp.repository.WishlistRepository;
 import com.atlantbh.auctionapp.request.CardRequest;
 import com.atlantbh.auctionapp.request.PayPalRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
@@ -66,13 +68,14 @@ public class ProductService {
     private final CardRepository cardRepository;
     private final PayPalRepository payPalRepository;
     private final BidRepository bidRepository;
+    private final WishlistRepository wishlistRepository;
     private final Hunspell speller;
 
     @Autowired
     public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
                           SubcategoryRepository subcategoryRepository, PersonRepository personRepository,
                           CardRepository cardRepository, PayPalRepository payPalRepository, BidRepository bidRepository,
-                          Hunspell speller) {
+                          WishlistRepository wishlistRepository, Hunspell speller) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.subcategoryRepository = subcategoryRepository;
@@ -80,6 +83,7 @@ public class ProductService {
         this.cardRepository = cardRepository;
         this.payPalRepository = payPalRepository;
         this.bidRepository = bidRepository;
+        this.wishlistRepository = wishlistRepository;
         this.speller = speller;
     }
 
@@ -380,9 +384,11 @@ public class ProductService {
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (!product.getPerson().getId().equals(personId))
             throw new UnauthorizedException("You can't remove this product");
-        List<Image> images = imageRepository.findAllByProductId(product.getId());
         List<Bid> bids = bidRepository.findAllByProductId(product.getId());
+        List<Wishlist> wishlists = wishlistRepository.findAllByProductId(product.getId());
+        List<Image> images = imageRepository.findAllByProductId(product.getId());
         bidRepository.deleteAll(bids);
+        wishlistRepository.deleteAll(wishlists);
         imageRepository.deleteAll(images);
         productRepository.delete(product);
     }
