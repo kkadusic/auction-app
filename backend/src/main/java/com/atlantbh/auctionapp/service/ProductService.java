@@ -6,6 +6,7 @@ import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.exception.NotFoundException;
 import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.exception.UnprocessableException;
+import com.atlantbh.auctionapp.model.Bid;
 import com.atlantbh.auctionapp.model.Card;
 import com.atlantbh.auctionapp.model.Image;
 import com.atlantbh.auctionapp.model.PayPal;
@@ -17,6 +18,7 @@ import com.atlantbh.auctionapp.projection.ProductCountProjection;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
+import com.atlantbh.auctionapp.repository.BidRepository;
 import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.ImageRepository;
 import com.atlantbh.auctionapp.repository.PayPalRepository;
@@ -63,18 +65,21 @@ public class ProductService {
     private final PersonRepository personRepository;
     private final CardRepository cardRepository;
     private final PayPalRepository payPalRepository;
+    private final BidRepository bidRepository;
     private final Hunspell speller;
 
     @Autowired
     public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
                           SubcategoryRepository subcategoryRepository, PersonRepository personRepository,
-                          CardRepository cardRepository, PayPalRepository payPalRepository, Hunspell speller) {
+                          CardRepository cardRepository, PayPalRepository payPalRepository, BidRepository bidRepository,
+                          Hunspell speller) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.personRepository = personRepository;
         this.cardRepository = cardRepository;
         this.payPalRepository = payPalRepository;
+        this.bidRepository = bidRepository;
         this.speller = speller;
     }
 
@@ -375,9 +380,9 @@ public class ProductService {
                 .orElseThrow(() -> new UnprocessableException("Wrong product id"));
         if (!product.getPerson().getId().equals(personId))
             throw new UnauthorizedException("You can't remove this product");
-        if (!product.getStartDate().isAfter(LocalDateTime.now()))
-            throw new BadRequestException("You can't remove an active or sold product");
         List<Image> images = imageRepository.findAllByProductId(product.getId());
+        List<Bid> bids = bidRepository.findAllByProductId(product.getId());
+        bidRepository.deleteAll(bids);
         imageRepository.deleteAll(images);
         productRepository.delete(product);
     }

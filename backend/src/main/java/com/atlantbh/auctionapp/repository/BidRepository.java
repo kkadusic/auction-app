@@ -32,4 +32,6 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
             "AND p.start_date <= (now() + interval '2 hours') AND p.end_date > (now() + interval '2 hours')",
             nativeQuery = true)
     List<Bid> findAllByProductId(@Param("person_id") Long personId, @Param("product_id") Long productId);
+
+    List<Bid> findAllByProductId(Long productId);
 }
