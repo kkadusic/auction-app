@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Spinner} from 'react-bootstrap';
+import {useHistory} from 'react-router-dom';
 import ProductTable from '../../components/ProductTable';
 import {getUserBidProducts} from "../../utilities/ServerCall";
 import {useAlertContext} from "../../AppContext";
@@ -12,7 +13,13 @@ const Bids = () => {
     const [loading, setLoading] = useState(true);
     const {showMessage} = useAlertContext();
 
+    const history = useHistory();
+    const productName = history.location.state != null && history.location.state.productName ? history.location.state.productName : false;
+
     useEffect(() => {
+        if (productName) {
+            showMessage("success", "You have successfully made a payment for '" + productName + "'");
+        }
         const fetchData = async () => {
             try {
                 setProducts(await getUserBidProducts());

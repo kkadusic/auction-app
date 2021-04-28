@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {Alert, Button, Image, OverlayTrigger, Table, Tooltip} from 'react-bootstrap';
+import {Alert, Button, Image, Table} from 'react-bootstrap';
 import {getDurationBetweenDates, longDateTimeFormat} from "../../utilities/Date";
-import {productUrl} from "../../utilities/AppUrl";
+import {productUrl, myAccountBidsPayUrl} from "../../utilities/AppUrl";
 import {getUserId} from "../../utilities/Common";
 import moment from 'moment';
+import Receipt from "../Modals/Receipt";
 
 import './productTable.css';
 
@@ -13,6 +14,9 @@ const ProductTable = ({products, type}) => {
     const history = useHistory();
     const userId = getUserId();
     const [alertVisible, setAlertVisible] = useState(true);
+
+    const [showModal, setShowModal] = useState(false);
+    const [productId, setProductId] = useState(null);
 
     const getTimeColumnName = () => {
         switch (type) {
@@ -42,11 +46,23 @@ const ProductTable = ({products, type}) => {
     const getMaxBidStyle = (product) => {
         if (product.max === null) {
             return {fontWeight: 'bold'};
-        } else if (product.personId === userId) {
+        } else if (product.personId === userId || (type === "sold" && product.paid)) {
             return {color: '#6CC047', fontWeight: 'bold'};
         } else {
             return {color: '#5B9ED6', fontWeight: 'bold'};
         }
+    }
+
+    const handlePayClick = (product) => {
+        if (product.paid) {
+            setProductId(product.id);
+            setShowModal(true);
+            return;
+        }
+        history.push({
+            pathname: myAccountBidsPayUrl,
+            state: {product}
+        });
     }
 
     return (
@@ -66,6 +82,7 @@ const ProductTable = ({products, type}) => {
                 </div> : null
             }
             <Table variant="gray-transparent" responsive style={{marginTop: '10px'}}>
+                <Receipt showModal={showModal} setShowModal={setShowModal} productId={productId}/>
                 <thead>
                 <tr className="product-table-header">
                     <th style={{width: 80}}>Item</th>
@@ -112,10 +129,11 @@ const ProductTable = ({products, type}) => {
                                 <Button
                                     id="pay-btn"
                                     size="lg-2"
-                                    variant="fill-purple-shadow"
+                                    variant={product.paid ? "transparent-black-shadow-disabled" : "fill-purple-shadow"}
                                     style={{width: 105, backgroundColor: '#8367D8', color: 'white'}}
+                                    onClick={() => handlePayClick(product)}
                                 >
-                                    PAY
+                                    {product.paid ? "RECEIPT" : "PAY"}
                                 </Button> :
                                 <Button
                                     size="lg-2"

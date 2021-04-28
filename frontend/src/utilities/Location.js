@@ -26,8 +26,10 @@ export const codeForCountry = (country) => {
 }
 
 export const validPhoneNumber = (phone, country, isCountryCode) => {
+    if (phone === undefined)
+        return false;
     const parsedPhoneNumber = parsePhoneNumberFromString(phone, isCountryCode ? country : codeForCountry(country));
-    if ((phone || parsedPhoneNumber) === undefined)
+    if (parsedPhoneNumber === undefined)
         return false;
     return parsedPhoneNumber.isValid();
 }

@@ -147,3 +147,12 @@ export const getUserProducts = async () => {
 export const deactivate = async (password) => {
     return (await axios.post(hostUrl + '/auth/deactivate', {password}, config())).data;
 };
+
+export const getReceipt = async (productId) => {
+    const headers = {...config(), ...getParams({productId})};
+    return (await axios.get(hostUrl + '/payments/receipt', headers)).data;
+};
+
+export const pay = async (data) => {
+    return (await axios.post(hostUrl + '/products/pay', {...data}, config())).data;
+};

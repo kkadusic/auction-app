@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Formik} from 'formik';
 import RequiredForm, {requiredFormInitialValues, requiredFormSchema} from "../Forms/RequiredForm";
-import {getUser, setUser} from "../../utilities/Common";
+import {getUser, setSession} from "../../utilities/Common";
 import {Button, Form, Image, Spinner} from 'react-bootstrap';
 import {IoIosArrowForward} from 'react-icons/io';
 import {toBase64} from "../../utilities/Location";
@@ -66,8 +66,8 @@ const Profile = () => {
             if (imageFile !== null) {
                 userData.imageUrl = await uploadImage(imageFile);
             }
-            const newUser = await updateUser(userData);
-            setUser(newUser);
+            const data = await updateUser(userData);
+            setSession(data.person, data.token);
             showMessage("success", "You have successfully updated your profile info!");
         } catch (e) {
         }

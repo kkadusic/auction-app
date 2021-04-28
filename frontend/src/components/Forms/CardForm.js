@@ -72,6 +72,10 @@ const CardForm = ({
     useEffect(() => {
         if (Object.keys(card).length === 0)
             return;
+        if (!creditCard) {
+            setFieldValue("card", {});
+            return;
+        }
         setFieldValue("card.name", card.name);
         setFieldValue("card.cardNumber", card.cardNumber);
         setFieldValue("card.expirationYear", card.expirationYear);
@@ -80,7 +84,7 @@ const CardForm = ({
 
         setExpirationYear(card.expirationYear);
         setExpirationMonth(card.expirationMonth);
-    }, [card, setFieldValue])
+    }, [creditCard, card, setFieldValue]);
 
     return (
         <>
@@ -93,7 +97,7 @@ const CardForm = ({
                 checked={payPal}
                 onChange={e => {
                     setPayPal(e.target.checked);
-                    setPayPalType(e.target.checked);
+                    setPayPalType(false);
                     if (e.target.checked)
                         setCreditCard(false);
                 }}
