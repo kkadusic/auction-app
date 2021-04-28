@@ -191,8 +191,7 @@ public class PersonService {
                 oldCard.setPerson(null);
                 newCard.setPerson(person);
                 newCard.setStripeCardId(stripeCardId);
-                // TODO: Old card?
-                List<Card> cards = Collections.singletonList(newCard);
+                List<Card> cards = Arrays.asList(oldCard, newCard);
                 cardRepository.saveAll(cards);
                 return;
             }

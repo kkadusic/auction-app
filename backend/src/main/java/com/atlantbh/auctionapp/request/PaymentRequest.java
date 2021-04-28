@@ -28,26 +28,22 @@ public class PaymentRequest {
 
     @NotBlank(message = "Phone can't be blank")
     @Size(max = 32, message = "Phone can't be longer than 32 characters")
-    private String phone;
+    private String phoneNumber;
 
     @Valid
     private CardRequest card;
 
-    @Valid
-    private PayPalRequest payPal;
-
     public PaymentRequest() {
     }
 
-    public PaymentRequest(Long productId, String street, String city, String country, String zip, String phone, CardRequest card, PayPalRequest payPal) {
+    public PaymentRequest(Long productId, String street, String city, String country, String zip, String phoneNumber, CardRequest card) {
         this.productId = productId;
         this.street = street;
         this.city = city;
         this.country = country;
         this.zip = zip;
-        this.phone = phone;
+        this.phoneNumber = phoneNumber;
         this.card = card;
-        this.payPal = payPal;
     }
 
     public Long getProductId() {
@@ -90,12 +86,12 @@ public class PaymentRequest {
         this.zip = zip;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public CardRequest getCard() {
@@ -104,13 +100,5 @@ public class PaymentRequest {
 
     public void setCard(CardRequest card) {
         this.card = card;
-    }
-
-    public PayPalRequest getPayPal() {
-        return payPal;
-    }
-
-    public void setPayPal(PayPalRequest payPal) {
-        this.payPal = payPal;
     }
 }

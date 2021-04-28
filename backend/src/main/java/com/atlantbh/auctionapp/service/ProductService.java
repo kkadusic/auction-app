@@ -389,7 +389,7 @@ public class ProductService {
                 payment.setCountry(payRequest.getCountry());
                 payment.setCity(payRequest.getCity());
                 payment.setZip(payRequest.getZip());
-                payment.setPhone(payRequest.getPhone());
+                payment.setPhone(payRequest.getPhoneNumber());
             });
             paymentRepository.save(payment);
         } catch (StripeException e) {

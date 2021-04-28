@@ -58,7 +58,7 @@ public class Card {
         this.person = person;
     }
 
-    public Card(@NotBlank String name, @Size(min = 13, max = 19) String cardNumber,
+    public Card(@NotBlank String name, @NotBlank @Size(min = 13, max = 19) String cardNumber,
                 @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(2) Integer expirationMonth,
                 @Min(100) @Max(999) Integer cvc) {
         this.name = name;

@@ -64,7 +64,7 @@ const Payment = () => {
         zip: yup.string()
             .required("*Zip is required")
             .max(32, "*Zip can't be longer than 32 characters"),
-        phone: yup.string()
+        phoneNumber: yup.string()
             .required("*Phone is required")
             .max(32, "*Phone can't be longer than 32 characters")
             .test("digits-only", "*Phone number can only contain digits", value => /^\d*$/.test(value))
@@ -77,10 +77,6 @@ const Payment = () => {
     const handleSubmit = async (data) => {
         setLoading(true);
         data.productId = product.id;
-        if (data.payPal.orderId !== "")
-            delete data.card;
-        else
-            delete data.payPal;
         try {
             await pay(data);
         } catch (e) {
@@ -107,7 +103,7 @@ const Payment = () => {
                         country: user.country || "",
                         city: user.city || "",
                         zip: user.zip || "",
-                        phone: user.phone || "",
+                        phoneNumber: user.phoneNumber || "",
                         card: cardFormInitialValues(user.card || {}),
                         payPal: payPalInitialValues({})
                     }}
@@ -208,14 +204,14 @@ const Payment = () => {
                                         className="form-control-gray-no-shadow"
                                         size="xl-18"
                                         name="phone"
-                                        defaultValue={user.phone || ""}
+                                        defaultValue={user.phoneNumber || ""}
                                         placeholder="e.g. 62123456"
                                         onChange={handleChange}
                                         maxLength={32}
-                                        isInvalid={touched.phone && errors.phone}
+                                        isInvalid={touched.phoneNumber && errors.phoneNumber}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.phone}
+                                        {errors.phoneNumber}
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
