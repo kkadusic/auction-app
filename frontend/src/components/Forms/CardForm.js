@@ -29,11 +29,6 @@ export const cardFormSchema = (notRequired, initialCardNumber) => {
     });
 };
 
-export const payPalFormSchema = yup.object().shape({
-    orderId: yup.string()
-        .required("*Finnish the payment checkout with PayPal")
-});
-
 export const cardFormInitialValues = (card) => {
     return {
         name: card.name || "",
@@ -88,22 +83,6 @@ const CardForm = ({
 
     return (
         <>
-            <Form.Check
-                custom
-                type="checkbox"
-                id="custom-paypal-checkbox"
-                label="Pay Pal"
-                name="payPal"
-                checked={payPal}
-                onChange={e => {
-                    setPayPal(e.target.checked);
-                    setPayPalType(false);
-                    if (e.target.checked)
-                        setCreditCard(false);
-                }}
-                disabled={payPalDisabled}
-                style={{marginBottom: 10}}
-            />
             <Form.Check
                 custom
                 type="checkbox"

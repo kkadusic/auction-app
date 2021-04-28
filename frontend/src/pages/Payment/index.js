@@ -6,8 +6,6 @@ import {myAccountBidsUrl, myAccountUrl} from "../../utilities/AppUrl";
 import CardForm, {
     cardFormInitialValues,
     cardFormSchema,
-    payPalFormSchema,
-    payPalInitialValues
 } from "../../components/Forms/CardForm";
 import {callCodeForCountry, citiesByCountry, countries, validPhoneNumber} from "../../utilities/Location";
 import {getUser} from "../../utilities/Common";
@@ -71,7 +69,6 @@ const Payment = () => {
             .test("country-selected", "*Select a country", () => country !== null)
             .test("valid-phone", "*Phone must be valid", value => validPhoneNumber(value, country, false)),
         card: !payPal ? cardFormSchema(false, card.cardNumber) : null,
-        payPal: payPal ? payPalFormSchema : null
     });
 
     const handleSubmit = async (data) => {
@@ -105,7 +102,6 @@ const Payment = () => {
                         zip: user.zip || "",
                         phoneNumber: user.phoneNumber || "",
                         card: cardFormInitialValues(user.card || {}),
-                        payPal: payPalInitialValues({})
                     }}
                     onSubmit={handleSubmit}
                 >
