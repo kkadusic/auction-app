@@ -333,23 +333,42 @@ public class ProductService {
                     cardRequest.getExpirationYear() == Calendar.getInstance().get(Calendar.YEAR) &&
                             cardRequest.getExpirationMonth() <= Calendar.getInstance().get(Calendar.MONTH) + 1)
                 throw new BadRequestException("Entered card has expired");
-
-            if (!cardRequest.getCardNumber().matches("^(\\d*)$"))
-                throw new BadRequestException("Card number can only contain digits");
-            card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvc(
+            if (!cardRequest.getCardNumber().matches("^(\\d*)$")) {
+                Card existingCard = cardRepository.findByPersonIdAndSavedIsTrue(person.getId())
+                        .orElseThrow(() -> new BadRequestException("Card number can only contain digits"));
+                if (!existingCard.getMaskedCardNumber().equals(cardRequest.getCardNumber()))
+                    throw new BadRequestException("Card number can only contain digits");
+                if (!existingCard.getName().equals(cardRequest.getName()) ||
+                        !existingCard.getExpirationYear().equals(cardRequest.getExpirationYear()) ||
+                        !existingCard.getExpirationMonth().equals(cardRequest.getExpirationMonth()) ||
+                        !existingCard.getCvc().equals(cardRequest.getCvc()))
+                    throw new BadRequestException("Wrong card info");
+                return existingCard;
+            }
+            card = cardRepository.findByNameAndCardNumberAndExpirationYearAndExpirationMonthAndCvcAndPerson(
                     cardRequest.getName(),
                     cardRequest.getCardNumber(),
                     cardRequest.getExpirationYear(),
                     cardRequest.getExpirationMonth(),
-                    cardRequest.getCvc()
+                    cardRequest.getCvc(),
+                    person
             ).orElseGet(() -> {
                 Card newCard = new Card(
                         cardRequest.getName(),
                         cardRequest.getCardNumber(),
                         cardRequest.getExpirationYear(),
                         cardRequest.getExpirationMonth(),
-                        cardRequest.getCvc()
+                        cardRequest.getCvc(),
+                        person,
+                        false
                 );
+                String stripeCardId;
+                try {
+                    stripeCardId = stripeService.saveCard(newCard, person, false);
+                } catch (StripeException e) {
+                    throw new BadRequestException(e.getStripeError().getMessage());
+                }
+                newCard.setStripeCardId(stripeCardId);
                 cardRepository.save(newCard);
                 return newCard;
             });
@@ -422,6 +441,5 @@ public class ProductService {
         String description = person.getFirstName() + " " + person.getLastName() + " (" + person.getId() + ") "
                 + "paid for " + product.getName() + " (" + product.getId() + ")";
         payWithCard(bid.getAmount(), cardRequest, person, product, description, Optional.of(paymentRequest));
-
     }
 }

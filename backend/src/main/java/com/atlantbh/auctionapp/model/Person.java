@@ -49,6 +49,7 @@ public class Person {
     @Size(max = 15)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private Boolean verified = false;
 
     @NotBlank
