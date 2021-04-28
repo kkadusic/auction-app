@@ -48,6 +48,9 @@ public class Card {
     @JoinColumn(name = "person_id")
     private Person person;
 
+    @Column(nullable = false)
+    private String stripeCardId;
+
     public Card() {
     }
 
@@ -119,6 +122,14 @@ public class Card {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public String getStripeCardId() {
+        return stripeCardId;
+    }
+
+    public void setStripeCardId(String stripeCardId) {
+        this.stripeCardId = stripeCardId;
     }
 
     public String getMaskedCardNumber() {

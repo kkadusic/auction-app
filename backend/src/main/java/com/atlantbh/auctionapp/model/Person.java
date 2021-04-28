@@ -4,7 +4,6 @@ import com.atlantbh.auctionapp.enumeration.Gender;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class Person {
@@ -79,6 +77,8 @@ public class Person {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    private String stripeCustomerId;
 
     public Person() {
     }
@@ -235,5 +235,13 @@ public class Person {
 
     public void setVerified(Boolean verified) {
         this.verified = verified;
+    }
+
+    public String getStripeCustomerId() {
+        return stripeCustomerId;
+    }
+
+    public void setStripeCustomerId(String stripeCustomerId) {
+        this.stripeCustomerId = stripeCustomerId;
     }
 }

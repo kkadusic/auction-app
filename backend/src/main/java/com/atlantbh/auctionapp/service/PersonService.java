@@ -22,6 +22,7 @@ import com.atlantbh.auctionapp.request.TokenRequest;
 import com.atlantbh.auctionapp.request.UpdateProfileRequest;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
 import com.atlantbh.auctionapp.utilities.UpdateMapper;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,6 +47,7 @@ public class PersonService {
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
     private final UpdateMapper updateMapper;
+    private final StripeService stripeService;
 
     private String hostUrl;
 
@@ -53,13 +57,14 @@ public class PersonService {
     }
 
     @Autowired
-    public PersonService(PersonRepository personRepository, CardRepository cardRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailService emailService, UpdateMapper updateMapper) {
+    public PersonService(PersonRepository personRepository, CardRepository cardRepository, PasswordEncoder passwordEncoder, TokenRepository tokenRepository, EmailService emailService, UpdateMapper updateMapper, StripeService stripeService) {
         this.personRepository = personRepository;
         this.cardRepository = cardRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
         this.updateMapper = updateMapper;
+        this.stripeService = stripeService;
     }
 
     public Person register(RegisterRequest registerRequest) {
@@ -149,6 +154,10 @@ public class PersonService {
         if (!updateProfileRequest.getImageUrl().equals("http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif")) {
             person.setImageUrl(updateProfileRequest.getImageUrl());
         }
+        try {
+            stripeService.updateCustomer(person);
+        } catch (StripeException ignore) {
+        }
         Person savedPerson = personRepository.save(person);
         savedPerson.setPassword(null);
         return savedPerson;
@@ -156,14 +165,39 @@ public class PersonService {
 
     private void updateCard(CardRequest updatedCard, Person person) {
         if (updatedCard != null) {
-            Card card = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
-            String maskedCardNumber = card.getMaskedCardNumber();
+            Card oldCard = cardRepository.findByPersonId(person.getId()).orElse(new Card(person));
+            String maskedCardNumber = oldCard.getMaskedCardNumber();
             if (maskedCardNumber != null && maskedCardNumber.equals(updatedCard.getCardNumber()))
-                updatedCard.setCardNumber(card.getCardNumber());
+                updatedCard.setCardNumber(oldCard.getCardNumber());
             else if (!updatedCard.getCardNumber().matches("^(\\d*)$"))
                 throw new BadRequestException("Card number can only contain digits");
-            updateMapper.updateCard(updatedCard, card);
-            cardRepository.save(card);
+            boolean createNewCard = false;
+            if (!updatedCard.getCardNumber().equals(oldCard.getCardNumber()) || !updatedCard.getCvc().equals(oldCard.getCvc()))
+                createNewCard = true;
+            Card newCard = new Card();
+            updateMapper.updateCard(updatedCard, newCard);
+            newCard.setStripeCardId(oldCard.getStripeCardId());
+            String stripeCardId;
+            try {
+                if (createNewCard) {
+                    stripeCardId = stripeService.saveCard(newCard, person, true);
+                } else {
+                    stripeCardId = stripeService.updateCard(newCard, person);
+                }
+            } catch (StripeException e) {
+                throw new BadRequestException(e.getStripeError().getMessage());
+            }
+            if (createNewCard) {
+                oldCard.setPerson(null);
+                newCard.setPerson(person);
+                newCard.setStripeCardId(stripeCardId);
+                // TODO: Old card?
+                List<Card> cards = Collections.singletonList(newCard);
+                cardRepository.saveAll(cards);
+                return;
+            }
+            updateMapper.updateCard(updatedCard, oldCard);
+            cardRepository.save(oldCard);
         } else {
             List<Card> cards = cardRepository.findAllByPersonId(person.getId());
             for (Card card : cards) {

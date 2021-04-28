@@ -5,6 +5,7 @@ import com.atlantbh.auctionapp.enumeration.Size;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.request.FilterCountRequest;
+import com.atlantbh.auctionapp.request.PaymentRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
 import com.atlantbh.auctionapp.request.SearchCountRequest;
 import com.atlantbh.auctionapp.request.SearchRequest;
@@ -117,5 +118,11 @@ public class ProductController {
     @GetMapping("/user")
     public ResponseEntity<List<UserProductProjection>> getUserProducts() {
         return ResponseEntity.ok(productService.getUserProducts());
+    }
+
+    @PostMapping("/pay")
+    public ResponseEntity<String> pay(@RequestBody @Valid PaymentRequest paymentRequest) {
+        productService.pay(paymentRequest);
+        return ResponseEntity.ok("Product paid");
     }
 }

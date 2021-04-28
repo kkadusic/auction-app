@@ -19,3 +19,8 @@ app:
   emailUsername: ${EMAIL_USERNAME}
   emailPassword: ${EMAIL_PASSWORD}
   hostUrl: ${HOST_URL}
+  stripeApiKey: ${STRIPE_API_KEY}
+server:
+  error:
+    include-message: always
+    include-stacktrace: never

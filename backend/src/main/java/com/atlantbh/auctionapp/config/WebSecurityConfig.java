@@ -38,9 +38,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/products/user/bid",
             "/products/add",
             "/products/user",
+            "/products/pay",
             "/auth/update",
             "/auth/deactivate",
-            "/cards/person"
+            "/cards/person",
+            "/payments/receipt"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
