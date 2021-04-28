@@ -10,13 +10,12 @@
 }
 
 .receipt-part {
-    display: flex;
+    display: inline-block;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin: -5px;
-    margin-bottom: 40px;
+    margin: -5px -5px 35px;
 }
 
-.receipt-part>span {
-    margin: 5px;
+.receipt-part > span {
+    margin: 0px;
 }
