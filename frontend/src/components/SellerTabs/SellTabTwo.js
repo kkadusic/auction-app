@@ -8,7 +8,7 @@ import * as yup from 'yup';
 
 import './sellerTabs.css';
 
-const SellTab2 = ({product, setProduct, setActiveTab}) => {
+const SellTabTwo = ({product, setProduct, setActiveTab}) => {
 
     const endDateRef = useRef(null);
 
@@ -182,4 +182,4 @@ const SellTab2 = ({product, setProduct, setActiveTab}) => {
     );
 }
 
-export default SellTab2;
+export default SellTabTwo;

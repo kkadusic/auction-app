@@ -13,7 +13,7 @@ import {v4 as uuid} from 'uuid';
 import './sellerTabs.css';
 
 
-const SellTab1 = ({
+const SellTabOne = ({
                       categories: loadedCategories,
                       subcategories: loadedSubcategories,
                       selectCategory,
@@ -294,4 +294,4 @@ const SellTab1 = ({
     );
 }
 
-export default SellTab1;
+export default SellTabOne;
