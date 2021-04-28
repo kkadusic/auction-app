@@ -8,7 +8,7 @@ import * as yup from 'yup';
 
 import './sellerTabs.css';
 
-const SellTabTwo = ({product, setProduct, setActiveTab}) => {
+const SellTab2 = ({product, setProduct, setActiveTab}) => {
 
     const endDateRef = useRef(null);
 
@@ -90,7 +90,12 @@ const SellTabTwo = ({product, setProduct, setActiveTab}) => {
                                 </InputGroup>
                             </Form.Group>
 
-                            <Form.Group className="form-sell-tab-two">
+                            <Form.Group style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+                                marginBottom: 0
+                            }}>
                                 <Form.Group className="form-half-width">
                                     <Form.Label>Start date</Form.Label>
                                     <div>
@@ -177,4 +182,4 @@ const SellTabTwo = ({product, setProduct, setActiveTab}) => {
     );
 }
 
-export default SellTabTwo;
+export default SellTab2;

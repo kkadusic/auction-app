@@ -33,6 +33,7 @@ const Profile = () => {
             try {
                 setCard(await getCard());
             } catch (e) {
+                showMessage("warning", "Card information fetching problem");
             }
         }
         fetchData();

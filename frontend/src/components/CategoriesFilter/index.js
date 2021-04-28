@@ -27,13 +27,7 @@ const CategoriesFilter = ({query, filter, handleClick}) => {
         setActiveCategory(filter.category || "");
         setActiveSubcategory(filter.subcategory || "");
     }, [filter])
-
-    // const allCategoryClick = () => {
-    //     setActiveCategory("");
-    //     setActiveSubcategory("");
-    //     handleClick({category: null, subcategory: null});
-    // }
-
+    
     const categoryClick = (categoryName) => {
         setActiveSubcategory("");
         if (activeCategory === categoryName) {
@@ -53,13 +47,6 @@ const CategoriesFilter = ({query, filter, handleClick}) => {
     return (
         <ListGroup variant="categories-filter">
             <ListGroup.Item className="categories-filter-title">PRODUCT CATEGORIES</ListGroup.Item>
-            {/*<ListGroup.Item*/}
-            {/*    action*/}
-            {/*    style={activeCategory === "" && activeSubcategory === "" ? activeItemStyle : {color: '#252525'}}*/}
-            {/*    onClick={allCategoryClick}*/}
-            {/*>*/}
-            {/*    All Categories*/}
-            {/*</ListGroup.Item>*/}
             {categories.map(category => (
                 <React.Fragment key={category.name}>
                     <ListGroup.Item

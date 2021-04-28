@@ -45,6 +45,13 @@
     position: absolute;
 }
 
+.form-sell-tab-two {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
 @media (max-width: 991px) {
     .form-half-width {
         width: 100%;
