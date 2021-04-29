@@ -138,6 +138,7 @@ const ItemPage = ({match, location}) => {
             }
             setWished(!wished);
         } catch (e) {
+            showMessage("warning", "Problem with adding or removing product from wishlist");
         }
     }
 

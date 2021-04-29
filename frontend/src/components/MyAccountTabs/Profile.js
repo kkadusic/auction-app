@@ -70,6 +70,7 @@ const Profile = () => {
             setUser(newUser);
             showMessage("success", "You have successfully updated your profile info!");
         } catch (e) {
+            showMessage("warning", "Error submitting data");
         }
         setUploading(false);
     }

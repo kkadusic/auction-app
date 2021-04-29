@@ -3,10 +3,11 @@ import {Button} from 'react-bootstrap';
 import {RiAuctionFill, RiHeartFill} from 'react-icons/ri';
 import {useHistory} from 'react-router-dom';
 import {removeWishlistProduct, wishlistProduct} from "../../utilities/ServerCall";
-
-import './imageCardOverlay.css';
+import {useAlertContext} from "../../AppContext";
 import {getUserId} from "../../utilities/Common";
 import {loginUrl} from "../../utilities/AppUrl";
+
+import './imageCardOverlay.css';
 
 const ImageCardOverlay = ({children, data, url}) => {
 
@@ -16,6 +17,7 @@ const ImageCardOverlay = ({children, data, url}) => {
     const isTouchDevice = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
     const [loadingWish, setLoadingWish] = useState(false);
     const [wished, setWished] = useState(data.wished);
+    const {showMessage} = useAlertContext();
 
     useEffect(() => {
         setWished(data.wished);
@@ -34,6 +36,7 @@ const ImageCardOverlay = ({children, data, url}) => {
                 await wishlistProduct(data.id);
             setWished(!wished);
         } catch (e) {
+            showMessage("warning", "Problem with adding or removing product from wishlist");
         }
         setLoadingWish(false);
     }
