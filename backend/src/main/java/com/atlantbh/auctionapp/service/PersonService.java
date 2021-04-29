@@ -146,7 +146,6 @@ public class PersonService {
         updateMapper.updatePerson(updateProfileRequest, person);
         person.setBirthDate(updateProfileRequest.getBirthDate());
         person.setPhoneNumber(updateProfileRequest.getPhoneNumber());
-        System.out.println(updateProfileRequest.getBirthDate());
         if (!updateProfileRequest.getImageUrl().equals("http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif")) {
             person.setImageUrl(updateProfileRequest.getImageUrl());
         }

@@ -144,11 +144,11 @@ public class ProductService {
                 break;
         }
 
-        Long id = null;
+        Long id;
         try {
             id = JwtTokenUtil.getRequestPersonId();
         } catch (UnauthorizedException ignore) {
-
+            id = -1L;
         }
 
         String tsQuery = formTsQuery(query);
@@ -158,7 +158,7 @@ public class ProductService {
                 tsQuery,
                 category.toLowerCase(),
                 subcategory.toLowerCase(),
-                id == null ? -1 : id,
+                id,
                 minPrice,
                 maxPrice,
                 color == null ? "" : color.toString(),

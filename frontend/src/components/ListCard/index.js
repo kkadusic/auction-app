@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {removeWishlistProduct, wishlistProduct} from "../../utilities/ServerCall";
 import {loginUrl} from "../../utilities/AppUrl";
 import {getUserId} from "../../utilities/Common";
+import {useAlertContext} from "../../AppContext";
 
 import './listCard.css';
 
@@ -15,6 +16,7 @@ const ListCard = ({data, url}) => {
 
     const [loadingWish, setLoadingWish] = useState(false);
     const [wished, setWished] = useState(data.wished);
+    const {showMessage} = useAlertContext();
 
     const wishlist = async () => {
         setLoadingWish(true);
@@ -29,6 +31,7 @@ const ListCard = ({data, url}) => {
                 await wishlistProduct(data.id);
             setWished(!wished);
         } catch (e) {
+            showMessage("warning", "Problem with adding or removing product from wishlist");
         }
         setLoadingWish(false);
     }
