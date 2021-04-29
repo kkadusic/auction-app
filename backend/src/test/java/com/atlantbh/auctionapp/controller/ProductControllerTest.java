@@ -207,4 +207,15 @@ public class ProductControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andReturn();
     }
+
+    @Test
+    public void getUserWishlist() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/products/user/wishlist")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+    }
 }

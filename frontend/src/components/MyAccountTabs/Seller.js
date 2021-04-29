@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'react-bootstrap';
 import {FaPlus} from 'react-icons/fa';
-import ProductTable from "../ProductTable";
+import ProductTable from "../Tables/ProductTable";
 import StartSellingTab from "../StartSellingTab";
 import {myAccountSellerSellUrl} from "../../utilities/AppUrl";
 import {getUserProducts} from "../../utilities/ServerCall";
@@ -56,8 +56,8 @@ const Seller = () => {
                 <Button id="btn-add-new-item"
                         onClick={() => history.push(myAccountSellerSellUrl)}
                         variant="fill-purple" size="xl">
-                    <FaPlus style={{fontSize: 22, marginRight: 8}}/>
-                    ADD NEW ITEM
+                    <FaPlus style={{fontSize: 18, marginRight: 8}}/>
+                    ADD ITEM
                 </Button>
             </div>
             {tabs[activeTab]}

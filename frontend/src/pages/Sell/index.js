@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useBreadcrumbContext} from "../../AppContext";
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import {myAccountSellerUrl, myAccountUrl, myAccountSellerSellUrl} from "../../utilities/AppUrl";
 import {Step, Stepper} from 'react-form-stepper';
 import {addProduct, getCategories, getSubcategoriesForCategory, getProductFilters} from "../../utilities/ServerCall";
@@ -17,6 +17,7 @@ const Sell = () => {
     const [categories, setCategories] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
     const [filters, setFilters] = useState({colors: [], sizes: []});
+    const {showMessage} = useAlertContext();
 
     const selectCategory = async (e, handleChange) => {
         handleChange(e);
@@ -66,6 +67,7 @@ const Sell = () => {
                 setCategories(await getCategories());
                 setFilters(await getProductFilters());
             } catch (e) {
+                showMessage("warning", "Error fetching data");
             }
         }
 

@@ -22,6 +22,4 @@ public class CardService {
         Card card = cardRepository.findByPersonId(personId).orElse(new Card());
         return new CardResponse(card);
     }
-
-
 }

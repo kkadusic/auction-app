@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {categoryUrl, homeUrl, subcategoryUrl} from '../../utilities/AppUrl';
 import {getSubcategories} from '../../utilities/ServerCall';
-import {useBreadcrumbContext} from "../../AppContext";
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 
 import './allCategories.css';
 
@@ -11,6 +11,7 @@ const AllCategories = () => {
     const history = useHistory();
     const [subcategories, setSubcategories] = useState([]);
     const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext()
 
     useEffect(() => {
         setBreadcrumb("ALL CATEGORIES", [{text: "HOME", href: homeUrl}, {text: "ALL CATEGORIES"}]);
@@ -19,6 +20,7 @@ const AllCategories = () => {
             try {
                 setSubcategories(await getSubcategories());
             } catch (e) {
+                showMessage("warning", "Error fetching data");
             }
         }
         fetchData();

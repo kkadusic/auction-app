@@ -18,5 +18,7 @@ public interface SimpleProductProjection {
 
     String getSubcategoryName();
 
+    Boolean getWished();
+
     Float getSimilarity();
 }

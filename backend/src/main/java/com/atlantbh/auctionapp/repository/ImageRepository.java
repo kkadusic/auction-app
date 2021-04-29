@@ -9,4 +9,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     List<Image> findAllByProductIdOrderByFeaturedDesc(Long productId);
 
+    List<Image> findAllByProductId(Long productId);
 }

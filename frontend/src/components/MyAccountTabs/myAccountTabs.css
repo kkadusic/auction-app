@@ -107,15 +107,16 @@
 }
 
 #btn-seller-tab{
-    width: 120px;
+    width: 125px;
     height: 48px;
     border: 1px solid #D9D9D9;
     box-shadow: none;
 }
 
 #btn-add-new-item{
-    width: 200px;
+    width: 160px;
     height: 48px;
+    font-size: 18px;
     position: absolute;
     right: 0;
     bottom: 0;

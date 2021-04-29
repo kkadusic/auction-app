@@ -6,23 +6,27 @@ import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.exception.NotFoundException;
 import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.exception.UnprocessableException;
+import com.atlantbh.auctionapp.model.Bid;
 import com.atlantbh.auctionapp.model.Card;
 import com.atlantbh.auctionapp.model.Image;
 import com.atlantbh.auctionapp.model.PayPal;
 import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.model.Product;
 import com.atlantbh.auctionapp.model.Subcategory;
+import com.atlantbh.auctionapp.model.Wishlist;
 import com.atlantbh.auctionapp.projection.ColorCountProjection;
 import com.atlantbh.auctionapp.projection.ProductCountProjection;
 import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
+import com.atlantbh.auctionapp.repository.BidRepository;
 import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.ImageRepository;
 import com.atlantbh.auctionapp.repository.PayPalRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.repository.SubcategoryRepository;
+import com.atlantbh.auctionapp.repository.WishlistRepository;
 import com.atlantbh.auctionapp.request.CardRequest;
 import com.atlantbh.auctionapp.request.PayPalRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
@@ -63,18 +67,23 @@ public class ProductService {
     private final PersonRepository personRepository;
     private final CardRepository cardRepository;
     private final PayPalRepository payPalRepository;
+    private final BidRepository bidRepository;
+    private final WishlistRepository wishlistRepository;
     private final Hunspell speller;
 
     @Autowired
     public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
                           SubcategoryRepository subcategoryRepository, PersonRepository personRepository,
-                          CardRepository cardRepository, PayPalRepository payPalRepository, Hunspell speller) {
+                          CardRepository cardRepository, PayPalRepository payPalRepository, BidRepository bidRepository,
+                          WishlistRepository wishlistRepository, Hunspell speller) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.personRepository = personRepository;
         this.cardRepository = cardRepository;
         this.payPalRepository = payPalRepository;
+        this.bidRepository = bidRepository;
+        this.wishlistRepository = wishlistRepository;
         this.speller = speller;
     }
 
@@ -135,6 +144,13 @@ public class ProductService {
                 break;
         }
 
+        Long id;
+        try {
+            id = JwtTokenUtil.getRequestPersonId();
+        } catch (UnauthorizedException ignore) {
+            id = -1L;
+        }
+
         String tsQuery = formTsQuery(query);
 
         Slice<SimpleProductProjection> searchResult = productRepository.search(
@@ -142,6 +158,7 @@ public class ProductService {
                 tsQuery,
                 category.toLowerCase(),
                 subcategory.toLowerCase(),
+                id,
                 minPrice,
                 maxPrice,
                 color == null ? "" : color.toString(),
@@ -354,5 +371,25 @@ public class ProductService {
     public List<UserProductProjection> getUserProducts() {
         Long personId = JwtTokenUtil.getRequestPersonId();
         return productRepository.getUserProducts(personId);
+    }
+
+    public List<UserProductProjection> getUserWishlistProducts() {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        return productRepository.getUserWishlistProducts(personId);
+    }
+
+    public void remove(Long productId) {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new UnprocessableException("Wrong product id"));
+        if (!product.getPerson().getId().equals(personId))
+            throw new UnauthorizedException("You can't remove this product");
+        List<Bid> bids = bidRepository.findAllByProductId(product.getId());
+        List<Wishlist> wishlists = wishlistRepository.findAllByProductId(product.getId());
+        List<Image> images = imageRepository.findAllByProductId(product.getId());
+        bidRepository.deleteAll(bids);
+        wishlistRepository.deleteAll(wishlists);
+        imageRepository.deleteAll(images);
+        productRepository.delete(product);
     }
 }
