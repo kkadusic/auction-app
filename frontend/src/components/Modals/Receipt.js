@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import {getReceipt} from "../../utilities/ServerCall";
 import {longDateTimeFormat} from "../../utilities/Date";
+import {useAlertContext} from "../../AppContext";
 import moment from 'moment';
 
 import './modal.css';
@@ -9,6 +10,7 @@ import './modal.css';
 const Receipt = ({showModal, setShowModal, productId}) => {
 
     const [receipt, setReceipt] = useState({});
+    const {showMessage} = useAlertContext();
 
     useEffect(() => {
         if (productId === null)
@@ -17,6 +19,7 @@ const Receipt = ({showModal, setShowModal, productId}) => {
             try {
                 setReceipt(await getReceipt(productId));
             } catch (e) {
+                showMessage("warning", "Unable to load receipt data");
             }
         }
         fetchData();

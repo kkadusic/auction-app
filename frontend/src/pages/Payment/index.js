@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button, Form, InputGroup} from 'react-bootstrap';
-import {useBreadcrumbContext} from "../../AppContext";
+import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import {myAccountBidsUrl, myAccountUrl} from "../../utilities/AppUrl";
 import CardForm, {
     cardFormInitialValues,
@@ -17,7 +17,6 @@ import * as yup from 'yup';
 import './payment.css';
 
 const Payment = () => {
-    const {setBreadcrumb} = useBreadcrumbContext();
 
     const history = useHistory();
     const product = history.location.state != null && history.location.state.product ? history.location.state.product : {};
@@ -29,6 +28,9 @@ const Payment = () => {
     const [payPal, setPayPal] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const {setBreadcrumb} = useBreadcrumbContext();
+    const {showMessage} = useAlertContext();
+
     useEffect(() => {
         setBreadcrumb("MY ACCOUNT", [{text: "MY ACCOUNT", href: myAccountUrl}, {
             text: "BIDS",
@@ -39,6 +41,7 @@ const Payment = () => {
             try {
                 setCard(await getCard());
             } catch (e) {
+                showMessage("warning", "Unable to load card data");
             }
         }
         fetchData();
