@@ -22,7 +22,6 @@ import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.repository.BidRepository;
 import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.ImageRepository;
-import com.atlantbh.auctionapp.repository.PayPalRepository;
 import com.atlantbh.auctionapp.repository.PaymentRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
