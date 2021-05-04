@@ -22,6 +22,7 @@ import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.repository.BidRepository;
 import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.ImageRepository;
+import com.atlantbh.auctionapp.repository.PayPalRepository;
 import com.atlantbh.auctionapp.repository.PaymentRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
@@ -71,8 +72,6 @@ public class ProductService {
     private final BidRepository bidRepository;
     private final PaymentRepository paymentRepository;
     private final StripeService stripeService;
-    private final PayPalRepository payPalRepository;
-    private final BidRepository bidRepository;
     private final WishlistRepository wishlistRepository;
     private final Hunspell speller;
 
@@ -80,8 +79,7 @@ public class ProductService {
     public ProductService(ProductRepository productRepository, ImageRepository imageRepository,
                           SubcategoryRepository subcategoryRepository, PersonRepository personRepository,
                           CardRepository cardRepository, BidRepository bidRepository,
-                          PaymentRepository paymentRepository, StripeService stripeService, Hunspell speller) {
-                          CardRepository cardRepository, PayPalRepository payPalRepository, BidRepository bidRepository,
+                          PaymentRepository paymentRepository, StripeService stripeService,
                           WishlistRepository wishlistRepository, Hunspell speller) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
@@ -91,8 +89,6 @@ public class ProductService {
         this.bidRepository = bidRepository;
         this.paymentRepository = paymentRepository;
         this.stripeService = stripeService;
-        this.payPalRepository = payPalRepository;
-        this.bidRepository = bidRepository;
         this.wishlistRepository = wishlistRepository;
         this.speller = speller;
     }
@@ -300,11 +296,6 @@ public class ProductService {
             throw new BadRequestException("Featured products must have payment details");
         if (productRequest.getShipping() && cardRequest == null)
             throw new BadRequestException("Products with shipping must have payment details");
-        if (cardRequest != null && payPalRequest != null)
-            throw new BadRequestException("Conflicting payment details");
-
-        Card card = getAndSaveCard(cardRequest);
-        PayPal payPal = getAndSavePayPal(payPalRequest);
 
         Product product = new Product(
                 productRequest.getName(),
