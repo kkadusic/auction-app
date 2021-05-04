@@ -45,8 +45,14 @@ public class Card {
     private Integer cvc;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
+
+    @Column(nullable = false)
+    private String stripeCardId;
+
+    @Column(nullable = false)
+    private Boolean saved;
 
     public Card() {
     }
@@ -55,14 +61,16 @@ public class Card {
         this.person = person;
     }
 
-    public Card(@NotBlank String name, @Size(min = 13, max = 19) String cardNumber,
+    public Card(@NotBlank String name, @NotBlank @Size(min = 13, max = 19) String cardNumber,
                 @Min(2000) @Max(9999) Integer expirationYear, @Min(1) @Max(2) Integer expirationMonth,
-                @Min(100) @Max(999) Integer cvc) {
+                @Min(100) @Max(999) Integer cvc, Person person, Boolean saved) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.expirationYear = expirationYear;
         this.expirationMonth = expirationMonth;
         this.cvc = cvc;
+        this.person = person;
+        this.saved = saved;
     }
 
     public Long getId() {
@@ -119,6 +127,22 @@ public class Card {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public String getStripeCardId() {
+        return stripeCardId;
+    }
+
+    public void setStripeCardId(String stripeCardId) {
+        this.stripeCardId = stripeCardId;
+    }
+
+    public Boolean getSaved() {
+        return saved;
+    }
+
+    public void setSaved(Boolean saved) {
+        this.saved = saved;
     }
 
     public String getMaskedCardNumber() {

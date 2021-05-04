@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
@@ -22,9 +23,9 @@ public class Bid {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @PositiveOrZero
     @Column(nullable = false)
-    @DecimalMin("0.01")
+    @DecimalMin("0.50")
+    @DecimalMax("9999999.00")
     private BigDecimal amount;
 
     @CreationTimestamp
@@ -42,14 +43,14 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(@PositiveOrZero @DecimalMin("0.01") BigDecimal amount, LocalDateTime date, Person person, Product product) {
+    public Bid(@PositiveOrZero @DecimalMin("0.05") @DecimalMax("9999999.00") BigDecimal amount, LocalDateTime date, Person person, Product product) {
         this.amount = amount;
         this.date = date;
         this.person = person;
         this.product = product;
     }
 
-    public Bid(@PositiveOrZero @Min(value = 0) BigDecimal amount, Person person, Product product) {
+    public Bid(@PositiveOrZero @DecimalMin("0.05") @DecimalMax("9999999.00") BigDecimal amount, Person person, Product product) {
         this.amount = amount;
         this.person = person;
         this.product = product;

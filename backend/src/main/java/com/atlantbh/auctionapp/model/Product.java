@@ -17,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
@@ -45,8 +47,9 @@ public class Product {
     @javax.validation.constraints.Size(max = 700)
     private String description;
 
-    @PositiveOrZero
-    @Column(nullable = false)
+    @DecimalMin("0.50")
+    @DecimalMax("9999999.00")
+    @Column(precision = 8, scale = 2, nullable = false)
     private BigDecimal startPrice;
 
     @Column(nullable = false)
@@ -96,14 +99,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "subcategory_id", nullable = false)
     private Subcategory subcategory;
-
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
-
-    @ManyToOne
-    @JoinColumn(name = "paypal_id")
-    private PayPal payPal;
 
     public Product() {
     }
@@ -274,21 +269,5 @@ public class Product {
 
     public void setSubcategory(Subcategory subcategory) {
         this.subcategory = subcategory;
-    }
-
-    public Card getCard() {
-        return card;
-    }
-
-    public void setCard(Card card) {
-        this.card = card;
-    }
-
-    public PayPal getPayPal() {
-        return payPal;
-    }
-
-    public void setPayPal(PayPal payPal) {
-        this.payPal = payPal;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
 
@@ -34,4 +35,11 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
     List<Bid> findAllByProductId(@Param("person_id") Long personId, @Param("product_id") Long productId);
 
     List<Bid> findAllByProductId(Long productId);
+
+    @Query(value = "SELECT * FROM " +
+            "bid b WHERE product_id = :product_id " +
+            "ORDER BY b.amount DESC, b.date " +
+            "LIMIT 1",
+            nativeQuery = true)
+    Optional<Bid> getHighestBidForProduct(@Param("product_id") Long productId);
 }

@@ -17,6 +17,8 @@ public interface UserProductProjection {
 
     String getSubcategoryName();
 
+    Boolean getShipping();
+
     LocalDateTime getStartDate();
 
     LocalDateTime getEndDate();
@@ -26,4 +28,6 @@ public interface UserProductProjection {
     BigDecimal getMaxBid();
 
     Long getPersonId();
+
+    Boolean getPaid();
 }

@@ -74,8 +74,9 @@ public class AuthController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Person> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
-        return ResponseEntity.ok(personService.update(updateProfileRequest));
+    public ResponseEntity<LoginResponse> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
+        Person person = personService.update(updateProfileRequest);
+        return ResponseEntity.ok(new LoginResponse(person, jwtTokenUtil.generateToken(person)));
     }
 
     @PostMapping("/deactivate")

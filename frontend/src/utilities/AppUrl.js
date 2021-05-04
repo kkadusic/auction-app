@@ -13,6 +13,7 @@ export const myAccountSellerSellUrl = "/my-account/seller/sell";
 export const myAccountBidsUrl = "/my-account/bids";
 export const myAccountWishlistUrl = "/my-account/wishlist";
 export const myAccountSettingsUrl = "/my-account/settings";
+export const myAccountBidsPayUrl = "/my-account/bids/payment";
 
 export const productUrl = (product) => {
     return `/shop/${removeSpaces(product.categoryName)}/${removeSpaces(product.subcategoryName)}/${product.id}`;

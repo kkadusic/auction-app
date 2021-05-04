@@ -136,16 +136,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<SizeCountProjection> sizeCount(String query, String tsquery, String category, String subcategory,
                                         @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice, String color);
 
-    @Query(value = "SELECT p.id, p.name, i.url, max(b.amount) price, s.name subcategoryName, c.name categoryName, " +
+    @Query(value = "SELECT p.id, p.name, i.url, max(b.amount) price, s.name subcategoryName, c.name categoryName, p.shipping, " +
             "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
             "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.amount DESC, b2.date LIMIT 1) personId, " +
-            "(SELECT max(b2.amount) FROM bid b2 WHERE b2.product_id = p.id) maxBid " +
+            "(SELECT max(b2.amount) FROM bid b2 WHERE b2.product_id = p.id) maxBid, " +
+            "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id = :user_id)) paid " +
             "FROM product p LEFT OUTER JOIN image i on p.id = i.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
             "WHERE b.person_id = :user_id AND (i.featured = true OR i.featured IS NULL) " +
-            "GROUP BY (p.id, p.name, i.url, s.name, c.name, p.start_date, p.end_date) " +
-            "ORDER BY p.end_date",
-            nativeQuery = true)
+            "GROUP BY (p.id, p.name, i.url, s.name, c.name, p.shipping, p.start_date, p.end_date) " +
+            "ORDER BY p.end_date", nativeQuery = true)
     List<UserProductProjection> getUserBidProducts(@Param("user_id") Long userId);
 
     @Query(value = "SELECT EXISTS(SELECT 1 " +
@@ -169,13 +169,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             nativeQuery = true)
     List<BigDecimal> prices(String query, String tsquery, String category, String subcategory, String color, String size);
 
-    @Query(value = "SELECT p.id, p.name, i.url, p.start_price price, s.name subcategoryName, c.name categoryName, " +
-            "p.start_date startDate, p.end_date endDate, count(b.id) bidCount, max(b.amount) maxBid " +
-            "FROM product p " +
-            "LEFT OUTER JOIN image i on p.id = i.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
+    @Query(value = "SELECT p.id, p.name, i.url, p.start_price price, s.name subcategoryName, c.name categoryName, p.shipping, " +
+            "p.start_date startDate, p.end_date endDate, count(b.id) bidCount, max(b.amount) maxBid, " +
+            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.amount DESC, b2.date LIMIT 1) personId, " +
+            "(SELECT EXISTS(SELECT 1 FROM payment pa WHERE pa.product_id = p.id AND pa.person_id != :user_id)) paid " +
+            "FROM product p LEFT OUTER JOIN image i on p.id = i.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
             "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
             "WHERE p.person_id = :user_id AND (i.featured = true OR i.featured IS NULL) " +
-            "GROUP BY (p.id, p.name, p.start_price, s.name, c.name, i.url, p.start_price, p.start_date, p.end_date) " +
+            "GROUP BY (p.id, p.name, i.url, p.start_price, s.name, c.name, p.shipping, p.start_date, p.end_date) " +
             "ORDER BY p.creation_date DESC",
             nativeQuery = true)
     List<UserProductProjection> getUserProducts(@Param("user_id") Long userId);

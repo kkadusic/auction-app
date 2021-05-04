@@ -440,3 +440,7 @@ select.form-control {
 .btn-danger:hover {
     color: #D8D8D8;
 }
+
+.modal-content {
+    border-radius: 0;
+}

@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 public class BidRequest {
 
     @NotNull(message = "Amount must be supplied")
-    @DecimalMin(value = "0.01", message = "Amount can't be less than $0.01")
-    @DecimalMax(value = "9999999", message = "Amount can't be more than $9999999")
+    @DecimalMin(value = "0.50", message = "Amount can't be less than $0.50")
+    @DecimalMax(value = "9999999.00", message = "Amount can't be more than $9999999.00")
     private BigDecimal amount;
 
     @NotNull(message = "Product must be supplied")
@@ -20,7 +20,9 @@ public class BidRequest {
     }
 
     public BidRequest(@NotNull(message = "Amount must be supplied")
-                      @Min(value = 0, message = "Amount can't be less than 0") BigDecimal amount,
+                      @DecimalMin(value = "0.50", message = "Amount can't be less than $0.01")
+                      @DecimalMax(value = "9999999.00", message = "Amount can't be more than $9999999.00")
+                              BigDecimal amount,
                       @NotNull(message = "Product must be supplied") Long productId) {
         this.amount = amount;
         this.productId = productId;
