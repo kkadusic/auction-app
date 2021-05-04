@@ -10,6 +10,7 @@ import com.atlantbh.auctionapp.projection.SimpleBidProjection;
 import com.atlantbh.auctionapp.repository.BidRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 import com.atlantbh.auctionapp.repository.ProductRepository;
+import com.atlantbh.auctionapp.request.BidDeleteRequest;
 import com.atlantbh.auctionapp.request.BidRequest;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,15 @@ public class BidService {
             throw new BadRequestException("Price can't be lower than your previous bid of $" + maxBid);
         }
         bidRepository.save(new Bid(bidRequest.getAmount(), person, product));
+    }
+
+    public void remove(BidDeleteRequest bidDeleteRequest) {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        if (bidDeleteRequest.getProductId() == null)
+            throw new BadRequestException("A product id has to be supplied");
+        List<Bid> bids = bidRepository.findAllByProductId(personId, bidDeleteRequest.getProductId());
+        if (bids.size() == 0)
+            throw new BadRequestException("No bids found for this product or the auction has finished");
+        bidRepository.deleteAll(bids);
     }
 }

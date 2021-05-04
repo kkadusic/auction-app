@@ -7,7 +7,7 @@ import {getUserId} from "../../utilities/Common";
 import moment from 'moment';
 import Receipt from "../Modals/Receipt";
 
-import './productTable.css';
+import './tables.css';
 
 const ProductTable = ({products, type}) => {
 

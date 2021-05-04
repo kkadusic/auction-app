@@ -9,6 +9,7 @@ import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
 import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
 import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
 import moment from 'moment';
+import {wishlistProduct, removeWishlistProduct} from "../../utilities/ServerCall";
 
 import './itemPage.css';
 
@@ -30,6 +31,8 @@ const ItemPage = ({match, location}) => {
     const [outbid, setOutbid] = useState(false);
     const {setBreadcrumb} = useBreadcrumbContext();
     const {showMessage} = useAlertContext();
+    const [wished, setWished] = useState(false);
+    const [loadingWish, setLoadingWish] = useState(false);
 
     useEffect(() => {
         if (personId == null) {
@@ -46,6 +49,7 @@ const ItemPage = ({match, location}) => {
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
+                setWished(data.wished);
                 setBids(bids);
                 if (location.state !== undefined && location.state.newProduct) {
                     showMessage("success", "You have successfully added a new product!");
@@ -118,6 +122,32 @@ const ItemPage = ({match, location}) => {
             </>
         );
     }
+
+    const wishlist = async () => {
+        if (personId === null) {
+            showMessage("warning", "You have to be logged in to wishlist products.");
+            return;
+        }
+        try {
+            if (wished) {
+                await removeWishlistProduct(product.id);
+                showMessage("success", "You have removed the product from your wishlist.");
+            } else {
+                await wishlistProduct(product.id);
+                showMessage("success", "You have added the product to your wishlist.");
+            }
+            setWished(!wished);
+        } catch (e) {
+            showMessage("warning", "Problem with adding or removing product from wishlist");
+        }
+    }
+
+    const handleWishlist = async () => {
+        setLoadingWish(true);
+        await wishlist();
+        setLoadingWish(false);
+    }
+
 
     return (
         <>
@@ -228,11 +258,15 @@ const ItemPage = ({match, location}) => {
                                 {getTimeInfo()}
                             </div>
                             <div>
-                                <Button className="wishlist-button"
-                                        style={product.wished ? {borderColor: '#8367D8'} : null}
-                                        variant="transparent-gray">
+                                <Button
+                                    className="wishlist-button"
+                                    style={wished ? {borderColor: '#8367D8'} : null}
+                                    variant="transparent-gray"
+                                    onClick={handleWishlist}
+                                    disabled={loadingWish}
+                                >
                                     Wishlist
-                                    {product.wished ? (
+                                    {wished ? (
                                         <RiHeartFill className="wishlist-icon-wished"/>
                                     ) : (
                                         <RiHeartFill className="wishlist-icon"/>

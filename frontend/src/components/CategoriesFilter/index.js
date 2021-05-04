@@ -27,7 +27,7 @@ const CategoriesFilter = ({query, filter, handleClick}) => {
         setActiveCategory(filter.category || "");
         setActiveSubcategory(filter.subcategory || "");
     }, [filter])
-
+    
     const categoryClick = (categoryName) => {
         setActiveSubcategory("");
         if (activeCategory === categoryName) {

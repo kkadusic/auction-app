@@ -9,6 +9,7 @@ import com.atlantbh.auctionapp.request.PaymentRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
 import com.atlantbh.auctionapp.request.SearchCountRequest;
 import com.atlantbh.auctionapp.request.SearchRequest;
+import com.atlantbh.auctionapp.request.WishlistRequest;
 import com.atlantbh.auctionapp.response.CategoryCountResponse;
 import com.atlantbh.auctionapp.response.FilterCountResponse;
 import com.atlantbh.auctionapp.response.FilterResponse;
@@ -17,6 +18,7 @@ import com.atlantbh.auctionapp.response.ProductResponse;
 import com.atlantbh.auctionapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -115,6 +117,12 @@ public class ProductController {
         return ResponseEntity.ok(productId);
     }
 
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> remove(@RequestBody @Valid WishlistRequest productRequest) {
+        productService.remove(productRequest.getProductId());
+        return ResponseEntity.ok("Product removed");
+    }
+
     @GetMapping("/user")
     public ResponseEntity<List<UserProductProjection>> getUserProducts() {
         return ResponseEntity.ok(productService.getUserProducts());
@@ -124,5 +132,10 @@ public class ProductController {
     public ResponseEntity<String> pay(@RequestBody @Valid PaymentRequest paymentRequest) {
         productService.pay(paymentRequest);
         return ResponseEntity.ok("Product paid");
+    }
+
+    @GetMapping("/user/wishlist")
+    public ResponseEntity<List<UserProductProjection>> getUserWishlistProducts() {
+        return ResponseEntity.ok(productService.getUserWishlistProducts());
     }
 }

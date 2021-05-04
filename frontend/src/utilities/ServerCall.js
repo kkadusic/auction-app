@@ -156,3 +156,15 @@ export const getReceipt = async (productId) => {
 export const pay = async (data) => {
     return (await axios.post(hostUrl + '/products/pay', {...data}, config())).data;
 };
+
+export const wishlistProduct = async (productId) => {
+    return (await axios.post(hostUrl + '/wishlist/add', {productId}, config())).data;
+};
+
+export const removeWishlistProduct = async (productId) => {
+    return (await axios.post(hostUrl + '/wishlist/remove', {productId}, config())).data;
+};
+
+export const getUserWishlistProducts = async () => {
+    return (await axios.get(hostUrl + '/products/user/wishlist', config())).data;
+};

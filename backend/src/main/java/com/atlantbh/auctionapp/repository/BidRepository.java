@@ -27,6 +27,15 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
             nativeQuery = true)
     BigDecimal getMaxBidFromPersonForProduct(@Param("person_id") Long personId, @Param("product_id") Long productId);
 
+    @Query(value = "SELECT * FROM bid b " +
+            "INNER JOIN product p on p.id = b.product_id " +
+            "WHERE b.person_id = :person_id AND b.product_id = :product_id " +
+            "AND p.start_date <= (now() + interval '2 hours') AND p.end_date > (now() + interval '2 hours')",
+            nativeQuery = true)
+    List<Bid> findAllByProductId(@Param("person_id") Long personId, @Param("product_id") Long productId);
+
+    List<Bid> findAllByProductId(Long productId);
+
     @Query(value = "SELECT * FROM " +
             "bid b WHERE product_id = :product_id " +
             "ORDER BY b.amount DESC, b.date " +

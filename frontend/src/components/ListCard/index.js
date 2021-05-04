@@ -1,12 +1,44 @@
+import React, {useEffect, useState} from 'react';
 import {Button, Image} from 'react-bootstrap';
 import {RiAuctionFill, RiHeartFill} from "react-icons/ri";
 import {useHistory} from 'react-router-dom';
+import {removeWishlistProduct, wishlistProduct} from "../../utilities/ServerCall";
+import {loginUrl} from "../../utilities/AppUrl";
+import {getUserId} from "../../utilities/Common";
+import {useAlertContext} from "../../AppContext";
 
 import './listCard.css';
 
 const ListCard = ({data, url}) => {
 
+    const personId = getUserId();
     const history = useHistory();
+
+    const [loadingWish, setLoadingWish] = useState(false);
+    const [wished, setWished] = useState(data.wished);
+    const {showMessage} = useAlertContext();
+
+    const wishlist = async () => {
+        setLoadingWish(true);
+        if (personId === null) {
+            history.push(loginUrl);
+            return;
+        }
+        try {
+            if (wished)
+                await removeWishlistProduct(data.id);
+            else
+                await wishlistProduct(data.id);
+            setWished(!wished);
+        } catch (e) {
+            showMessage("warning", "Problem with adding or removing product from wishlist");
+        }
+        setLoadingWish(false);
+    }
+
+    useEffect(() => {
+        setWished(data.wished);
+    }, [data]);
 
     return (
         <div className="list-item-container">
@@ -28,9 +60,17 @@ const ListCard = ({data, url}) => {
                 <div style={{display: 'flex'}}>
                     <Button
                         className="wishlist-button"
-                        variant="transparent-gray">
+                        style={wished ? {borderColor: '#8367D8'} : null}
+                        variant="transparent-gray"
+                        onClick={wishlist}
+                        disabled={loadingWish}
+                    >
                         Wishlist
-                        <RiHeartFill className="button-icon"/>
+                        {wished ? (
+                            <RiHeartFill className="wishlist-icon-wished"/>
+                        ) : (
+                            <RiHeartFill className="wishlist-icon"/>
+                        )}
                     </Button>
                     <Button
                         className="bid-button"

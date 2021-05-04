@@ -37,7 +37,7 @@ const Profile = () => {
             }
         }
         fetchData();
-    }, []);
+    }, [])
 
     const schema = yup.object().shape({
         ...requiredFormSchema,
@@ -70,6 +70,7 @@ const Profile = () => {
             setSession(data.person, data.token);
             showMessage("success", "You have successfully updated your profile info!");
         } catch (e) {
+            showMessage("warning", "Error submitting data");
         }
         setUploading(false);
     }

@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {Spinner} from 'react-bootstrap';
+import ProductTable from '../Tables/ProductTable';
 import {Alert, Spinner} from 'react-bootstrap';
 import {useHistory} from 'react-router-dom';
 import ProductTable from '../../components/ProductTable';

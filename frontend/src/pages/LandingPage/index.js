@@ -155,7 +155,7 @@ const LandingPage = () => {
                                 src={product.imageUrl}
                                 onClick={() => history.push(productUrl(product))}
                             />
-                            <h3>
+                            <h3 className="word-wrap-xl">
                                 {product.name}
                             </h3>
                             Start from ${product.startPrice}

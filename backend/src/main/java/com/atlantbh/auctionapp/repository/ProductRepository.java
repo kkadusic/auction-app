@@ -68,6 +68,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, " +
             "i.url AS imageUrl, c.name categoryName, s.name subcategoryName, pr.creation_date, " +
             "(SELECT count(id) FROM bid WHERE product_id = pr.id) bids, " +
+            "(case when :id = -1 then false else EXISTS (SELECT 1 FROM wishlist WHERE product_id = pr.id AND person_id = :id) end) wished, " +
             "similarity(pr.name, :query) similarity " +
             "FROM product pr INNER JOIN image i on pr.id = i.product_id " +
             "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
@@ -83,7 +84,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "AND i.featured = true AND start_date <= (now() + interval '2 hours') AND end_date > (now() + interval '2 hours') " +
             "GROUP BY (pr.id, pr.name, pr.start_price, pr.description, i.url, c.name, s.name, pr.creation_date)",
             nativeQuery = true)
-    Slice<SimpleProductProjection> search(String query, String tsquery, String category, String subcategory,
+    Slice<SimpleProductProjection> search(String query, String tsquery, String category, String subcategory, Long id,
                                           @Param("min_price") Integer minPrice, @Param("max_price") Integer maxPrice,
                                           String color, String size, Pageable pageable);
 
@@ -193,4 +194,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "AND p2.active AND p.id = :id)",
             nativeQuery = true)
     Boolean existsByIdAndIsActive(Long id);
+
+    @Query(value = "SELECT p.id, p.name, p2.url, max(b.amount) price, s.name subcategoryName, c.name categoryName, " +
+            "p.start_date startDate, p.end_date endDate, (SELECT count(*) FROM bid b2 WHERE b2.product_id = p.id) bidCount, " +
+            "(SELECT b2.person_id FROM bid b2 WHERE b2.product_id = p.id ORDER BY b2.amount DESC, b2.date LIMIT 1) personId, " +
+            "(SELECT max(b2.amount) FROM bid b2 WHERE b2.product_id = p.id) maxBid " +
+            "FROM product p LEFT OUTER JOIN image p2 on p.id = p2.product_id LEFT OUTER JOIN bid b on p.id = b.product_id " +
+            "INNER JOIN subcategory s on s.id = p.subcategory_id INNER JOIN category c on c.id = s.category_id " +
+            "INNER JOIN wishlist w on p.id = w.product_id " +
+            "WHERE w.person_id = :user_id AND (p2.featured = true OR p2.featured IS NULL) " +
+            "GROUP BY (p.id, p.name, p2.url, s.name, c.name, p.start_date, p.end_date, w.date) " +
+            "ORDER BY w.date DESC",
+            nativeQuery = true)
+    List<UserProductProjection> getUserWishlistProducts(@Param("user_id") Long userId);
 }
