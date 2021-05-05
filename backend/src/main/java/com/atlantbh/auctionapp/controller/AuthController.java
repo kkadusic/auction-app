@@ -9,6 +9,7 @@ import com.atlantbh.auctionapp.request.LoginRequest;
 import com.atlantbh.auctionapp.request.RegisterRequest;
 import com.atlantbh.auctionapp.request.ResetPasswordRequest;
 import com.atlantbh.auctionapp.request.TokenRequest;
+import com.atlantbh.auctionapp.request.UpdateNotifRequest;
 import com.atlantbh.auctionapp.request.UpdateProfileRequest;
 import com.atlantbh.auctionapp.response.LoginResponse;
 import com.atlantbh.auctionapp.response.RegisterResponse;
@@ -83,5 +84,11 @@ public class AuthController {
     public ResponseEntity<String> deactivate(@RequestBody @Valid DeactivateRequest deactivateRequest) {
         personService.deactivate(deactivateRequest.getPassword());
         return ResponseEntity.ok("User deactivated");
+    }
+
+    @PostMapping("/notifications/update")
+    public ResponseEntity<String> updateNotifications(@RequestBody @Valid UpdateNotifRequest updateNotifRequest) {
+        personService.updateNotifications(updateNotifRequest);
+        return ResponseEntity.ok("Notification preferences successfully updated");
     }
 }

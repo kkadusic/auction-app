@@ -19,6 +19,7 @@ import com.atlantbh.auctionapp.request.RegisterRequest;
 
 import com.atlantbh.auctionapp.request.ResetPasswordRequest;
 import com.atlantbh.auctionapp.request.TokenRequest;
+import com.atlantbh.auctionapp.request.UpdateNotifRequest;
 import com.atlantbh.auctionapp.request.UpdateProfileRequest;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
 import com.atlantbh.auctionapp.utilities.UpdateMapper;
@@ -31,7 +32,6 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -230,6 +230,22 @@ public class PersonService {
         if (!passwordEncoder.matches(password, person.getPassword()))
             throw new UnauthorizedException("Wrong password");
         person.setActive(false);
+        personRepository.save(person);
+    }
+
+    public void updateNotifications(UpdateNotifRequest updateNotifRequest) {
+        Long personId = JwtTokenUtil.getRequestPersonId();
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new UnauthorizedException("Wrong person id"));
+
+        if (updateNotifRequest.getEmailNotify() == null && updateNotifRequest.getPushNotify() == null)
+            throw new BadRequestException("Email notify or push notify attribute missing");
+
+        if (updateNotifRequest.getEmailNotify() != null)
+            person.setEmailNotify(updateNotifRequest.getEmailNotify());
+        if (updateNotifRequest.getPushNotify() != null)
+            person.setPushNotify(updateNotifRequest.getPushNotify());
+
         personRepository.save(person);
     }
 }
