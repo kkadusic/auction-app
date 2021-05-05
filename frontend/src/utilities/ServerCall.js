@@ -168,3 +168,7 @@ export const removeWishlistProduct = async (productId) => {
 export const getUserWishlistProducts = async () => {
     return (await axios.get(hostUrl + '/products/user/wishlist', config())).data;
 };
+
+export const updateNotifications = async (emailNotify, pushNotify) => {
+    return (await axios.post(hostUrl + '/auth/notifications/update', {emailNotify, pushNotify}, config())).data;
+};
