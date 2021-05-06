@@ -1,6 +1,7 @@
 package com.atlantbh.auctionapp.repository;
 
 import com.atlantbh.auctionapp.model.Bid;
+import com.atlantbh.auctionapp.projection.BidderProjection;
 import com.atlantbh.auctionapp.projection.SimpleBidProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -42,4 +43,12 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
             "LIMIT 1",
             nativeQuery = true)
     Optional<Bid> getHighestBidForProduct(@Param("product_id") Long productId);
+
+    @Query(value = "SELECT p.email, p.email_notify emailNotify, p.push_notify pushNotify, b.amount maxBid " +
+            "FROM bid b " +
+            "INNER JOIN person p ON b.person_id = p.id " +
+            "WHERE product_id = :product_id " +
+            "ORDER BY b.amount DESC, b.date LIMIT 1",
+            nativeQuery = true)
+    Optional<BidderProjection> getHighestBidder(@Param("product_id") Long productId);
 }
