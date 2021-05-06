@@ -7,6 +7,7 @@ import com.atlantbh.auctionapp.projection.SimpleProductProjection;
 import com.atlantbh.auctionapp.projection.SizeCountProjection;
 import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.projection.FullProductProjection;
+import com.atlantbh.auctionapp.projection.WinnerProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -207,4 +208,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "ORDER BY w.date DESC",
             nativeQuery = true)
     List<UserProductProjection> getUserWishlistProducts(@Param("user_id") Long userId);
+
+    @Query(value = "SELECT p.id productId, p.name productName, max(b.amount) maxBid, " +
+            "(SELECT p2.email FROM bid b2 INNER JOIN person p2 on p2.id = b2.person_id WHERE b2.product_id = p.id " +
+            "ORDER BY b2.amount DESC, b2.date LIMIT 1) email," +
+            "(SELECT p3.push_notify FROM bid b3 INNER JOIN person p3 on p3.id = b3.person_id WHERE b3.product_id = p.id " +
+            "ORDER BY b3.amount DESC, b3.date LIMIT 1) pushNotify, " +
+            "(SELECT p4.email_notify FROM bid b4 INNER JOIN person p4 on p4.id = b4.person_id WHERE b4.product_id = p.id " +
+            "ORDER BY b4.amount DESC, b4.date LIMIT 1) emailNotify " +
+            "FROM product p " +
+            "INNER JOIN bid b on p.id = b.product_id " +
+            "WHERE end_date <= now() AND NOT notified AND NOT EXISTS (SELECT 1 FROM payment p3 WHERE p3.product_id = p.id) " +
+            "GROUP BY (p.id, p.name)",
+            nativeQuery = true)
+    List<WinnerProjection> getNotNotifiedWinners();
 }

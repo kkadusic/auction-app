@@ -5,7 +5,6 @@ import com.atlantbh.auctionapp.enumeration.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,14 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 public class Product {
@@ -85,6 +82,9 @@ public class Product {
 
     @Column(nullable = false)
     private Boolean shipping = false;
+
+    @Column(nullable = false)
+    private Boolean notified = false;
 
     @Enumerated(EnumType.STRING)
     private Size size;
@@ -269,5 +269,13 @@ public class Product {
 
     public void setSubcategory(Subcategory subcategory) {
         this.subcategory = subcategory;
+    }
+
+    public Boolean getNotified() {
+        return notified;
+    }
+
+    public void setNotified(Boolean notified) {
+        this.notified = notified;
     }
 }
