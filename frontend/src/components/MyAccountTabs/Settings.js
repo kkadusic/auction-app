@@ -79,14 +79,14 @@ const Settings = () => {
                     This information can be edited on your profile.
                     <div style={{marginTop: 30}}>
                         Email:
-                        <span style={{color: '#8367D8', marginLeft: 23}}>
+                        <span style={{color: '#8367D8', marginLeft: 23, wordWrap: 'anywhere'}}>
                             <a className="purple-nav-link" target="_blank" rel="noopener noreferrer"
                                href={"mailto:" + user.email}>{user.email}</a>
                         </span>
                     </div>
                     <div style={{marginTop: 30}}>
                         Phone:
-                        <span style={{color: '#8367D8', marginLeft: 16}}>
+                        <span style={{color: '#8367D8', marginLeft: 16, wordWrap: 'anywhere'}}>
                             <a className="purple-nav-link"
                                href={"tel:" + user.phoneNumber}>
                                 {user.phoneNumber}
