@@ -95,7 +95,7 @@ public class BidService {
 
     private void notifyHighestBidder(Product product, String email, BigDecimal price) {
         bidRepository.getHighestBidder(product.getId())
-                .ifPresent(bidder -> {
+                .ifPresent(bidder -> new Thread(() -> {
                     try {
                         if (bidder.getEmailNotify() && !email.equals(bidder.getEmail())
                                 && bidder.getMaxBid().compareTo(price) < 0) {
@@ -104,7 +104,7 @@ public class BidService {
                         }
                     } catch (MessagingException ignore) {
                     }
-                });
+                }).start());
     }
 
     private String formEmailBody(String hostUrl, Product product, String maxBid) {
