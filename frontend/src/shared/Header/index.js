@@ -11,6 +11,7 @@ import {
     myAccountSettingsUrl, myAccountWishlistUrl, homeUrl, productUrl
 } from '../../utilities/AppUrl';
 import {useUserContext} from "../../AppContext";
+import NotificationBell from "../NotificationBell";
 import * as qs from 'query-string';
 
 import './header.css';
@@ -152,6 +153,7 @@ const Header = () => {
                             <ListGroup.Item onClick={() => history.push(myAccountWishlistUrl)}>Wishlist</ListGroup.Item>
                             <ListGroup.Item onClick={() => history.push(myAccountSettingsUrl)}>Settings</ListGroup.Item>
                         </ListGroup> : null}
+                    {loggedIn ? <NotificationBell/> : null}
                 </Nav>
             </div>
         </>

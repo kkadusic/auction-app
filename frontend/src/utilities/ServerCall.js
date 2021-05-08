@@ -172,3 +172,14 @@ export const getUserWishlistProducts = async () => {
 export const updateNotifications = async (emailNotify, pushNotify) => {
     return (await axios.post(hostUrl + '/auth/notifications/update', {emailNotify, pushNotify}, config())).data;
 };
+
+export const getNotifications = async (page, size) => {
+    const headers = {...config(), ...getParams({page, size})};
+    return (await axios.get(hostUrl + '/notifications', headers)).data;
+};
+
+export const checkNotifications = async (uncheckedIds) => {
+    const ids = uncheckedIds.join(",");
+    const headers = {...config(), ...getParams({ids})};
+    return (await axios.get(hostUrl + '/notifications/check', headers)).data;
+};
