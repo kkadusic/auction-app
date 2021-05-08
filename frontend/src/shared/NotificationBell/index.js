@@ -178,7 +178,7 @@ const NotificationBell = () => {
                                     <div className="notification-product-name">
                                         {notification.name}
                                         <br/>
-                                        <div style={{margin: '0 auto'}} className="product-table-id">
+                                        <div style={{margin: '0 auto', fontSize: '12px'}} className="product-table-id">
                                             #{notification.productId}
                                         </div>
                                     </div>
