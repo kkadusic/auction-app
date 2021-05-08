@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public interface WinnerProjection {
 
+    Long getId();
+
     Long getProductId();
 
     String getProductName();

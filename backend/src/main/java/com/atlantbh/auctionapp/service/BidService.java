@@ -4,6 +4,7 @@ import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.exception.UnauthorizedException;
 import com.atlantbh.auctionapp.exception.UnprocessableException;
 import com.atlantbh.auctionapp.model.Bid;
+import com.atlantbh.auctionapp.model.Notification;
 import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.model.Product;
 import com.atlantbh.auctionapp.projection.SimpleBidProjection;
@@ -13,6 +14,7 @@ import com.atlantbh.auctionapp.repository.ProductRepository;
 import com.atlantbh.auctionapp.request.BidDeleteRequest;
 import com.atlantbh.auctionapp.request.BidRequest;
 import com.atlantbh.auctionapp.security.JwtTokenUtil;
+import com.atlantbh.auctionapp.utilities.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class BidService {
     private final PersonRepository personRepository;
     private final ProductRepository productRepository;
     private final EmailService emailService;
+    private final PushService pushService;
 
     private String hostUrl;
 
@@ -41,11 +44,12 @@ public class BidService {
 
     @Autowired
     public BidService(BidRepository bidRepository, PersonRepository personRepository,
-                      ProductRepository productRepository, EmailService emailService) {
+                      ProductRepository productRepository, EmailService emailService, PushService pushService) {
         this.bidRepository = bidRepository;
         this.personRepository = personRepository;
         this.productRepository = productRepository;
         this.emailService = emailService;
+        this.pushService = pushService;
     }
 
     public List<SimpleBidProjection> getBidsForProduct(Long id) {
@@ -96,13 +100,24 @@ public class BidService {
     private void notifyHighestBidder(Product product, String email, BigDecimal price) {
         bidRepository.getHighestBidder(product.getId())
                 .ifPresent(bidder -> new Thread(() -> {
-                    try {
-                        if (bidder.getEmailNotify() && !email.equals(bidder.getEmail())
-                                && bidder.getMaxBid().compareTo(price) < 0) {
-                            String body = formEmailBody(hostUrl, product, bidder.getMaxBid().toPlainString());
-                            emailService.sendMail(bidder.getEmail(), "Highest bid place lost", body);
+                    if (email.equals(bidder.getEmail()) || bidder.getMaxBid().compareTo(price) >= 0)
+                        return;
+                    if (bidder.getPushNotify()) {
+                        Notification notification = new Notification(
+                                "warning",
+                                "You lost your highest bid place! Your bid of $" + bidder.getMaxBid() +
+                                        " isn't the highest bid anymore.",
+                                product,
+                                new Person(bidder.getId())
+                        );
+                        pushService.broadcastNotification(notification, bidder.getId().toString());
+                    }
+                    if (bidder.getEmailNotify()) {
+                        String body = formEmailBody(hostUrl, product, bidder.getMaxBid().toPlainString());
+                        try {
+                            emailService.sendMail(bidder.getEmail(), "Lost the highest bid place", body);
+                        } catch (MessagingException ignore) {
                         }
-                    } catch (MessagingException ignore) {
                     }
                 }).start());
     }
@@ -112,14 +127,7 @@ public class BidService {
         return body.replace("maxBid", maxBid)
                 .replace("productName", product.getName())
                 .replace("productId", product.getId().toString())
-                .replace("productPageUrl", hostUrl + "/shop/" +
-                        removeSpaces(product.getSubcategory().getCategory().getName()) + "/" +
-                        removeSpaces(product.getSubcategory().getName())
-                        + "/" + product.getId())
+                .replace("productPageUrl", StringUtil.getProductPageUrl(product, hostUrl))
                 .replace("settingsUrl", hostUrl + "/my-account/settings");
-    }
-
-    private String removeSpaces(String name) {
-        return name.replaceAll(" ", "_").toLowerCase();
     }
 }

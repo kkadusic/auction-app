@@ -44,7 +44,7 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
             nativeQuery = true)
     Optional<Bid> getHighestBidForProduct(@Param("product_id") Long productId);
 
-    @Query(value = "SELECT p.email, p.email_notify emailNotify, p.push_notify pushNotify, b.amount maxBid " +
+    @Query(value = "SELECT p.id, p.email, p.email_notify emailNotify, p.push_notify pushNotify, b.amount maxBid " +
             "FROM bid b " +
             "INNER JOIN person p ON b.person_id = p.id " +
             "WHERE product_id = :product_id " +

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public interface BidderProjection {
 
+    Long getId();
+
     String getEmail();
 
     Boolean getEmailNotify();

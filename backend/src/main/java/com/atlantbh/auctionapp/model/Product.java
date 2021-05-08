@@ -103,6 +103,11 @@ public class Product {
     public Product() {
     }
 
+    public Product(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Product(@NotBlank String name, @PositiveOrZero BigDecimal startPrice, LocalDateTime startDate,
                    LocalDateTime endDate, @NotBlank String street, @NotBlank String city, @NotBlank String zip,
                    @NotBlank String country, @NotBlank String phoneNumber, Person person, Subcategory subcategory) {

@@ -209,17 +209,23 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             nativeQuery = true)
     List<UserProductProjection> getUserWishlistProducts(@Param("user_id") Long userId);
 
-    @Query(value = "SELECT p.id productId, p.name productName, max(b.amount) maxBid, " +
-            "(SELECT p2.email FROM bid b2 INNER JOIN person p2 on p2.id = b2.person_id WHERE b2.product_id = p.id " +
-            "ORDER BY b2.amount DESC, b2.date LIMIT 1) email," +
-            "(SELECT p3.push_notify FROM bid b3 INNER JOIN person p3 on p3.id = b3.person_id WHERE b3.product_id = p.id " +
-            "ORDER BY b3.amount DESC, b3.date LIMIT 1) pushNotify, " +
-            "(SELECT p4.email_notify FROM bid b4 INNER JOIN person p4 on p4.id = b4.person_id WHERE b4.product_id = p.id " +
-            "ORDER BY b4.amount DESC, b4.date LIMIT 1) emailNotify " +
-            "FROM product p " +
-            "INNER JOIN bid b on p.id = b.product_id " +
-            "WHERE end_date <= now() AND NOT notified AND NOT EXISTS (SELECT 1 FROM payment p3 WHERE p3.product_id = p.id) " +
-            "GROUP BY (p.id, p.name)",
+    @Query(value = "SELECT p.id productId, p.name productName, " +
+            "(SELECT max(b2.amount) FROM bid b2 INNER JOIN person p5 on b2.person_id = p5.id " +
+            "WHERE p5.active AND b2.product_id = p.id) maxBid, " +
+            "(SELECT p1.id FROM bid b1 INNER JOIN person p1 on p1.id = b1.person_id " +
+            "WHERE b1.product_id = p.id AND p1.active ORDER BY b1.amount DESC, b1.date LIMIT 1) id," +
+            "(SELECT p2.email FROM bid b2 INNER JOIN person p2 on p2.id = b2.person_id " +
+            "WHERE b2.product_id = p.id AND p2.active ORDER BY b2.amount DESC, b2.date LIMIT 1) email," +
+            "(SELECT p3.push_notify FROM bid b3 INNER JOIN person p3 on p3.id = b3.person_id " +
+            "WHERE b3.product_id = p.id AND p3.active ORDER BY b3.amount DESC, b3.date LIMIT 1) pushNotify, " +
+            "(SELECT p4.email_notify FROM bid b4 INNER JOIN person p4 on p4.id = b4.person_id " +
+            "WHERE b4.product_id = p.id AND p4.active ORDER BY b4.amount DESC, b4.date LIMIT 1) emailNotify " +
+            "FROM product p INNER JOIN bid b on p.id = b.product_id INNER JOIN person p2 on p.person_id = p2.id " +
+            "WHERE end_date <= (now() + interval '2 hours') AND NOT notified " +
+            "AND NOT EXISTS (SELECT 1 FROM payment p3 WHERE p3.product_id = p.id) " +
+            "AND (SELECT EXISTS(SELECT 1 FROM bid b5 INNER JOIN person p5 on p5.id = b5.person_id " +
+            "WHERE b5.product_id = p.id AND p5.active)) " +
+            "AND p2.active GROUP BY (p.id, p.name)",
             nativeQuery = true)
     List<WinnerProjection> getNotNotifiedWinners();
 }

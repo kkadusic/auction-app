@@ -2,9 +2,12 @@ package com.atlantbh.auctionapp.service;
 
 import com.atlantbh.auctionapp.exception.BadGatewayException;
 import com.atlantbh.auctionapp.exception.UnprocessableException;
+import com.atlantbh.auctionapp.model.Notification;
+import com.atlantbh.auctionapp.model.Person;
 import com.atlantbh.auctionapp.model.Product;
 import com.atlantbh.auctionapp.projection.WinnerProjection;
 import com.atlantbh.auctionapp.repository.ProductRepository;
+import com.atlantbh.auctionapp.utilities.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,11 +24,13 @@ import static com.atlantbh.auctionapp.utilities.ResourceUtil.getResourceFileAsSt
 public class ScheduleService {
 
     private final ProductRepository productRepository;
+    private final PushService pushService;
     private final EmailService emailService;
 
     @Autowired
-    public ScheduleService(ProductRepository productRepository, EmailService emailService) {
+    public ScheduleService(ProductRepository productRepository, PushService pushService, EmailService emailService) {
         this.productRepository = productRepository;
+        this.pushService = pushService;
         this.emailService = emailService;
     }
 
@@ -40,18 +45,28 @@ public class ScheduleService {
     public void notifyHighestBidders() {
         List<WinnerProjection> winners = productRepository.getNotNotifiedWinners();
         for (WinnerProjection winner : winners) {
-            try {
-                if (winner.getEmailNotify()) {
-                    String body = formEmailBody(hostUrl, winner);
-                    emailService.sendMail(winner.getEmail(), "Bid winner", body);
-                }
-                Product product = productRepository.findById(winner.getProductId())
-                        .orElseThrow(() -> new UnprocessableException("Wrong product id"));
-                product.setNotified(true);
-                productRepository.save(product);
-            } catch (MessagingException e) {
-                throw new BadGatewayException("Error sending an email");
+            if (winner.getPushNotify()) {
+                Notification notification = new Notification(
+                        "success",
+                        "Congratulations! You outbid the competition, your bid of $" + winner.getMaxBid() +
+                                " is the highest bid.",
+                        new Product(winner.getProductId(), winner.getProductName()),
+                        new Person(winner.getId())
+                );
+                pushService.broadcastNotification(notification, winner.getId().toString());
             }
+            if (winner.getEmailNotify()) {
+                String body = formEmailBody(hostUrl, winner);
+                try {
+                    emailService.sendMail(winner.getEmail(), "Bid winner", body);
+                } catch (MessagingException e) {
+                    throw new BadGatewayException("Error sending an email");
+                }
+            }
+            Product product = productRepository.findById(winner.getProductId())
+                    .orElseThrow(() -> new UnprocessableException("Wrong product id"));
+            product.setNotified(true);
+            productRepository.save(product);
         }
     }
 
@@ -60,7 +75,7 @@ public class ScheduleService {
         return body.replace("maxBid", winner.getMaxBid().toPlainString())
                 .replace("productName", winner.getProductName())
                 .replace("productId", winner.getProductId().toString())
-                .replace("paymentUrl", hostUrl + "/my-account/bids")
+                .replace("paymentUrl", StringUtil.getPaymentPageUrl(winner.getProductId().toString(), hostUrl))
                 .replace("settingsUrl", hostUrl + "/my-account/settings");
     }
 }

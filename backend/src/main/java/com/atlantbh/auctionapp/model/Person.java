@@ -90,6 +90,10 @@ public class Person {
     public Person() {
     }
 
+    public Person(Long id) {
+        this.id = id;
+    }
+
     public Person(@NotBlank @Size(min = 2, max = 50) String firstName,
                   @NotBlank @Size(min = 2, max = 50) String lastName,
                   @NotBlank @Size(max = 320) @Email String email,
