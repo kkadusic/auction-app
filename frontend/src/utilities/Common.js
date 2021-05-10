@@ -1,3 +1,5 @@
+import {decode} from "jsonwebtoken";
+
 // Set token and user to local storage
 export const setSession = (user, token) => {
     localStorage.setItem('auction-token', token);
@@ -48,4 +50,13 @@ export const getUserId = () => {
 // Return token from local storage
 export const getToken = () => {
     return localStorage.getItem('auction-token') || null;
+}
+
+export const validToken = () => {
+    const token = getToken();
+    if (token === null) {
+        return false;
+    }
+    const exp = decode(token, {complete: true}).payload.exp;
+    return Date.now() < exp * 1000;
 }

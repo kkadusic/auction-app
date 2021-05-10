@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Button, Form, Image, Modal, Table} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
-import {getUserId} from '../../utilities/Common';
+import {getUserId, removeSession} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
 import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
 import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
-import {useAlertContext, useBreadcrumbContext} from "../../AppContext";
+import {useAlertContext, useBreadcrumbContext, useUserContext} from "../../AppContext";
 import moment from 'moment';
 import {wishlistProduct, removeWishlistProduct} from "../../utilities/ServerCall";
+import {validToken} from "../../utilities/Common";
 
 import './itemPage.css';
 
@@ -33,6 +34,7 @@ const ItemPage = ({match, location}) => {
     const {showMessage} = useAlertContext();
     const [wished, setWished] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
+    const {loggedIn, setLoggedIn} = useUserContext();
 
     useEffect(() => {
         if (personId == null) {
@@ -100,7 +102,13 @@ const ItemPage = ({match, location}) => {
             setBids(newBids);
             setBidPrice("");
         } catch (e) {
-            showMessage("warning", "Oops! Something went wrong. Please refresh the page and try again.");
+            if (!validToken()) {
+                showMessage("warning", "Your session has timed out. Please login again.");
+                setLoggedIn(false);
+                removeSession();
+            } else {
+                showMessage("warning", "Oops! Something went wrong. Please refresh the page and try again.");
+            }
         }
         setLoading(false);
     }
