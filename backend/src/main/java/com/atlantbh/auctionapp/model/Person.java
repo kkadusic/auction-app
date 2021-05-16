@@ -77,11 +77,21 @@ public class Person {
     private String imageUrl = "http://www.gnd.center/bpm/resources/img/avatar-placeholder.gif";
 
     @Column(nullable = false)
+    private Boolean emailNotify = false;
+
+    @Column(nullable = false)
+    private Boolean pushNotify = true;
+
+    @Column(nullable = false)
     private Boolean active = true;
 
     private String stripeCustomerId;
 
     public Person() {
+    }
+
+    public Person(Long id) {
+        this.id = id;
     }
 
     public Person(@NotBlank @Size(min = 2, max = 50) String firstName,
@@ -244,5 +254,21 @@ public class Person {
 
     public void setStripeCustomerId(String stripeCustomerId) {
         this.stripeCustomerId = stripeCustomerId;
+    }
+
+    public Boolean getEmailNotify() {
+        return emailNotify;
+    }
+
+    public void setEmailNotify(Boolean emailNotify) {
+        this.emailNotify = emailNotify;
+    }
+
+    public Boolean getPushNotify() {
+        return pushNotify;
+    }
+
+    public void setPushNotify(Boolean pushNotify) {
+        this.pushNotify = pushNotify;
     }
 }

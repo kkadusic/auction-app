@@ -48,7 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/cards/person",
             "/wishlist/add",
             "/wishlist/remove",
-            "/products/user/wishlist"
+            "/products/user/wishlist",
+            "/auth/notifications/update",
+            "/notifications",
+            "/notifications/check",
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -84,7 +87,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://auction-abh.herokuapp.com"));
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
+                "https://auction-abh.herokuapp.com"
+        ));
+        configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

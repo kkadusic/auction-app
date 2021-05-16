@@ -6,6 +6,7 @@ import {productUrl, myAccountBidsPayUrl} from "../../utilities/AppUrl";
 import {getUserId} from "../../utilities/Common";
 import moment from 'moment';
 import Receipt from "../Modals/Receipt";
+import {IoIosCheckmarkCircle} from "react-icons/io";
 
 import './tables.css';
 
@@ -73,10 +74,11 @@ const ProductTable = ({products, type}) => {
                            onClose={() => setAlertVisible(false)} transition={false}
                            show={alertVisible} variant="info">
                         <div style={{marginLeft: '-7vw'}}>
+                            <IoIosCheckmarkCircle style={{fontSize: 18, marginBottom: 4, marginRight: 5}}/>
                             Congratulations!
                             <span style={{fontWeight: 'normal'}}>
-                                            {' '}You outbid the competition.
-                                            </span>
+                                {' '} You outbid the competition.
+                            </span>
                         </div>
                     </Alert>
                 </div> : null
