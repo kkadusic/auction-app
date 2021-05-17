@@ -13,6 +13,7 @@ import {wishlistProduct, removeWishlistProduct} from "../../utilities/ServerCall
 import {validToken} from "../../utilities/Common";
 
 import './itemPage.css';
+import SortTh from "../../components/Tables/SortTh";
 
 const ItemPage = ({match, location}) => {
 
@@ -37,6 +38,7 @@ const ItemPage = ({match, location}) => {
     const [loadingWish, setLoadingWish] = useState(false);
     const {loggedIn, setLoggedIn} = useUserContext();
     const [relatedProducts, setRelatedProducts] = useState([]);
+    const [sort, setSort] = useState("price");
 
     const productRoute = (history, product) => {
         history.push(`/shop/${product.categoryName.split(' ').join('_').toLowerCase()}/${product.subcategoryName.split(' ').join('_').toLowerCase()}/${product.id}`);
@@ -100,6 +102,8 @@ const ItemPage = ({match, location}) => {
         try {
             await bidForProduct(parseFloat(bidPrice), product.id);
             const newBids = await getBidsForProduct(product.id);
+            if (sort !== "price")
+                setSort("price");
             setMinPrice(Math.max(...newBids.map(bid => bid.personId === personId ? bid.amount : 0), 0) + 0.01);
             if (personId === newBids[0].personId) {
                 showMessage("success", "Congrats! You are the highest bider!");
@@ -303,10 +307,14 @@ const ItemPage = ({match, location}) => {
             {bids.length !== 0 && product.personId === personId ? (
                 <Table variant="gray-transparent" responsive>
                     <thead>
-                    <tr>
-                        <th colSpan="2">Bider</th>
-                        <th>Date</th>
-                        <th>Bid</th>
+                    <tr className="product-table-header">
+                        <SortTh colSpan="2" active={sort} setActive={setSort} data={bids} setData={setBids}
+                                name="firstName"
+                                type="string">Bidder</SortTh>
+                        <SortTh style={{minWidth: 190}} active={sort} setActive={setSort} data={bids} setData={setBids}
+                                name="date" type="date">Date</SortTh>
+                        <SortTh style={{minWidth: 205}} active={sort} setActive={setSort} data={bids} setData={setBids}
+                                name="amount" type="number">Bid</SortTh>
                     </tr>
                     </thead>
                     <tbody>

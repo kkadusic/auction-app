@@ -50,3 +50,8 @@ export const getDaysInMonth = (month, year) => {
 export const getDate = (day, month, year) => {
     return moment().set({"date": day, "month": month, "year": year}).toDate();
 }
+
+export const dateCompare = (d1, d2, order) => {
+    const diff = moment.utc(d1).diff(moment.utc(d2));
+    return order ? diff : -diff;
+}
