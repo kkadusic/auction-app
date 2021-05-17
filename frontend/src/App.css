@@ -198,6 +198,11 @@ h3 {
     object-fit: cover;
 }
 
+.avatar-image-small-2 {
+    width: 45px;
+    height: 45px;
+}
+
 .table-gray-transparent {
     text-align: left;
     border: 1px solid #D8D8D8;
@@ -442,5 +447,30 @@ select.form-control {
 }
 
 .modal-content {
+    border-radius: 0;
+}
+
+.rc-rate-star-second > svg {
+    stroke: #8367D8;
+    stroke-width: 0.7px;
+}
+
+.rc-rate-star {
+    color: transparent;
+    margin-right: 10px;
+}
+
+.rc-rate-star-focused {
+    transform: unset;
+}
+
+.rc-rate-star-full .rc-rate-star-second, .rc-rate-star-full:hover .rc-rate-star-second {
+    color: #8367D8;
+}
+
+.modal-content, .popover, .popover-header {
+    color: #252525;
+    font-size: 16px;
+    letter-spacing: 0.56px;
     border-radius: 0;
 }

@@ -11,7 +11,9 @@ import {callCodeForCountry, citiesByCountry, countries, validPhoneNumber} from "
 import {getUser} from "../../utilities/Common";
 import {Formik, getIn} from 'formik';
 import {getCard} from "../../utilities/ServerCall";
-import {pay} from "../../utilities/ServerCall";
+import {pay, rate} from "../../utilities/ServerCall";
+import RateUser from "../../components/Modals/RateUser";
+import MyPrompt from "../../components/MyPrompt";
 import * as yup from 'yup';
 
 import './payment.css';
@@ -30,6 +32,10 @@ const Payment = () => {
 
     const {setBreadcrumb} = useBreadcrumbContext();
     const {showMessage} = useAlertContext();
+
+    const [showModal, setShowModal] = useState(false);
+    const [promptVisible, setPromptVisible] = useState(false);
+    const [finished, setFinished] = useState(false);
 
     useEffect(() => {
         setBreadcrumb("MY ACCOUNT", [{text: "MY ACCOUNT", href: myAccountUrl}, {
@@ -84,14 +90,36 @@ const Payment = () => {
             return;
         }
         setLoading(false);
-        history.push({
-            pathname: myAccountBidsUrl,
-            state: {productName: product.name}
-        })
+        setPromptVisible(true);
+        setShowModal(true);
+    }
+
+    useEffect(() => {
+        console.log(product);
+        if (finished)
+            history.push({
+                pathname: myAccountBidsUrl,
+                state: {productName: product.name}
+            })
+        // eslint-disable-next-line
+    }, [finished]);
+
+    const onDone = async (rating) => {
+        if (rating >= 1 && rating <= 5) {
+            try {
+                await rate(product.id, rating);
+            } catch (e) {
+                return;
+            }
+        }
+        setPromptVisible(false);
+        setFinished(true);
     }
 
     return (
         <div className="tab-container">
+            <MyPrompt promptVisible={promptVisible}/>
+            <RateUser onDone={onDone} showModal={showModal} personAddedId={product.personId}/>
             <div className="tab-title">
                 PAYMENT
             </div>

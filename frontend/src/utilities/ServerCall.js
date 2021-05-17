@@ -183,3 +183,12 @@ export const checkNotifications = async (uncheckedIds) => {
     const headers = {...config(), ...getParams({ids})};
     return (await axios.get(hostUrl + '/notifications/check', headers)).data;
 };
+
+export const getUserInfo = async (userId) => {
+    const headers = {...config(), ...getParams({userId})};
+    return (await axios.get(hostUrl + '/auth', headers)).data;
+};
+
+export const rate = async (productId, rating) => {
+    return (await axios.post(hostUrl + '/products/rate', {productId, rating}, config())).data;
+};

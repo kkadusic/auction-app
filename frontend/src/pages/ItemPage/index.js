@@ -11,8 +11,11 @@ import {useAlertContext, useBreadcrumbContext, useUserContext} from "../../AppCo
 import moment from 'moment';
 import {wishlistProduct, removeWishlistProduct} from "../../utilities/ServerCall";
 import {validToken} from "../../utilities/Common";
+import {getUserInfo} from "../../utilities/ServerCall";
 
 import './itemPage.css';
+import {GoStar} from "react-icons/go";
+import {loginUrl} from "../../utilities/AppUrl";
 
 const ItemPage = ({match, location}) => {
 
@@ -35,6 +38,9 @@ const ItemPage = ({match, location}) => {
     const [wished, setWished] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
     const {loggedIn, setLoggedIn} = useUserContext();
+    const [seller, setSeller] = useState(null);
+
+    const withMessage = location.state != null && location.state.withMessage;
 
     useEffect(() => {
         if (personId == null) {
@@ -48,6 +54,9 @@ const ItemPage = ({match, location}) => {
                 setActive(moment().isBetween(moment(data.startDate), moment(data.endDate), null, "[)"));
                 setOwnProduct(data.personId === personId);
                 setProduct(data);
+                if (loggedIn) {
+                    setSeller(await getUserInfo(data.personId));
+                }
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
@@ -229,6 +238,21 @@ const ItemPage = ({match, location}) => {
                                             </span>
                                             </div>
                                         </Alert>
+                                        <div style={{marginTop: 10, display: 'flex', alignItems: 'center'}}>
+                                <span style={{color: '#9B9B9B'}}>
+                                Seller:
+                                </span>
+                                            <Image style={{marginLeft: 5, marginRight: 5}}
+                                                   className="avatar-image-small-2"
+                                                   src={seller.photo}
+                                                   roundedCircle
+                                            />
+                                            {seller.name}
+                                            <GoStar
+                                                style={{marginLeft: 20, color: '#8367D8', fontSize: 22, marginRight: 5}}
+                                            />
+                                            {seller.rating !== 0 ? (Math.round((seller.rating + Number.EPSILON) * 100) / 100 + "/5") : "No ratings"}
+                                        </div>
                                     </div> : null}
                             </div>
                             {active !== false ?

@@ -142,12 +142,34 @@ const CardForm = ({
                                 size="xl-18"
                                 name="card.cardNumber"
                                 defaultValue={card.cardNumber || ""}
-                                placeholder="e.g. 1234 5678 1234 5678"
+                                placeholder="e.g. 4242 4242 4242 4242"
                                 onChange={handleChange}
                                 onBlur={e => e.target.value === "" ? setFieldValue("card.cardNumber", "") : null}
                                 maxLength={19}
                                 isInvalid={getIn(touched, 'card.cardNumber') && getIn(errors, 'card.cardNumber')}
                             />
+                            <OverlayTrigger
+                                trigger="click"
+                                placement="right"
+                                popperConfig={{
+                                    modifiers: [{
+                                        name: "flip",
+                                        enabled: true,
+                                        options: {fallbackPlacements: ["bottom", "top"]}
+                                    },],
+                                }}
+                                overlay={
+                                    <Popover>
+                                        <Popover.Title as="h3">Valid card numbers</Popover.Title>
+                                        <Popover.Content>
+                                            <a href="https://stripe.com/docs/testing">stripe.com/docs/testing</a>
+                                        </Popover.Content>
+                                    </Popover>
+                                }
+                                rootClose
+                            >
+                                <FaQuestionCircle className="cvc-question"/>
+                            </OverlayTrigger>
                             <Form.Control.Feedback type="invalid">
                                 {getIn(errors, 'card.cardNumber')}
                             </Form.Control.Feedback>
