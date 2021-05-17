@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Button, Form, Image, Modal, Table} from 'react-bootstrap';
 import {useHistory, withRouter} from 'react-router-dom';
 import {getUserId, removeSession} from '../../utilities/Common';
-import {IoIosArrowForward} from "react-icons/io";
+import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
 import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
@@ -39,6 +39,7 @@ const ItemPage = ({match, location}) => {
     const {loggedIn, setLoggedIn} = useUserContext();
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [sort, setSort] = useState("price");
+    const [page, setPage] = useState(0);
 
     const productRoute = (history, product) => {
         history.push(`/shop/${product.categoryName.split(' ').join('_').toLowerCase()}/${product.subcategoryName.split(' ').join('_').toLowerCase()}/${product.id}`);
@@ -166,7 +167,6 @@ const ItemPage = ({match, location}) => {
         await wishlist();
         setLoadingWish(false);
     }
-
 
     return (
         <>
@@ -305,35 +305,61 @@ const ItemPage = ({match, location}) => {
                 </>
             ) : null}
             {bids.length !== 0 && product.personId === personId ? (
-                <Table variant="gray-transparent" responsive>
-                    <thead>
-                    <tr className="product-table-header">
-                        <SortTh colSpan="2" active={sort} setActive={setSort} data={bids} setData={setBids}
-                                name="firstName"
-                                type="string">Bidder</SortTh>
-                        <SortTh style={{minWidth: 190}} active={sort} setActive={setSort} data={bids} setData={setBids}
-                                name="date" type="date">Date</SortTh>
-                        <SortTh style={{minWidth: 205}} active={sort} setActive={setSort} data={bids} setData={setBids}
-                                name="amount" type="number">Bid</SortTh>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {bids.map((bid, i) => (
-                        <tr key={bid.id}>
-                            <td style={{fontWeight: 'bold'}} colSpan="2">
-                                <Image style={{marginRight: 20}} className="avatar-image-small" src={bid.imageUrl}
-                                       roundedCircle/>
-                                {bid.firstName + ' ' + bid.lastName}
-                            </td>
-                            <td>{moment(bid.date).format("D MMMM YYYY")}</td>
-                            <td style={i === 0 ? {
-                                color: '#6CC047',
-                                fontWeight: 'bold'
-                            } : {fontWeight: 'bold'}}>{'$ ' + bid.amount}</td>
+                <div>
+                    <Table variant="gray-transparent" responsive>
+                        <thead>
+                        <tr className="product-table-header">
+                            <SortTh colSpan="2" active={sort} setActive={setSort} data={bids} setData={setBids}
+                                    name="firstName"
+                                    type="string">Bidder</SortTh>
+                            <SortTh style={{minWidth: 190}} active={sort} setActive={setSort} data={bids}
+                                    setData={setBids}
+                                    name="date" type="date">Date</SortTh>
+                            <SortTh style={{minWidth: 205}} active={sort} setActive={setSort} data={bids}
+                                    setData={setBids}
+                                    name="amount" type="number">Bid</SortTh>
                         </tr>
-                    ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                        {bids.slice(page, page + 5).map((bid, i) => (
+                            <tr key={bid.id}>
+                                <td style={{fontWeight: 'bold'}} colSpan="2">
+                                    <Image style={{marginRight: 20}}
+                                           className="avatar-image-small"
+                                           src={bid.imageUrl}
+                                           roundedCircle/>
+                                    {bid.firstName + ' ' + bid.lastName}
+                                </td>
+                                <td>{moment(bid.date).format("D MMMM YYYY")}</td>
+                                <td style={i === 0 && page === 0 ? {
+                                    color: '#6CC047',
+                                    fontWeight: 'bold'
+                                } : {fontWeight: 'bold'}}>{'$ ' + bid.amount}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </Table>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <Button
+                            className="sell-submit-button"
+                            size="lg"
+                            variant={"fill-purple-shadow"}
+                            onClick={() => setPage(page <= 0 ? 0 : page - 5)}
+                        >
+                            <IoIosArrowBack style={{fontSize: 24, marginLeft: -5, marginRight: 5}}/>
+                            BACK
+                        </Button>
+                        <Button
+                            className="sell-submit-button"
+                            size="lg"
+                            variant={"fill-purple-shadow"}
+                            onClick={() => page < bids.length - 5 ? setPage(page + 5) : null}
+                        >
+                            <IoIosArrowForward style={{fontSize: 24, marginRight: 5, marginLeft: 5}}/>
+                            NEXT
+                        </Button>
+                    </div>
+                </div>
             ) : <div style={{marginTop: 150}} className="featured-container">
                 <h2>
                     Related products
