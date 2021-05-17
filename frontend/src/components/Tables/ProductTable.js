@@ -66,6 +66,13 @@ const ProductTable = ({products, type}) => {
         });
     }
 
+    const handleCheckClick = (product) => {
+        history.push({
+            pathname: productUrl(product),
+            state: { withMessage: type === "bids" && product.paid }
+        });
+    }
+
     return (
         <>
             {document.getElementById('pay-btn') ?

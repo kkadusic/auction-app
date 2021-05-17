@@ -1,7 +1,9 @@
 package com.atlantbh.auctionapp.repository;
 
 import com.atlantbh.auctionapp.model.Person;
+import com.atlantbh.auctionapp.projection.PersonInfoProj;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,4 +20,10 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByIdAndActiveIsTrue(Long id);
 
     boolean existsByIdAndActiveIsTrue(Long id);
+
+    @Query(value = "SELECT p.first_name || ' ' || p.last_name AS name, p.image_url AS photo, p.rating " +
+            "FROM person p " +
+            "WHERE id = :id",
+            nativeQuery = true)
+    Optional<PersonInfoProj> getUserInfo(Long id);
 }

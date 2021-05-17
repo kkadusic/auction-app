@@ -12,9 +12,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -86,6 +90,15 @@ public class Person {
     private Boolean active = true;
 
     private String stripeCustomerId;
+
+    @DecimalMin("0")
+    @DecimalMax("5")
+    @Column(precision = 7, scale = 6, nullable = false)
+    private BigDecimal rating = BigDecimal.ZERO;
+
+    @Min(0)
+    @Column(nullable = false)
+    private Integer ratingCount = 0;
 
     public Person() {
     }
@@ -270,5 +283,21 @@ public class Person {
 
     public void setPushNotify(Boolean pushNotify) {
         this.pushNotify = pushNotify;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public Integer getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(Integer ratingCount) {
+        this.ratingCount = ratingCount;
     }
 }

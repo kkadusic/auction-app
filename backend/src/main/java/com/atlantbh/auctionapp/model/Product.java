@@ -92,6 +92,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Color color;
 
+    @Column(nullable = false)
+    private Boolean rated = false;
+
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
@@ -282,5 +285,13 @@ public class Product {
 
     public void setNotified(Boolean notified) {
         this.notified = notified;
+    }
+
+    public Boolean getRated() {
+        return rated;
+    }
+
+    public void setRated(Boolean rated) {
+        this.rated = rated;
     }
 }

@@ -6,6 +6,7 @@ import {addProduct, getCategories, getSubcategoriesForCategory, getProductFilter
 import SellerTab1 from "../../components/SellerTabs/SellTabOne";
 import SellerTab2 from "../../components/SellerTabs/SellTabTwo";
 import SellTabThree from "../../components/SellerTabs/SellTabThree";
+import MyPrompt from "../../components/MyPrompt";
 
 import './sell.css';
 
@@ -18,6 +19,7 @@ const Sell = () => {
     const [subcategories, setSubcategories] = useState([]);
     const [filters, setFilters] = useState({colors: [], sizes: []});
     const {showMessage} = useAlertContext();
+    const [promptVisible, setPromptVisible] = useState(false);
 
     const selectCategory = async (e, handleChange) => {
         handleChange(e);
@@ -33,6 +35,7 @@ const Sell = () => {
             const id = await addProduct(product);
             const categoryName = categories.filter(category => category.id === parseInt(product.categoryId))[0].name;
             const subcategoryName = subcategories.filter(subcategory => subcategory.id === parseInt(product.subcategoryId))[0].name;
+            setPromptVisible(false);
             return {
                 id, categoryName, subcategoryName
             };
@@ -86,6 +89,7 @@ const Sell = () => {
 
     return (
         <>
+            <MyPrompt promptVisible={promptVisible} />
             <Stepper
                 activeStep={activeTab}
                 styleConfig={{
