@@ -228,4 +228,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "AND p2.active GROUP BY (p.id, p.name)",
             nativeQuery = true)
     List<WinnerProjection> getNotNotifiedWinners();
+
+    @Query(value = "SELECT pr.id, pr.name, pr.start_price startPrice, pr.description, p.url AS imageUrl, c.name categoryName, s.name subcategoryName " +
+            "FROM product pr INNER JOIN image p on pr.id = p.product_id " +
+            "INNER JOIN subcategory s on s.id = pr.subcategory_id " +
+            "INNER JOIN category c on c.id = s.category_id " +
+            "WHERE (s.id = :subcategory_id OR c.id = :category_id) " +
+            "AND pr.id != :product_id AND p.featured = true AND start_date <= (now() + interval '2 hours') " +
+            "AND end_date > (now() + interval '2 hours') " +
+            "ORDER BY s.id = :subcategory_id DESC, RANDOM() LIMIT 4", nativeQuery = true)
+    List<SimpleProductProjection> getRelatedProducts(@Param("product_id") Long productId,
+                                                     @Param("subcategory_id") Long subcategoryId,
+                                                     @Param("category_id") Long categoryId);
 }
