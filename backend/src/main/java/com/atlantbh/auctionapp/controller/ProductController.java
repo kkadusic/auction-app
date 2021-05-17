@@ -140,9 +140,15 @@ public class ProductController {
         return ResponseEntity.ok(productService.getUserWishlistProducts());
     }
 
+
     @PostMapping("/rate")
     public ResponseEntity<String> rate(@RequestBody @Valid RateRequest rateRequest) {
         productService.rate(rateRequest.getProductId(), rateRequest.getRating());
         return ResponseEntity.ok("Product rated");
+    }
+  
+    @GetMapping("/related")
+    public ResponseEntity<List<SimpleProductProjection>> getRelatedProducts(@RequestParam(name = "id") Long id) {
+        return ResponseEntity.ok(productService.getRelatedProducts(id));
     }
 }

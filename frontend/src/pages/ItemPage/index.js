@@ -1,26 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Button, Form, Image, Modal, Table} from 'react-bootstrap';
-import {withRouter} from 'react-router-dom';
+import {useHistory, withRouter} from 'react-router-dom';
 import {getUserId, removeSession} from '../../utilities/Common';
-import {IoIosArrowForward} from "react-icons/io";
+import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
 import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
-import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
+import {bidForProduct, getBidsForProduct, getProduct, getRelatedProducts} from '../../utilities/ServerCall';
 import {useAlertContext, useBreadcrumbContext, useUserContext} from "../../AppContext";
 import moment from 'moment';
 import {wishlistProduct, removeWishlistProduct} from "../../utilities/ServerCall";
 import {validToken} from "../../utilities/Common";
 import {getUserInfo} from "../../utilities/ServerCall";
-
-import './itemPage.css';
 import {GoStar} from "react-icons/go";
 import {loginUrl} from "../../utilities/AppUrl";
+import SortTh from "../../components/Tables/SortTh";
+
+import './itemPage.css';
 
 const ItemPage = ({match, location}) => {
 
     let personId = getUserId();
 
+    const history = useHistory();
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
     const [activePhoto, setActivePhoto] = useState(0);
@@ -39,8 +41,14 @@ const ItemPage = ({match, location}) => {
     const [loadingWish, setLoadingWish] = useState(false);
     const {loggedIn, setLoggedIn} = useUserContext();
     const [seller, setSeller] = useState(null);
-
     const withMessage = location.state != null && location.state.withMessage;
+    const [relatedProducts, setRelatedProducts] = useState([]);
+    const [sort, setSort] = useState("price");
+    const [page, setPage] = useState(0);
+
+    const productRoute = (history, product) => {
+        history.push(`/shop/${product.categoryName.split(' ').join('_').toLowerCase()}/${product.subcategoryName.split(' ').join('_').toLowerCase()}/${product.id}`);
+    }
 
     useEffect(() => {
         if (personId == null) {
@@ -57,6 +65,7 @@ const ItemPage = ({match, location}) => {
                 if (loggedIn) {
                     setSeller(await getUserInfo(data.personId));
                 }
+                setRelatedProducts(await getRelatedProducts(productId));
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
@@ -81,7 +90,7 @@ const ItemPage = ({match, location}) => {
 
         fetchData();
         // eslint-disable-next-line
-    }, [])
+    }, [match.params.id])
 
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1, -1);
@@ -102,6 +111,8 @@ const ItemPage = ({match, location}) => {
         try {
             await bidForProduct(parseFloat(bidPrice), product.id);
             const newBids = await getBidsForProduct(product.id);
+            if (sort !== "price")
+                setSort("price");
             setMinPrice(Math.max(...newBids.map(bid => bid.personId === personId ? bid.amount : 0), 0) + 0.01);
             if (personId === newBids[0].personId) {
                 showMessage("success", "Congrats! You are the highest bider!");
@@ -164,7 +175,6 @@ const ItemPage = ({match, location}) => {
         await wishlist();
         setLoadingWish(false);
     }
-
 
     return (
         <>
@@ -317,33 +327,84 @@ const ItemPage = ({match, location}) => {
                     </div>
                 </>
             ) : null}
-            {bids.length !== 0 && personId > 0 ? (
-                <Table variant="gray-transparent" responsive>
-                    <thead>
-                    <tr>
-                        <th colSpan="2">Bider</th>
-                        <th>Date</th>
-                        <th>Bid</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {bids.map((bid, i) => (
-                        <tr key={bid.id}>
-                            <td style={{fontWeight: 'bold'}} colSpan="2">
-                                <Image style={{marginRight: 20}} className="avatar-image-small" src={bid.imageUrl}
-                                       roundedCircle/>
-                                {bid.firstName + ' ' + bid.lastName}
-                            </td>
-                            <td>{moment(bid.date).format("D MMMM YYYY")}</td>
-                            <td style={i === 0 ? {
-                                color: '#6CC047',
-                                fontWeight: 'bold'
-                            } : {fontWeight: 'bold'}}>{'$ ' + bid.amount}</td>
+            {bids.length !== 0 && product.personId === personId ? (
+                <div>
+                    <Table variant="gray-transparent" responsive>
+                        <thead>
+                        <tr className="product-table-header">
+                            <SortTh colSpan="2" active={sort} setActive={setSort} data={bids} setData={setBids}
+                                    name="firstName"
+                                    type="string">Bidder</SortTh>
+                            <SortTh style={{minWidth: 190}} active={sort} setActive={setSort} data={bids}
+                                    setData={setBids}
+                                    name="date" type="date">Date</SortTh>
+                            <SortTh style={{minWidth: 205}} active={sort} setActive={setSort} data={bids}
+                                    setData={setBids}
+                                    name="amount" type="number">Bid</SortTh>
                         </tr>
+                        </thead>
+                        <tbody>
+                        {bids.slice(page, page + 5).map((bid, i) => (
+                            <tr key={bid.id}>
+                                <td style={{fontWeight: 'bold'}} colSpan="2">
+                                    <Image style={{marginRight: 20}}
+                                           className="avatar-image-small"
+                                           src={bid.imageUrl}
+                                           roundedCircle/>
+                                    {bid.firstName + ' ' + bid.lastName}
+                                </td>
+                                <td>{moment(bid.date).format("D MMMM YYYY")}</td>
+                                <td style={i === 0 && page === 0 ? {
+                                    color: '#6CC047',
+                                    fontWeight: 'bold'
+                                } : {fontWeight: 'bold'}}>{'$ ' + bid.amount}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </Table>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <Button
+                            className="sell-submit-button"
+                            size="lg"
+                            variant={"fill-purple-shadow"}
+                            onClick={() => setPage(page <= 0 ? 0 : page - 5)}
+                        >
+                            <IoIosArrowBack style={{fontSize: 24, marginLeft: -5, marginRight: 5}}/>
+                            BACK
+                        </Button>
+                        <Button
+                            className="sell-submit-button"
+                            size="lg"
+                            variant={"fill-purple-shadow"}
+                            onClick={() => page < bids.length - 5 ? setPage(page + 5) : null}
+                        >
+                            <IoIosArrowForward style={{fontSize: 24, marginRight: 5, marginLeft: 5}}/>
+                            NEXT
+                        </Button>
+                    </div>
+                </div>
+            ) : <div style={{marginTop: 150}} className="featured-container">
+                <h2>
+                    Related products
+                </h2>
+                <div className="grey-line"/>
+                <div className="featured-items-container">
+                    {relatedProducts.map(product => (
+                        <div key={product.id} className="featured-item-container">
+                            <Image
+                                id="featured-item-image-xxl"
+                                src={product.imageUrl}
+                                onClick={() => productRoute(history, product)}
+                            />
+                            <h3>
+                                {product.name}
+                            </h3>
+                            Start from ${product.startPrice}
+                        </div>
                     ))}
-                    </tbody>
-                </Table>
-            ) : null}
+                </div>
+            </div>
+            }
         </>
     );
 }

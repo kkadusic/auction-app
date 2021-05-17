@@ -496,4 +496,11 @@ public class ProductService {
         product.setRated(true);
         productRepository.save(product);
     }
+  
+    public List<SimpleProductProjection> getRelatedProducts(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Wrong product id"));
+        return productRepository.getRelatedProducts(id, product.getSubcategory().getId(),
+                product.getSubcategory().getCategory().getId());
+    }
 }

@@ -191,4 +191,8 @@ export const getUserInfo = async (userId) => {
 
 export const rate = async (productId, rating) => {
     return (await axios.post(hostUrl + '/products/rate', {productId, rating}, config())).data;
+}
+
+export const getRelatedProducts = async (id) => {
+    return (await axios.get(hostUrl + '/products/related/?id=' + id)).data;
 };
