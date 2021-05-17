@@ -95,7 +95,6 @@ const Payment = () => {
     }
 
     useEffect(() => {
-        console.log(product);
         if (finished)
             history.push({
                 pathname: myAccountBidsUrl,
