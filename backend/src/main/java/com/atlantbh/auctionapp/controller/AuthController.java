@@ -3,6 +3,7 @@ package com.atlantbh.auctionapp.controller;
 import com.atlantbh.auctionapp.exception.BadGatewayException;
 import com.atlantbh.auctionapp.exception.BadRequestException;
 import com.atlantbh.auctionapp.model.Person;
+import com.atlantbh.auctionapp.projection.PersonInfoProj;
 import com.atlantbh.auctionapp.request.DeactivateRequest;
 import com.atlantbh.auctionapp.request.ForgotPasswordRequest;
 import com.atlantbh.auctionapp.request.LoginRequest;
@@ -90,5 +91,10 @@ public class AuthController {
     public ResponseEntity<String> updateNotifications(@RequestBody @Valid UpdateNotifRequest updateNotifRequest) {
         personService.updateNotifications(updateNotifRequest);
         return ResponseEntity.ok("Notification preferences successfully updated");
+    }
+
+    @GetMapping
+    public ResponseEntity<PersonInfoProj> getUserInfo(@RequestParam Long userId) {
+        return ResponseEntity.ok(personService.getUserInfo(userId));
     }
 }

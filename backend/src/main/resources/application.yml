@@ -5,6 +5,7 @@ spring:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
+    initialization-mode: always
   jpa:
     properties:
       hibernate:
@@ -12,7 +13,7 @@ spring:
       jdbc:
         time_zone: UTC
     hibernate:
-      ddl-auto: ${SCHEMA_DB}
+      ddl-auto: create-drop
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpiration: ${JWT_EXPIRATION}

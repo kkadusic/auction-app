@@ -8,6 +8,7 @@ import com.atlantbh.auctionapp.model.Card;
 import com.atlantbh.auctionapp.model.Person;
 
 import com.atlantbh.auctionapp.model.Token;
+import com.atlantbh.auctionapp.projection.PersonInfoProj;
 import com.atlantbh.auctionapp.repository.CardRepository;
 import com.atlantbh.auctionapp.repository.PersonRepository;
 
@@ -247,5 +248,10 @@ public class PersonService {
             person.setPushNotify(updateNotifRequest.getPushNotify());
 
         personRepository.save(person);
+    }
+
+    public PersonInfoProj getUserInfo(Long userId) {
+        return personRepository.getUserInfo(userId)
+                .orElseThrow(() -> new BadRequestException("Wrong person id"));
     }
 }

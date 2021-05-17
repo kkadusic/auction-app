@@ -7,6 +7,7 @@ import com.atlantbh.auctionapp.projection.UserProductProjection;
 import com.atlantbh.auctionapp.request.FilterCountRequest;
 import com.atlantbh.auctionapp.request.PaymentRequest;
 import com.atlantbh.auctionapp.request.ProductRequest;
+import com.atlantbh.auctionapp.request.RateRequest;
 import com.atlantbh.auctionapp.request.SearchCountRequest;
 import com.atlantbh.auctionapp.request.SearchRequest;
 import com.atlantbh.auctionapp.request.WishlistRequest;
@@ -137,5 +138,11 @@ public class ProductController {
     @GetMapping("/user/wishlist")
     public ResponseEntity<List<UserProductProjection>> getUserWishlistProducts() {
         return ResponseEntity.ok(productService.getUserWishlistProducts());
+    }
+
+    @PostMapping("/rate")
+    public ResponseEntity<String> rate(@RequestBody @Valid RateRequest rateRequest) {
+        productService.rate(rateRequest.getProductId(), rateRequest.getRating());
+        return ResponseEntity.ok("Product rated");
     }
 }

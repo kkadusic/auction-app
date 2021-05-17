@@ -52,6 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/auth/notifications/update",
             "/notifications",
             "/notifications/check",
+            "/auth",
+            "/products/rate"
     };
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
