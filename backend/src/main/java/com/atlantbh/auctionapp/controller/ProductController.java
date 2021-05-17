@@ -138,4 +138,9 @@ public class ProductController {
     public ResponseEntity<List<UserProductProjection>> getUserWishlistProducts() {
         return ResponseEntity.ok(productService.getUserWishlistProducts());
     }
+
+    @GetMapping("/related")
+    public ResponseEntity<List<SimpleProductProjection>> getRelatedProducts(@RequestParam(name = "id") Long id) {
+        return ResponseEntity.ok(productService.getRelatedProducts(id));
+    }
 }
