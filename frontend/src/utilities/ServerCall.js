@@ -183,3 +183,7 @@ export const checkNotifications = async (uncheckedIds) => {
     const headers = {...config(), ...getParams({ids})};
     return (await axios.get(hostUrl + '/notifications/check', headers)).data;
 };
+
+export const getRelatedProducts = async (id) => {
+    return (await axios.get(hostUrl + '/products/related/?id=' + id)).data;
+};

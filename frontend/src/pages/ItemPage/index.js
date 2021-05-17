@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Button, Form, Image, Modal, Table} from 'react-bootstrap';
-import {withRouter} from 'react-router-dom';
+import {useHistory, withRouter} from 'react-router-dom';
 import {getUserId, removeSession} from '../../utilities/Common';
 import {IoIosArrowForward} from "react-icons/io";
 import {RiHeartFill} from "react-icons/ri";
 import {GiExpand} from "react-icons/gi";
 import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
-import {bidForProduct, getBidsForProduct, getProduct} from '../../utilities/ServerCall';
+import {bidForProduct, getBidsForProduct, getProduct, getRelatedProducts} from '../../utilities/ServerCall';
 import {useAlertContext, useBreadcrumbContext, useUserContext} from "../../AppContext";
 import moment from 'moment';
 import {wishlistProduct, removeWishlistProduct} from "../../utilities/ServerCall";
@@ -18,6 +18,7 @@ const ItemPage = ({match, location}) => {
 
     let personId = getUserId();
 
+    const history = useHistory();
     const [product, setProduct] = useState(null);
     const [bids, setBids] = useState([]);
     const [activePhoto, setActivePhoto] = useState(0);
@@ -35,6 +36,11 @@ const ItemPage = ({match, location}) => {
     const [wished, setWished] = useState(false);
     const [loadingWish, setLoadingWish] = useState(false);
     const {loggedIn, setLoggedIn} = useUserContext();
+    const [relatedProducts, setRelatedProducts] = useState([]);
+
+    const productRoute = (history, product) => {
+        history.push(`/shop/${product.categoryName.split(' ').join('_').toLowerCase()}/${product.subcategoryName.split(' ').join('_').toLowerCase()}/${product.id}`);
+    }
 
     useEffect(() => {
         if (personId == null) {
@@ -48,6 +54,7 @@ const ItemPage = ({match, location}) => {
                 setActive(moment().isBetween(moment(data.startDate), moment(data.endDate), null, "[)"));
                 setOwnProduct(data.personId === personId);
                 setProduct(data);
+                setRelatedProducts(await getRelatedProducts(productId));
                 const bids = await getBidsForProduct(productId);
                 const highestBidFromUser = Math.max(...bids.map(bid => bid.personId === personId ? bid.amount : 0), 0);
                 setMinPrice(highestBidFromUser === 0 ? data.startPrice : highestBidFromUser + 0.01);
@@ -72,7 +79,7 @@ const ItemPage = ({match, location}) => {
 
         fetchData();
         // eslint-disable-next-line
-    }, [])
+    }, [match.params.id])
 
     const formBreadcrumb = () => {
         const urlElements = match.url.split("/").slice(1, -1);
@@ -293,7 +300,7 @@ const ItemPage = ({match, location}) => {
                     </div>
                 </>
             ) : null}
-            {bids.length !== 0 && personId > 0 ? (
+            {bids.length !== 0 && product.personId === personId ? (
                 <Table variant="gray-transparent" responsive>
                     <thead>
                     <tr>
@@ -319,7 +326,28 @@ const ItemPage = ({match, location}) => {
                     ))}
                     </tbody>
                 </Table>
-            ) : null}
+            ) : <div style={{marginTop: 150}} className="featured-container">
+                <h2>
+                    Related products
+                </h2>
+                <div className="grey-line"/>
+                <div className="featured-items-container">
+                    {relatedProducts.map(product => (
+                        <div key={product.id} className="featured-item-container">
+                            <Image
+                                id="featured-item-image-xxl"
+                                src={product.imageUrl}
+                                onClick={() => productRoute(history, product)}
+                            />
+                            <h3>
+                                {product.name}
+                            </h3>
+                            Start from ${product.startPrice}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            }
         </>
     );
 }

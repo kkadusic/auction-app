@@ -126,6 +126,13 @@
     right: 0;
 }
 
+#featured-item-image-xxl {
+    width: 18.2vw;
+    height: 18.2vw;
+    object-fit: cover;
+    cursor: pointer;
+}
+
 @media (max-width: 765px) {
     .product-container {
         flex-wrap: wrap;
