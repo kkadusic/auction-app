@@ -239,9 +239,9 @@ const ItemPage = ({match, location}) => {
                                             </div>
                                         </Alert>
                                         <div style={{marginTop: 10, display: 'flex', alignItems: 'center'}}>
-                                <span style={{color: '#9B9B9B'}}>
-                                Seller:
-                                </span>
+                                            <span style={{color: '#9B9B9B'}}>
+                                                Seller:
+                                            </span>
                                             <Image style={{marginLeft: 5, marginRight: 5, objectFit: "cover"}}
                                                    className="avatar-image-small-2"
                                                    src={seller.photo}
