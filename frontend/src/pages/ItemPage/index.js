@@ -242,7 +242,7 @@ const ItemPage = ({match, location}) => {
                                 <span style={{color: '#9B9B9B'}}>
                                 Seller:
                                 </span>
-                                            <Image style={{marginLeft: 5, marginRight: 5}}
+                                            <Image style={{marginLeft: 5, marginRight: 5, objectFit: "cover"}}
                                                    className="avatar-image-small-2"
                                                    src={seller.photo}
                                                    roundedCircle
