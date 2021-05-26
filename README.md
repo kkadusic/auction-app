@@ -15,6 +15,21 @@ $ cd auction-app
 
 - ##### Backend application
 ```bash
+# Add following environment variables:
+JDBC_DATABASE_URL=
+JDBC_DATABASE_USERNAME=
+JDBC_DATABASE_PASSWORD=
+SCHEMA_DB=
+JWT_SECRET=
+JWT_EXPIRATION=
+EMAIL_USERNAME=
+EMAIL_PASSWORD=
+HOST_URL=
+STRIPE_API_KEY=
+SCHEDULE_RATE=
+```
+
+```bash
 # Go into the backend directory
 $ cd backend
 
@@ -23,6 +38,13 @@ $ mvn spring-boot:run
 ```
 
 - ##### Frontend application
+```bash
+# Add following environment variables:
+REACT_APP_API_URL=
+REACT_APP_CLOUD_NAME=
+REACT_APP_UPLOAD_PRESET=
+```
+
 ```bash
 # Go into the fronted directory
 $ cd frontend
