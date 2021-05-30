@@ -1,5 +1,10 @@
 # Auction web app
 
+## Architecture
+
+The following is a diagram of the application architecture:
+![architecture](docs/architecture.png)
+
 ## How To Use :wrench:
 
 To clone and run this application, you will need [Git](https://git-scm.com), [Java](https://www.oracle.com/java/technologies/javase-downloads.html),
