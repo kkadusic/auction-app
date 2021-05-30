@@ -1,5 +1,9 @@
 # Auction web app
 
+Frontend application: [`https://auction-abh.herokuapp.com`](https://auction-abh.herokuapp.com/) <br>
+Backend application: [`https://auction-abh-server.herokuapp.com`](https://auction-abh-server.herokuapp.com/) <br>
+Open [`https://auction-abh-server.herokuapp.com/swagger-ui/`](https://auction-abh-server.herokuapp.com/swagger-ui/) to launch Swagger UI in a browser.
+
 ## Architecture
 
 The following is a diagram of the application architecture:
@@ -60,7 +64,3 @@ $ npm install
 # Run the client
 $ npm start
 ```
-
-Frontend application: [`https://auction-abh.herokuapp.com`](https://auction-abh.herokuapp.com/) <br>
-Backend application: [`https://auction-abh-server.herokuapp.com`](https://auction-abh-server.herokuapp.com/) <br>
-Open [`https://auction-abh-server.herokuapp.com/swagger-ui/`](https://auction-abh-server.herokuapp.com/swagger-ui/) to launch Swagger UI in a browser.
