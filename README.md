@@ -1,8 +1,24 @@
-# Auction web app
+# AuctionHub
 
-Frontend application: [`https://auction-abh.herokuapp.com`](https://auction-abh.herokuapp.com/) <br>
-Backend application: [`https://auction-abh-server.herokuapp.com`](https://auction-abh-server.herokuapp.com/) <br>
-Open [`https://auction-abh-server.herokuapp.com/swagger-ui/`](https://auction-abh-server.herokuapp.com/swagger-ui/) to launch Swagger UI in a browser.
+AuctionHub is a web application for buying and selling various products using auction system.
+
+- Frontend application: [`https://auction-abh.herokuapp.com`](https://auction-abh.herokuapp.com/) <br>
+- Backend application: [`https://auction-abh-server.herokuapp.com`](https://auction-abh-server.herokuapp.com/) <br>
+- Swagger UI: [`https://auction-abh-server.herokuapp.com/swagger-ui/`](https://auction-abh-server.herokuapp.com/swagger-ui/).
+
+## Features
+
+| 1. month | 2. month | 3. month |
+| --- | --- | --- |
+| ERD, project skeleton | Forgot password | Wishlist |
+| Registration and login | Product sorting | Payment (using Stripe) |
+| Static pages (with header and footer) | List and grid preview | Notifications centre (socket) |
+| Landing page | "Did you mean"? | Related products |
+| Item page | Sell page (add new item as seller) |  Seller rating |
+| Deployment | User profile page  | |
+| Categories preview page and product list |  |  |
+| Basic search functionality |  |  |
+| Bidding items | |  |
 
 ## Architecture
 
