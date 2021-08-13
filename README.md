@@ -4,7 +4,7 @@ AuctionHub is a web application for buying and selling various products using au
 
 - Frontend application: [`https://auction-abh.herokuapp.com`](https://auction-abh.herokuapp.com/) <br>
 - Backend application: [`https://auction-abh-server.herokuapp.com`](https://auction-abh-server.herokuapp.com/) <br>
-- Swagger UI: [`https://auction-abh-server.herokuapp.com/swagger-ui/`](https://auction-abh-server.herokuapp.com/swagger-ui/).
+- Swagger UI: [`https://auction-abh-server.herokuapp.com/swagger-ui/`](https://auction-abh-server.herokuapp.com/swagger-ui/)
 
 ## Features
 
@@ -13,7 +13,7 @@ AuctionHub is a web application for buying and selling various products using au
 | ERD, project skeleton | Forgot password | Wishlist |
 | Registration and login | Product sorting | Payment (using Stripe) |
 | Static pages (with header and footer) | List and grid preview | Notifications centre (socket) |
-| Landing page | "Did you mean"? | Related products |
+| Landing page | "Did you mean" feature? | Related products |
 | Item page | Sell page (add new item as seller) |  Seller rating |
 | Deployment | User profile page  | |
 | Categories preview page and product list |  |  |
